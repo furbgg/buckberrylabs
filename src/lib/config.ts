@@ -3,8 +3,8 @@ export const brand = {
   legalName: "Buckberry Labs",
   tagline: "Software, handverlesen. Aus Österreich.",
   location: {
-    city: "Bad Ischl",
-    postalCode: "4820",
+    city: "Linz",
+    postalCode: "4020",
     country: "AT",
     region: "Oberösterreich",
   },
