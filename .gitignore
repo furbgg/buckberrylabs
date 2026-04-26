@@ -40,3 +40,25 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI / internal docs (do not commit to public repo)
+CODEX_PROMPT*.md
+CHANGES.md
+AGENTS.md
+CLAUDE.md
+.design-imports/
+emails/
+
+# Local dev logs
+*-dev.log
+*-dev.err.log
+next-start.log
+next-start.err.log
+.codex-dev.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

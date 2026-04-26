@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hinweis — Buckberry Labs</title>
+<meta name="description" content="Diese Website befindet sich in der Aufbauphase. Buckberry Labs ist noch nicht als Unternehmen registriert." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<style>
+  :root{
+    --primary-dark:#0F1E2E;
+    --surface-dark:#0A1520;
+    --mint:#3DD9C4;
+    --deep-mint:#14B8A6;
+    --cream:#F4F2ED;
+    --light:#FAFAFA;
+    --border:#E5E7EB;
+    --muted:#6B7280;
+  }
+
+  *{margin:0; padding:0; box-sizing:border-box;}
+  html,body{background:var(--light); color:var(--primary-dark); font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased; line-height:1.5;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  button{font:inherit; background:none; border:0; cursor:pointer; color:inherit;}
+  .container{max-width:1240px; margin:0 auto; padding:0 32px;}
+  .mono{font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--deep-mint);}
+
+  /* CURSOR */
+  .cursor{position:fixed; width:14px; height:14px; border-radius:50%; background:var(--mint); mix-blend-mode:difference; pointer-events:none; z-index:9999; left:0; top:0; transform:translate(-50%,-50%); transition:width .2s ease, height .2s ease;}
+  .cursor.big{width:44px; height:44px; background:var(--deep-mint);}
+  @media(hover:none){ .cursor{display:none;} body{cursor:auto;} }
+  body{cursor:none;}
+  a,button,input,select,textarea,label{cursor:none;}
+
+  /* NAV */
+  .nav{position:fixed; top:0; left:0; right:0; height:72px; background:rgba(255,255,255,0.92); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); z-index:100; display:flex; align-items:center;}
+  .nav-inner{max-width:1240px; width:100%; margin:0 auto; padding:0 32px; display:flex; align-items:center; justify-content:space-between;}
+  .nav-brand{font-family:'Geist',sans-serif; font-weight:600; font-size:18px; letter-spacing:-0.02em; display:flex; align-items:center; gap:10px;}
+  .nav-brand .dot{width:8px; height:8px; border-radius:50%; background:var(--mint); box-shadow:0 0 16px var(--mint);}
+  .nav-links{display:flex; gap:32px;}
+  .nav-links a{font-family:'Geist',sans-serif; font-weight:500; font-size:14px; color:var(--primary-dark); opacity:0.75; transition:opacity .2s;}
+  .nav-links a:hover, .nav-links a.active{opacity:1; color:var(--deep-mint);}
+  .nav-right{display:flex; gap:16px; align-items:center;}
+  .btn-kontakt{font-family:'Geist',sans-serif; font-weight:500; font-size:14px;}
+  .hamburger{display:none; width:32px; height:24px; position:relative; z-index:120;}
+  .hamburger span{position:absolute; left:0; right:0; height:2px; background:var(--primary-dark); transition:transform .3s, opacity .2s, top .3s;}
+  .hamburger span:nth-child(1){top:4px;} .hamburger span:nth-child(2){top:11px;} .hamburger span:nth-child(3){top:18px;}
+  .hamburger.open span:nth-child(1){top:11px; transform:rotate(45deg);}
+  .hamburger.open span:nth-child(2){opacity:0;}
+  .hamburger.open span:nth-child(3){top:11px; transform:rotate(-45deg);}
+  @media(max-width:900px){
+    .nav-links, .nav-right > a{display:none;}
+    .hamburger{display:block;}
+  }
+
+  /* MOBILE PANEL */
+  .mobile-panel{position:fixed; inset:0; background:var(--primary-dark); color:#fff; z-index:110; transform:translateX(100%); transition:transform .4s cubic-bezier(0.2,0.8,0.2,1); padding:100px 32px 40px; overflow-y:auto;}
+  .mobile-panel.open{transform:translateX(0);}
+  .mobile-panel a{display:block; font-family:'Geist',sans-serif; font-size:28px; font-weight:500; padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.1);}
+
+  /* BUTTONS */
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:14px 24px; font-family:'Geist',sans-serif; font-weight:500; font-size:14px; border-radius:999px; transition:all .3s cubic-bezier(0.2,0.8,0.2,1); white-space:nowrap;}
+  .btn-primary{background:var(--primary-dark); color:#fff;}
+  .btn-primary:hover{background:var(--deep-mint); transform:translateY(-2px);}
+  .btn-ghost-light{background:transparent; color:var(--primary-dark); border:1px solid var(--border);}
+  .btn-ghost-light:hover{border-color:var(--primary-dark); background:var(--primary-dark); color:#fff;}
+  .arrow{font-size:16px; transition:transform .3s cubic-bezier(0.2,0.8,0.2,1);}
+  .btn:hover .arrow{transform:translateX(4px);}
+
+  /* REVEAL */
+  .reveal{opacity:0; transform:translateY(20px);}
+
+  /* HERO */
+  .hero{padding:180px 0 60px; background:var(--light);}
+  .bcr{font-family:'Geist Mono',monospace; font-size:12px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:20px;}
+  .bcr a{color:var(--muted); transition:color .2s;}
+  .bcr a:hover{color:var(--deep-mint);}
+  .bcr .sep{margin:0 10px; opacity:0.5;}
+  .bcr .cur{color:var(--primary-dark);}
+  .hero h1{font-family:'Geist',sans-serif; font-size:clamp(36px,5.5vw,56px); font-weight:600; letter-spacing:-0.03em; line-height:1.08; max-width:720px; margin:18px 0 24px;}
+  .hero h1 .accent{color:var(--deep-mint); font-style:italic;}
+
+  /* CONTENT */
+  .content{padding:0 0 80px; max-width:720px; margin:0 auto;}
+  .content p{font-size:17px; color:var(--primary-dark); line-height:1.65; margin-bottom:20px;}
+  .content p:last-of-type{margin-bottom:0;}
+
+  /* FACTS CARD */
+  .facts{background:#fff; border:1px solid var(--border); border-radius:20px; padding:28px; margin-top:40px;}
+  .facts .label{font-family:'Geist Mono',monospace; font-size:10.5px; color:var(--muted); letter-spacing:.2em; text-transform:uppercase; margin-bottom:18px; display:block;}
+  .facts dl{display:flex; flex-direction:column; gap:18px;}
+  .facts .row{display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding-bottom:14px; border-bottom:1px dashed var(--border);}
+  .facts .row:last-child{border-bottom:none; padding-bottom:0;}
+  .facts dt{font-family:'Geist Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; flex:none;}
+  .facts dd{font-family:'Geist',sans-serif; font-weight:500; font-size:15px; text-align:right; letter-spacing:-0.015em;}
+  .facts dd a{color:var(--deep-mint); transition:color .2s;}
+  .facts dd a:hover{text-decoration:underline;}
+
+  .closing{margin-top:40px; font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted);}
+
+  /* FOOTER */
+  .footer{background:var(--primary-dark); color:#fff; padding:80px 0 40px;}
+  .footer-grid{display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:48px; margin-bottom:60px;}
+  @media(max-width:800px){ .footer-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:500px){ .footer-grid{grid-template-columns:1fr;} }
+  .footer-brand h3{font-family:'Geist',sans-serif; font-size:22px; font-weight:600; letter-spacing:-0.02em; margin-bottom:12px;}
+  .footer-brand p{color:rgba(255,255,255,0.6); font-size:14px; line-height:1.6; max-width:320px;}
+  .footer-col h5{font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--mint); margin-bottom:16px;}
+  .footer-col ul{list-style:none;}
+  .footer-col li{margin-bottom:10px;}
+  .footer-col a{color:rgba(255,255,255,0.7); font-size:14px; transition:color .2s;}
+  .footer-col a:hover{color:var(--mint);}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.08); padding-top:32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+  .footer-bottom p{color:rgba(255,255,255,0.5); font-size:13px;}
+  .footer-legal{display:flex; gap:20px; align-items:center;}
+
+  .lang-switch{display:flex;align-items:center;gap:10px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;}
+  .lang-switch a{display:inline;color:inherit;text-decoration:none;opacity:.55;transition:opacity .2s,color .2s;font-size:12px;padding:0;border:0;}
+  .lang-switch a:hover{opacity:1;}
+  .lang-switch a.active{opacity:1;color:var(--deep-mint);font-weight:700;}
+  .lang-switch .sep{opacity:.28;}
+  .mobile-panel .lang-switch{margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);}
+  .mobile-panel .lang-switch a{color:#fff;}
+  .mobile-panel .lang-switch a.active{color:var(--mint);}
+  @media(max-width:900px){ .nav-right .lang-switch{display:none;} }
+  @media(min-width:901px){ .mobile-panel .lang-switch{display:none;} }
+
+  @media(prefers-reduced-motion:reduce){
+    .cursor{display:none;} body{cursor:auto;}
+    .reveal{opacity:1 !important; transform:none !important;}
+  }
+</style>
+<link rel="canonical" href="https://buckberrylabs.com/de/hinweis" />
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/de/" class="nav-brand"><span class="dot"></span>Buckberry Labs</a>
+    <div class="nav-links">
+      <a href="/de/loesungen">Lösungen</a>
+      <a href="/de/referenzen">Referenzen</a>
+      <a href="/de/preise">Preise</a>
+      <a href="/de/kontakt">Kontakt</a>
+    </div>
+    <div class="nav-right">
+    <div class="lang-switch" aria-label="Sprache wechseln">
+      <a href="/de/hinweis" data-lang-switch="de" class="active">DE</a>
+      <span class="sep">·</span>
+      <a href="/en/" data-lang-switch="en" class="">EN</a>
+      <span class="sep">·</span>
+      <a href="/tr/" data-lang-switch="tr" class="">TR</a>
+    </div>
+      <a href="/de/kontakt" class="btn btn-primary">Projekt starten <span class="arrow">→</span></a>
+      <button class="hamburger" id="hamburger" aria-label="Menü" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE PANEL -->
+<div class="mobile-panel" id="mobilePanel">
+  <a href="/de/loesungen">Lösungen</a>
+  <a href="/de/referenzen">Referenzen</a>
+  <a href="/de/preise">Preise</a>
+  <a href="/de/kontakt">Kontakt</a>
+
+  <div class="lang-switch" aria-label="Sprache wechseln">
+    <a href="/de/hinweis" data-lang-switch="de" class="active">DE</a>
+    <span class="sep">·</span>
+    <a href="/en/" data-lang-switch="en" class="">EN</a>
+    <span class="sep">·</span>
+    <a href="/tr/" data-lang-switch="tr" class="">TR</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="bcr reveal">
+      <a href="/de/">Start</a><span class="sep">/</span><span class="cur">Hinweis</span>
+    </div>
+    <span class="mono reveal">— Status · Pre-Launch · Stand April 2026</span>
+    <h1 class="reveal">Diese Website ist in der <span class="accent">Aufbauphase</span>.</h1>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section style="padding:0 0 80px;">
+  <div class="container" style="max-width:720px;">
+    <div class="content reveal">
+      <p>Buckberry Labs ist derzeit noch nicht als Unternehmen registriert. Kontaktanfragen, Preisangaben und Referenzen dienen aktuell der Information und sind unverbindlich.</p>
+
+      <p>Sobald die Gründung abgeschlossen ist (voraussichtlich Q2/Q3 2026), folgen Impressum, Datenschutzerklärung und Allgemeine Geschäftsbedingungen gemäß österreichischem E-Commerce-Gesetz an dieser Stelle.</p>
+
+      <p>Bis dahin: schreib uns gern, rede mit uns, lass uns Ideen austauschen — aber erwarte keine verbindlichen Angebote oder Rechnungen. Fair &amp; transparent.</p>
+    </div>
+
+    <div class="facts reveal">
+      <span class="label">Fakten</span>
+      <dl>
+        <div class="row"><dt>Status</dt><dd>Pre-Launch</dd></div>
+        <div class="row"><dt>Sitz (geplant)</dt><dd>Linz, Österreich</dd></div>
+        <div class="row"><dt>Rechtsform</dt><dd>Einzelunternehmen (in Vorbereitung)</dd></div>
+        <div class="row"><dt>Kontakt</dt><dd><a href="mailto:info@buckberrylabs.com">info@buckberrylabs.com</a></dd></div>
+        <div class="row"><dt>Stand</dt><dd>April 2026</dd></div>
+      </dl>
+    </div>
+
+    <p class="closing reveal">— Wir melden uns hier, sobald sich der Status ändert.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>Buckberry Labs</h3>
+        <p>Software­studio aus Linz. Wir bauen Shops, Portale und Tools, die nach Livegang ohne uns laufen.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Produkt</h5>
+        <ul>
+          <li><a href="/de/loesungen">Lösungen</a></li>
+          <li><a href="/de/referenzen">Referenzen</a></li>
+          <li><a href="/de/preise">Preise</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Firma</h5>
+        <ul>
+          <li><a href="/de/kontakt">Kontakt</a></li>
+          <li><a href="/de/referenzen">Referenzen</a></li>
+          <li><a href="/de/preise">Preise</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Direkt</h5>
+        <ul>
+          <li><a href="mailto:info@buckberrylabs.com">info@buckberrylabs.com</a></li>
+          <li><a href="tel:+436601234567">+43 660 1234567</a></li>
+          <li>Linz, Österreich</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Buckberry Labs. Alle Rechte vorbehalten.</p>
+      <div class="footer-legal">
+        <span style="color:rgba(255,255,255,0.4); font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">entwickelt in Linz · AT</span>
+        <a href="/de/hinweis" style="font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--mint); text-decoration:none;">— Status</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  /* CURSOR */
+  const cursor = document.getElementById('cursor');
+  let mx = innerWidth/2, my = innerHeight/2, cx = mx, cy = my;
+  addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function loop(){ cx += (mx - cx) * 0.18; cy += (my - cy) * 0.18; cursor.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`; requestAnimationFrame(loop); })();
+  document.querySelectorAll('a, button, input, textarea, select, label').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+  });
+
+  /* HAMBURGER */
+  const h = document.getElementById('hamburger'), mp = document.getElementById('mobilePanel');
+  h.addEventListener('click', () => { h.classList.toggle('open'); mp.classList.toggle('open'); h.setAttribute('aria-expanded', h.classList.contains('open')); });
+  mp.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { h.classList.remove('open'); mp.classList.remove('open'); }));
+
+  /* REVEAL */
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.gsap && window.ScrollTrigger){
+    gsap.registerPlugin(ScrollTrigger);
+    document.querySelectorAll('.reveal').forEach(el => {
+      gsap.to(el, { opacity:1, y:0, duration:0.9, ease:'power3.out', scrollTrigger:{ trigger:el, start:'top 85%' } });
+    });
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => { el.style.opacity=1; el.style.transform='none'; });
+  }
+})();
+</script>
+</body>
+</html>

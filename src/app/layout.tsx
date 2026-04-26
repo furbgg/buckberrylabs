@@ -25,23 +25,28 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://buckberrylabs.com";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Buckberry Labs — Software aus Österreich",
-    template: "%s | Buckberry Labs",
+    default: "Buckberry Labs — Software-Studio aus Linz",
+    template: "%s · Buckberry Labs",
   },
   description:
-    "Buckberry Labs entwickelt verlässliche Software für KMUs in Österreich und im DACH-Raum.",
+    "Wir bauen Shops, Portale und Tools, die nach Livegang ohne uns laufen. Aus Linz, Österreich.",
   openGraph: {
     type: "website",
     locale: "de_AT",
     url: siteUrl,
     siteName: "Buckberry Labs",
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og.png"],
   },
   robots: {
     index: true,
     follow: true,
+  },
+  alternates: {
+    canonical: "/",
   },
 };
 

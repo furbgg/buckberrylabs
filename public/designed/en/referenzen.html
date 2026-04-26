@@ -1,0 +1,1193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>References — Buckberry Labs</title>
+<meta name="description" content="Six real systems that are live today: shops, booking systems, portals, and operational software in daily use." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<style>
+  :root{
+    --primary-dark:#0F1E2E;
+    --surface-dark:#0A1520;
+    --mint:#3DD9C4;
+    --deep-mint:#14B8A6;
+    --grad: linear-gradient(135deg,#3DD9C4 0%,#14B8A6 100%);
+    --light:#FAFAFA;
+    --cream:#F4F2ED;
+    --white:#FFFFFF;
+    --border:#E5E7EB;
+    --muted:#6B7280;
+    --ease:cubic-bezier(0.2,0.8,0.2,1);
+    --bounce:cubic-bezier(0.34,1.56,0.64,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--primary-dark); background:var(--light);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    overflow-x:hidden; line-height:1.6; cursor:none;
+  }
+  @media (max-width:900px){ body{cursor:auto;}}
+  ::selection{ background:var(--mint); color:var(--surface-dark);}
+  .display{ font-family:'Geist','Inter',sans-serif; font-weight:600; letter-spacing:-0.02em;}
+  .mono{ font-family:'Geist Mono','ui-monospace',monospace; font-weight:500; letter-spacing:.15em; text-transform:uppercase; font-size:12px;}
+  .container{ max-width:1200px; margin:0 auto; padding:0 24px;}
+  a{ color:inherit; }
+
+  /* Buttons */
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:14px 24px;
+    border-radius:10px; font-weight:600; font-size:15px;
+    font-family:'Geist','Inter',sans-serif; letter-spacing:-0.01em;
+    text-decoration:none; border:1px solid transparent;
+    transition: transform .2s var(--ease), box-shadow .3s var(--ease), border-color .2s, color .2s, background .2s;
+    cursor:none;
+  }
+  @media(max-width:900px){ .btn{cursor:pointer;}}
+  .btn-primary{ background:var(--grad); color:var(--surface-dark); box-shadow:0 4px 16px -4px rgba(61,217,196,.25);}
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 16px 32px -8px rgba(61,217,196,.5);}
+  .btn-ghost-dark{ border-color:rgba(255,255,255,.2); color:#fff;}
+  .btn-ghost-dark:hover{ border-color:var(--mint); color:var(--mint);}
+  .arrow{ display:inline-block; transition: transform .2s var(--ease);}
+  .btn:hover .arrow{ transform:translateX(4px);}
+  .arrow-pulse{ animation: arrowPulse 1.8s ease-in-out infinite;}
+  @keyframes arrowPulse { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);}}
+
+  .link-mint{ color:var(--deep-mint); font-weight:500; text-decoration:none; display:inline-flex; align-items:center; gap:6px; position:relative;}
+  .link-mint::after{ content:''; position:absolute; left:0; bottom:-2px; height:1px; width:0; background:currentColor; transition:width .25s var(--ease);}
+  .link-mint:hover::after{ width:100%; }
+  .link-mint:hover .arrow{ transform:translateX(4px);}
+
+  /* NAV */
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:50; height:72px;
+    display:flex; align-items:center;
+    background: rgba(250,250,250,.85);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; width:100%;}
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none;}
+  .berry{ width:32px; height:32px; border-radius:50%; background:var(--grad); position:relative; box-shadow: inset 0 -4px 8px rgba(0,0,0,.15), 0 2px 8px rgba(61,217,196,.3);}
+  .berry::before{ content:''; position:absolute; top:6px; left:9px; width:8px; height:8px; background:rgba(255,255,255,.5); border-radius:50%; filter:blur(2px);}
+  .berry::after{ content:''; position:absolute; top:-4px; left:12px; width:8px; height:8px; background:#0F1E2E; border-radius:0 100% 0 0; transform:rotate(-20deg);}
+  .wordmark{ font-family:'Geist','Inter',sans-serif; font-weight:600; font-size:20px; letter-spacing:-0.025em; color:var(--primary-dark);}
+  .nav-links{ display:flex; gap:32px; align-items:center;}
+  .nav-link{ font-size:14px; font-weight:500; color:var(--primary-dark); text-decoration:none; transition:color .2s; position:relative; padding:8px 0;}
+  .nav-link:hover{ color:var(--deep-mint);}
+  .nav-link.active{ color:var(--deep-mint);}
+  .nav-link.active::before{ content:''; position:absolute; left:50%; bottom:0; width:4px; height:4px; border-radius:50%; background:var(--mint); transform:translateX(-50%);}
+  .nav-right{ display:flex; align-items:center; gap:12px;}
+  .btn-kontakt{ font-size:14px; font-weight:500; color:var(--primary-dark); background:transparent; border:none; padding:8px 12px; text-decoration:none; cursor:none; position:relative;}
+  @media(max-width:900px){ .btn-kontakt{cursor:pointer;}}
+  .btn-kontakt::after{ content:''; position:absolute; left:12px; right:12px; bottom:4px; height:1px; background:currentColor; transform:scaleX(0); transform-origin:left; transition:transform .25s var(--ease);}
+  .btn-kontakt:hover::after{ transform:scaleX(1);}
+  .nav .btn-primary{ padding:10px 18px; font-size:14px;}
+  .hamburger{ display:none; width:32px; height:32px; flex-direction:column; justify-content:center; align-items:center; gap:5px; background:none; border:none; cursor:none;}
+  @media(max-width:900px){ .hamburger{cursor:pointer;}}
+  .hamburger span{ width:22px; height:1.5px; background:var(--primary-dark); transition: transform .18s var(--ease), opacity .18s;}
+  .hamburger.open span:nth-child(1){ transform:translateY(6.5px) rotate(45deg);}
+  .hamburger.open span:nth-child(2){ opacity:0;}
+  .hamburger.open span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg);}
+  .mobile-panel{
+    position:fixed; top:0; right:0; width:min(360px,90vw); height:100vh;
+    background:var(--surface-dark); z-index:45;
+    transform:translateX(100%); transition:transform .3s var(--ease);
+    padding:96px 32px 32px; display:none; flex-direction:column; gap:4px;
+  }
+  .mobile-panel.open{ transform:translateX(0);}
+  @media(max-width:900px){
+    .nav-links, .nav-right .btn-kontakt, .nav-right .btn-primary{ display:none; }
+    .hamburger{ display:flex; } .mobile-panel{ display:flex; }
+  }
+  .mobile-panel a{ color:#fff; text-decoration:none; font-family:'Geist','Inter',sans-serif; font-size:24px; font-weight:500; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.08);}
+
+  /* PAGE HEAD */
+  .page-head{
+    padding: 144px 0 72px; position:relative;
+    background:var(--light); border-bottom:1px solid var(--border); overflow:hidden;
+  }
+  .page-head::before{
+    content:''; position:absolute; top:-80px; right:-140px; width:520px; height:520px; border-radius:50%;
+    background: radial-gradient(circle, rgba(61,217,196,.18), transparent 65%);
+    filter: blur(50px); pointer-events:none;
+  }
+  .breadcrumb{ color:var(--muted); font-size:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px;}
+  .breadcrumb a{ color:var(--muted); text-decoration:none;}
+  .breadcrumb a:hover{ color:var(--deep-mint);}
+  .breadcrumb .sep{ opacity:.5;}
+  .page-head h1{
+    font-family:'Geist','Inter',sans-serif; font-weight:600;
+    font-size: clamp(40px, 7vw, 76px);
+    line-height:1.02; letter-spacing:-0.035em;
+    max-width: 16ch; margin-bottom:22px;
+  }
+  .page-head h1 .accent{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; font-style:italic; font-weight:500;}
+  .page-head .lead{ font-size:18px; color:var(--muted); max-width:58ch;}
+  .head-kicker{ display:inline-flex; align-items:center; gap:10px; color:var(--deep-mint); margin-bottom:22px;}
+  .head-kicker::before{ content:''; width:24px; height:1px; background:var(--deep-mint); opacity:.6;}
+
+  /* LIVE STRIP */
+  .live-strip{
+    margin-top: 56px;
+    display:flex; align-items:center; gap:32px; flex-wrap:wrap;
+    padding: 18px 24px;
+    background:#fff; border:1px solid var(--border); border-radius:999px;
+  }
+  @media(max-width:700px){ .live-strip{ border-radius:20px; padding:16px 20px;}}
+  .live-dot{
+    width:8px; height:8px; border-radius:50%; background:var(--mint);
+    box-shadow: 0 0 0 0 rgba(61,217,196,.5);
+    animation: livePulse 2s ease-in-out infinite;
+    flex:none;
+  }
+  @keyframes livePulse {
+    0%{ box-shadow: 0 0 0 0 rgba(61,217,196,.5);}
+    70%{ box-shadow: 0 0 0 10px rgba(61,217,196,0);}
+    100%{ box-shadow: 0 0 0 0 rgba(61,217,196,0);}
+  }
+  .live-strip .lbl{ font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--primary-dark);}
+  .live-strip .lbl b{ color:var(--deep-mint); font-weight:600;}
+  .live-sep{ width:1px; height:18px; background:var(--border);}
+  .live-item{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted);}
+  .live-item .v{ font-family:'Geist',sans-serif; font-weight:600; color:var(--primary-dark); font-size:15px; letter-spacing:-0.02em;}
+
+  /* SECTIONS */
+  section.band{ padding: 80px 0; position:relative;}
+  @media(min-width:1024px){ section.band{ padding: 112px 0;}}
+  .band.dark{ background:var(--primary-dark); color:#fff;}
+  .band.surface-dark{ background:var(--surface-dark); color:#fff;}
+  .band.cream{ background:var(--cream);}
+  .band.light{ background:var(--light);}
+
+  /* SHOWCASE — live site cards */
+  .showcase-head{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;
+    margin-bottom: 56px;
+  }
+  .showcase-head .mono{ color:var(--deep-mint);}
+  .showcase-head h2{
+    font-size: clamp(32px, 4.5vw, 52px); line-height:1.08; letter-spacing:-0.03em;
+    max-width: 18ch; margin-top: 14px;
+  }
+  .showcase-head p{ font-size:15px; color:var(--muted); max-width: 40ch;}
+
+  /* Big site cards */
+  .site-list{ display:flex; flex-direction:column; gap: 32px;}
+
+  .site{
+    background:#fff; border:1px solid var(--border);
+    border-radius: 28px; overflow:hidden;
+    display:grid; grid-template-columns: 1.15fr 1fr;
+    transition: border-color .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease);
+    position:relative;
+  }
+  .site:hover{
+    border-color: var(--mint);
+    box-shadow: 0 30px 60px -20px rgba(15,30,46,.15);
+  }
+  @media(max-width:1024px){ .site{ grid-template-columns: 1fr;} }
+
+  .site.flip{ grid-template-columns: 1fr 1.15fr;}
+  @media(max-width:1024px){ .site.flip{ grid-template-columns: 1fr;} }
+  .site.flip .site-visual{ order:2;}
+  @media(max-width:1024px){ .site.flip .site-visual{ order:1;} }
+
+  .site-visual{
+    position:relative;
+    aspect-ratio: 16/11;
+    overflow:hidden;
+    background: linear-gradient(135deg, #F4F2ED, #FAFAFA);
+    border-right:1px solid var(--border);
+  }
+  @media(max-width:1024px){ .site-visual{ border-right:none; border-bottom:1px solid var(--border);} }
+  .site.flip .site-visual{ border-right:none; border-left:1px solid var(--border);}
+  @media(max-width:1024px){ .site.flip .site-visual{ border-left:none; border-bottom:1px solid var(--border);} }
+
+  .browser{
+    position:absolute; inset: 32px; border-radius: 12px; overflow:hidden;
+    background:#fff; border:1px solid var(--border);
+    box-shadow: 0 30px 60px -24px rgba(15,30,46,.2);
+    display:flex; flex-direction:column;
+    transition: transform .5s var(--ease);
+    transform-style: preserve-3d;
+  }
+  .site:hover .browser{ transform: translateY(-4px);}
+  @media(max-width:700px){ .browser{ inset: 18px;} }
+
+  .bbar{ display:flex; align-items:center; gap:8px; padding: 9px 12px; background:#F4F2ED; border-bottom:1px solid var(--border); flex:none;}
+  .bbar .d{ width:8px; height:8px; border-radius:50%;}
+  .bbar .d:nth-child(1){ background:#FF5F57;} .bbar .d:nth-child(2){ background:#FEBC2E;} .bbar .d:nth-child(3){ background:#28C840;}
+  .bbar .ad{ margin-left:10px; flex:1; font-family:'Geist Mono',monospace; font-size:10px; color:var(--muted); background:#fff; padding:3px 10px; border-radius:5px; border:1px solid var(--border); display:inline-flex; align-items:center; gap:6px;}
+  .bbar .ad::before{ content:''; width:8px; height:8px; border-radius:50%; background:var(--mint); flex:none;}
+
+  .live-pin{
+    position:absolute; top: 12px; right: 12px; z-index:3;
+    padding: 5px 10px 5px 22px;
+    background: rgba(10,21,32,.8); color:#fff;
+    border-radius: 999px;
+    font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    backdrop-filter: blur(8px);
+  }
+  .live-pin::before{
+    content:''; position:absolute; left:9px; top:50%; transform:translateY(-50%);
+    width:6px; height:6px; border-radius:50%; background: var(--mint);
+    box-shadow: 0 0 8px var(--mint);
+    animation: livePulse 2s ease-in-out infinite;
+  }
+
+  .bcontent{ flex:1; background:#fff; position:relative; overflow:hidden;}
+
+  /* Site 1 — Yilmaz (e-commerce storefront) */
+  .site-yilmaz .bcontent{
+    padding: 16px;
+    display:grid; grid-template-rows: auto auto auto; gap:12px;
+    align-content: start;
+    background: linear-gradient(180deg, #fff, #FAFAFA);
+  }
+  .yl-head{ display:flex; align-items:center; justify-content:space-between;}
+  .yl-logo{ display:flex; align-items:center; gap:8px; font-family:'Geist',sans-serif; font-weight:600; font-size:13px; letter-spacing:-0.01em;}
+  .yl-logo::before{ content:''; width:18px; height:18px; border-radius:50%; background: var(--grad);}
+  .yl-nav{ display:flex; gap:14px; font-size:10px; color:var(--muted);}
+  .yl-hero{
+    height:62px; border-radius:8px; overflow:hidden; position:relative;
+    background: linear-gradient(120deg, #0F1E2E 0%, #14B8A6 140%);
+    color:#fff; padding: 12px 16px;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .yl-hero .t{ font-family:'Geist',sans-serif; font-weight:600; font-size:12px; letter-spacing:-0.01em;}
+  .yl-hero .s{ font-size:9px; opacity:.75; margin-top:2px;}
+  .yl-hero::after{ content:''; position:absolute; right:-20px; top:-10px; width:90px; height:90px; border-radius:50%; background: radial-gradient(circle, rgba(61,217,196,.5), transparent 60%);}
+  .yl-grid{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;}
+  .yl-card{ border:1px solid var(--border); border-radius:8px; overflow:hidden; display:flex; flex-direction:column;}
+  .yl-img{ height:58px; position:relative;}
+  .yl-img::after{ content:''; position:absolute; inset:14px; border:1px dashed rgba(15,30,46,.15); border-radius:5px;}
+  .yl-img.a{ background: linear-gradient(135deg, #F4F2ED, #E5E7EB);}
+  .yl-img.b{ background: linear-gradient(135deg, #0F1E2E, #14B8A6);}
+  .yl-img.b::after{ border-color:rgba(255,255,255,.25);}
+  .yl-img.c{ background: linear-gradient(135deg, #F4F2ED, #3DD9C4);}
+  .yl-meta{ padding:7px 8px 9px;}
+  .yl-meta .t{ font-family:'Geist',sans-serif; font-weight:500; font-size:9px;}
+  .yl-meta .p{ font-family:'Geist Mono',monospace; font-size:9px; color:var(--deep-mint); margin-top:2px;}
+
+  /* Site 2 — Tennishalle (booking calendar) */
+  .site-tennis .bcontent{
+    padding: 14px 16px; background:#fff;
+    display:grid; grid-template-rows: auto auto auto; gap:10px;
+    align-content: start;
+  }
+  .tn-head{ display:flex; justify-content:space-between; align-items:center;}
+  .tn-logo{ font-family:'Geist',sans-serif; font-weight:600; font-size:13px; letter-spacing:-0.015em;}
+  .tn-logo span{ color:var(--deep-mint);}
+  .tn-ctrl{ display:flex; gap:6px;}
+  .tn-ctrl .c{ width:20px; height:20px; border-radius:5px; background:var(--cream); display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--muted);}
+  .tn-week{ display:flex; gap:4px;}
+  .tn-day{ flex:1; padding:5px 4px; text-align:center; border:1px solid var(--border); border-radius:6px; font-size:9px; color:var(--muted);}
+  .tn-day.active{ background:var(--primary-dark); color:#fff; border-color:var(--primary-dark);}
+  .tn-day b{ display:block; font-family:'Geist',sans-serif; font-size:11px; color:inherit; font-weight:600; letter-spacing:-0.01em;}
+  .tn-grid{ display:grid; grid-template-columns: 36px repeat(4, 1fr); gap: 3px; font-size:8px;}
+  .tn-grid .th{ color:var(--muted); padding:3px 4px; font-family:'Geist Mono',monospace; letter-spacing:.08em; text-transform:uppercase;}
+  .tn-grid .cell{ padding:5px 4px; border-radius:4px; border:1px solid var(--border); min-height:16px; font-family:'Geist',sans-serif;}
+  .tn-grid .cell.free{ background:#fff; color:var(--muted); font-size:8px;}
+  .tn-grid .cell.booked{ background:rgba(15,30,46,.9); color:#fff; border-color:rgba(15,30,46,.9); font-size:8px;}
+  .tn-grid .cell.mine{ background: var(--grad); color:var(--surface-dark); border-color:var(--deep-mint); font-weight:600; font-size:8px;}
+
+  /* Site 3 — Sommerhuber bakery (landing) */
+  .site-bakery .bcontent{
+    background: var(--cream); padding: 14px 16px;
+    display:grid; grid-template-rows: auto auto auto; gap:10px;
+    align-content: start;
+  }
+  .bk-nav{ display:flex; justify-content:space-between; align-items:center;}
+  .bk-logo{ font-family:'Geist',serif; font-style:italic; font-weight:500; font-size:14px; color:var(--primary-dark); letter-spacing:-0.01em;}
+  .bk-nav-r{ display:flex; gap:10px; font-size:9px; color:var(--muted);}
+  .bk-hero{
+    background:#fff; border-radius:8px; padding:12px 14px;
+    display:grid; grid-template-columns: 1fr auto; align-items:end; gap:10px;
+    position:relative; overflow:hidden;
+  }
+  .bk-hero .t{ font-family:'Geist',serif; font-style:italic; font-size:16px; line-height:1.1; letter-spacing:-0.02em; color:var(--primary-dark); max-width:14ch;}
+  .bk-hero .sub{ font-size:8px; color:var(--muted); margin-top:4px;}
+  .bk-pill{ font-family:'Geist Mono',monospace; font-size:8px; background:var(--grad); color:var(--surface-dark); padding:4px 8px; border-radius:999px; letter-spacing:.08em;}
+  .bk-hero::after{ content:''; position:absolute; right:-20px; top:-10px; width:60px; height:60px; border-radius:50%; background: rgba(61,217,196,.2);}
+  .bk-cats{ display:grid; grid-template-columns: repeat(4,1fr); gap:6px;}
+  .bk-cat{ background:#fff; border-radius:6px; padding:8px 6px; text-align:center; font-family:'Geist',sans-serif; font-size:9px; font-weight:500; color:var(--primary-dark);}
+  .bk-cat span{ display:block; font-size:7px; color:var(--muted); margin-top:1px; font-family:'Geist Mono',monospace;}
+
+  /* Site 4 — Haberl logistics dashboard */
+  .site-haberl .bcontent{
+    background:#0F1E2E; color:#fff; padding: 14px 16px;
+    display:grid; grid-template-rows: auto 1fr; gap:10px;
+    min-height: 0;
+  }
+  .site-haberl .hb-main{ min-height: 0;}
+  .hb-head{ display:flex; justify-content:space-between; align-items:center;}
+  .hb-logo{ font-family:'Geist',sans-serif; font-weight:600; font-size:12px; letter-spacing:-0.01em; color:#fff;}
+  .hb-logo::before{ content:'◤'; color:var(--mint); margin-right:6px;}
+  .hb-status{ display:flex; gap:6px;}
+  .hb-chip{ font-family:'Geist Mono',monospace; font-size:8px; padding:3px 6px; background: rgba(61,217,196,.15); color: var(--mint); border-radius:3px; letter-spacing:.08em;}
+  .hb-chip.off{ background: rgba(255,255,255,.08); color: rgba(255,255,255,.6);}
+  .hb-main{ display:grid; grid-template-columns: 1fr 100px; gap:10px; min-height:0;}
+  .hb-map{ position:relative; border-radius:8px; overflow:hidden; background:#0A1520;
+    background-image:
+      linear-gradient(rgba(61,217,196,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(61,217,196,.06) 1px, transparent 1px);
+    background-size: 16px 16px;
+    border:1px solid rgba(255,255,255,.05);
+  }
+  .hb-route{ position:absolute; top:30%; left:15%; right:25%; height:1px; background: var(--mint); opacity:.7;}
+  .hb-route::after{ content:''; position:absolute; right:-3px; top:-3px; width:7px; height:7px; border-radius:50%; background:var(--mint); box-shadow:0 0 10px var(--mint);}
+  .hb-truck{ position:absolute; top:60%; left:40%; font-family:'Geist Mono',monospace; font-size:8px; color:var(--mint); padding:2px 5px; background:rgba(61,217,196,.1); border-radius:3px; border:1px solid rgba(61,217,196,.3);}
+  .hb-side{ display:flex; flex-direction:column; gap:6px;}
+  .hb-stat{ background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:6px; padding:8px; }
+  .hb-stat .v{ font-family:'Geist',sans-serif; font-weight:600; font-size:14px; letter-spacing:-0.02em;}
+  .hb-stat .l{ font-size:7px; color:rgba(255,255,255,.5); letter-spacing:.08em; text-transform:uppercase; font-family:'Geist Mono',monospace; margin-top:2px;}
+
+  /* Site 5 — Reitsport (PWA card) */
+  .site-reit .bcontent{
+    background: linear-gradient(180deg, #F4F2ED, #fff);
+    padding: 14px 16px;
+    display:grid; grid-template-rows: auto auto; gap:10px;
+    align-content: start;
+  }
+  .rt-head{ display:flex; justify-content:space-between; align-items:center;}
+  .rt-logo{ font-family:'Geist',serif; font-weight:500; font-size:13px; letter-spacing:-0.015em;}
+  .rt-bell{ width:22px; height:22px; border-radius:50%; background:#fff; border:1px solid var(--border); position:relative;}
+  .rt-bell::after{ content:''; position:absolute; top:3px; right:3px; width:5px; height:5px; border-radius:50%; background:var(--deep-mint);}
+  .rt-cards{ display:flex; flex-direction:column; gap:6px;}
+  .rt-card{ background:#fff; border:1px solid var(--border); border-radius:8px; padding:9px 10px; display:flex; justify-content:space-between; align-items:center;}
+  .rt-card.primary{ border-color: var(--deep-mint); background:linear-gradient(135deg, rgba(61,217,196,.1), #fff);}
+  .rt-time{ font-family:'Geist Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:.08em;}
+  .rt-card.primary .rt-time{ color:var(--deep-mint); font-weight:600;}
+  .rt-what{ font-family:'Geist',sans-serif; font-weight:500; font-size:10px; flex:1; margin-left:10px;}
+  .rt-badge{ font-family:'Geist Mono',monospace; font-size:7px; padding:3px 6px; background:var(--cream); border-radius:4px; letter-spacing:.06em; color:var(--muted);}
+  .rt-card.primary .rt-badge{ background:var(--grad); color:var(--surface-dark);}
+
+  /* Site text column */
+  .site-info{
+    padding: 44px 44px;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  @media(max-width:1024px){ .site-info{ padding: 32px 28px;} }
+  .site-info .mono.topline{ color:var(--deep-mint); display:inline-flex; align-items:center; gap:10px; margin-bottom:16px;}
+  .site-info .mono.topline::before{ content:''; width:20px; height:1px; background:currentColor; opacity:.6;}
+  .site-info h3{
+    font-family:'Geist',sans-serif; font-weight:600;
+    font-size: clamp(22px, 2.2vw, 30px);
+    line-height:1.12; letter-spacing:-0.025em;
+    margin-bottom: 14px;
+  }
+  .site-info p{ font-size:14.5px; color:var(--muted); margin-bottom:20px; max-width: 44ch;}
+  .site-info .url{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Geist Mono',monospace; font-size:12px; color:var(--primary-dark);
+    background:var(--cream); padding:6px 12px; border-radius:6px;
+    text-decoration:none;
+    margin-bottom: 24px; align-self:flex-start;
+    border:1px solid var(--border);
+    transition: all .2s var(--ease);
+  }
+  .site-info .url:hover{ border-color:var(--mint); color:var(--deep-mint);}
+  .site-info .url::before{
+    content:''; width:6px; height:6px; border-radius:50%; background:var(--mint); box-shadow:0 0 6px var(--mint);
+    animation: livePulse 2s ease-in-out infinite;
+  }
+  .site-kv{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;
+    margin-bottom: 22px;
+    padding: 16px 0;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+  }
+  .site-kv .k{ font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; font-family:'Geist Mono',monospace; margin-bottom:4px;}
+  .site-kv .v{ font-family:'Geist',sans-serif; font-weight:600; font-size:16px; letter-spacing:-0.02em; color:var(--primary-dark);}
+  .site-kv .v .s{ font-size:11px; color:var(--muted); font-weight:400; letter-spacing:0;}
+  .site-tags{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom: 22px;}
+  .tag{ padding:4px 9px; border-radius:5px; background:var(--light); color:var(--primary-dark); font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; border:1px solid var(--border);}
+  .site-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+
+  /* TIMELINE */
+  .timeline{
+    display:flex; gap:40px; overflow-x:auto;
+    padding: 4px 4px 24px;
+    scrollbar-width: thin;
+  }
+  .tl-item{
+    min-width: 260px; padding: 24px;
+    background:#fff; border:1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    position: relative;
+    background: rgba(255,255,255,.03);
+  }
+  .tl-item .y{ font-family:'Geist Mono',monospace; font-size:11px; color:var(--mint); letter-spacing:.1em; margin-bottom:10px; display:block;}
+  .tl-item .t{ font-family:'Geist',sans-serif; font-weight:500; font-size:16px; color:#fff; letter-spacing:-0.015em; margin-bottom:6px;}
+  .tl-item .d{ font-size:13px; color:rgba(255,255,255,.6);}
+
+  /* LOGOS WALL */
+  .wall{
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px; background:var(--border);
+    border:1px solid var(--border); border-radius: 20px; overflow:hidden;
+  }
+  .wall .cell{
+    background:#fff; padding: 28px 20px;
+    display:flex; flex-direction:column; gap:6px;
+    min-height: 120px;
+    transition: background .2s;
+  }
+  .wall .cell:hover{ background: var(--cream);}
+  .wall .n{ font-family:'Geist',sans-serif; font-weight:500; font-size:15px; letter-spacing:-0.01em; color:var(--primary-dark);}
+  .wall .m{ font-size:11px; color:var(--muted);}
+  .wall .since{ margin-top:auto; font-family:'Geist Mono',monospace; font-size:9px; color:var(--deep-mint); letter-spacing:.1em;}
+
+  /* TESTIMONIAL */
+  .quote-card{
+    max-width: 880px; margin: 0 auto;
+    padding: 48px 44px; background:#fff; border:1px solid var(--border);
+    border-radius: 24px; position:relative;
+  }
+  @media(max-width:700px){ .quote-card{ padding: 36px 24px;}}
+  .quote-card blockquote{
+    font-family:'Geist',sans-serif; font-weight:500;
+    font-size: clamp(20px, 2.3vw, 26px);
+    line-height:1.42; letter-spacing:-0.02em;
+    color:var(--primary-dark); margin-bottom: 28px;
+    padding-left: 22px; border-left: 2px solid var(--mint);
+  }
+  .quote-foot{ display:flex; align-items:center; gap:14px;}
+  .avatar{
+    width:42px; height:42px; border-radius:50%; background:var(--grad); color:var(--surface-dark);
+    font-family:'Geist',sans-serif; font-weight:600;
+    display:flex; align-items:center; justify-content:center; font-size:15px; letter-spacing:-0.02em;
+  }
+  .quote-foot .who{ font-weight:500; font-size:15px;}
+  .quote-foot .role{ font-size:12px; color:var(--muted);}
+
+  /* CTA */
+  .cta-banner{ position:relative; padding: 120px 0; text-align:center; overflow:hidden; background:var(--surface-dark); color:#fff;}
+  .cta-orb{
+    position:absolute; width:700px; height:700px; border-radius:50%;
+    left:50%; top:50%; transform:translate(-50%,-50%);
+    background: radial-gradient(circle, rgba(61,217,196,.22), rgba(20,184,166,.08) 40%, transparent 70%);
+    filter:blur(120px); pointer-events:none; will-change:transform;
+  }
+  .dotgrid{
+    position:absolute; inset:0;
+    background-image: radial-gradient(rgba(61,217,196,.3) 1px, transparent 1px);
+    background-size: 32px 32px; opacity:.08; pointer-events:none;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  }
+  .cta-inner{ position:relative; z-index:2; max-width:720px; margin:0 auto;}
+  .cta-inner h2{
+    font-family:'Geist',sans-serif; font-weight:600;
+    font-size: clamp(32px, 4.5vw, 48px);
+    letter-spacing:-0.03em; line-height:1.1; color:#fff; margin-bottom:18px;
+  }
+  .cta-inner .lead{ color:rgba(255,255,255,.7); font-size:17px; margin-bottom:32px;}
+
+  /* FOOTER */
+  footer{ background: var(--primary-dark); color:#fff; padding: 72px 0 24px;}
+  .foot-grid{
+    display:grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap:48px;
+    padding-bottom:48px; border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  @media(max-width:900px){ .foot-grid{ grid-template-columns: 1fr 1fr; gap:32px;}}
+  @media(max-width:520px){ .foot-grid{ grid-template-columns: 1fr;}}
+  .foot-brand .brand{ margin-bottom:16px;}
+  .foot-brand .wordmark{ color:#fff;}
+  .foot-brand .tagline{ font-size:14px; color:rgba(255,255,255,.7); max-width:28ch; margin-bottom:12px;}
+  .foot-brand .loc{ color:rgba(255,255,255,.45); font-size:10px;}
+  .foot-h{ color:rgba(255,255,255,.5); margin-bottom:18px; display:block;}
+  .foot-col ul{ list-style:none; display:flex; flex-direction:column; gap:10px;}
+  .foot-col a{ font-size:14px; color:rgba(255,255,255,.7); text-decoration:none; transition:color .2s;}
+  .foot-col a:hover{ color:var(--mint);}
+  .foot-bar{
+    padding-top:24px;
+    display:flex; justify-content:space-between; align-items:center; gap:24px;
+    font-size:12px; color:rgba(255,255,255,.45);
+  }
+  @media(max-width:700px){ .foot-bar{ flex-direction:column; align-items:flex-start; gap:12px;}}
+
+  /* CURSOR */
+  .cursor{
+    position:fixed; top:0; left:0; pointer-events:none; z-index:9999;
+    width:16px; height:16px; border-radius:50%; background:var(--mint);
+    opacity:.3; transform: translate(-50%,-50%);
+    transition: width .18s var(--ease), height .18s var(--ease), opacity .18s;
+    mix-blend-mode: difference;
+  }
+  .cursor.hover{ width:40px; height:40px; opacity:.15;}
+  @media(max-width:900px){ .cursor{ display:none;}}
+
+  :focus-visible{ outline:3px solid var(--mint); outline-offset:3px; border-radius:8px;}
+  .reveal{ opacity:0; transform:translateY(20px);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; transition-duration:.2s !important;}
+    .cursor{ display:none;} body{ cursor:auto !important;}
+    .reveal, .site{ opacity:1 !important; transform:none !important;}
+  }
+
+  .lang-switch{display:flex;align-items:center;gap:10px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;}
+  .lang-switch a{display:inline;color:inherit;text-decoration:none;opacity:.55;transition:opacity .2s,color .2s;font-size:12px;padding:0;border:0;}
+  .lang-switch a:hover{opacity:1;}
+  .lang-switch a.active{opacity:1;color:var(--deep-mint);font-weight:700;}
+  .lang-switch .sep{opacity:.28;}
+  .mobile-panel .lang-switch{margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);}
+  .mobile-panel .lang-switch a{color:#fff;}
+  .mobile-panel .lang-switch a.active{color:var(--mint);}
+  @media(max-width:900px){ .nav-right .lang-switch{display:none;} }
+  @media(min-width:901px){ .mobile-panel .lang-switch{display:none;} }
+
+</style>
+<link rel="canonical" href="https://buckberrylabs.com/en/references" />
+<link rel="alternate" hreflang="de" href="https://buckberrylabs.com/de/referenzen" />
+<link rel="alternate" hreflang="en" href="https://buckberrylabs.com/en/references" />
+<link rel="alternate" hreflang="tr" href="https://buckberrylabs.com/tr/referanslar" />
+<link rel="alternate" hreflang="x-default" href="https://buckberrylabs.com/de/referenzen" />
+</head>
+<body>
+
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<!-- NAV -->
+<header class="nav" aria-label="Hauptnavigation">
+  <div class="container nav-inner">
+    <a href="/en/" class="brand" aria-label="Buckberry Labs homepage">
+      <img src="/logo/karelogo.png" alt="Buckberry Labs" style="height:44px;width:auto;object-fit:contain;">
+    </a>
+    <nav class="nav-links" aria-label="Primär">
+      <a href="/en/solutions" class="nav-link">Solutions</a>
+      <a href="/en/references" class="nav-link active">References</a>
+      <a href="/en/pricing" class="nav-link">Pricing</a>
+      <a href="/en/#ueber" class="nav-link">About</a>
+    </nav>
+    <div class="nav-right">
+    <div class="lang-switch" aria-label="Switch language">
+      <a href="/de/referenzen" data-lang-switch="de" class="">DE</a>
+      <span class="sep">·</span>
+      <a href="/en/references" data-lang-switch="en" class="active">EN</a>
+      <span class="sep">·</span>
+      <a href="/tr/referanslar" data-lang-switch="tr" class="">TR</a>
+    </div>
+      <a href="/en/contact" class="btn-kontakt">Contact</a>
+      <a href="/en/contact" class="btn btn-primary">Start project <span class="arrow">→</span></a>
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-panel" id="mobilePanel" aria-hidden="true">
+  <a href="/en/solutions">Solutions</a>
+  <a href="/en/references">References</a>
+  <a href="/en/pricing">Pricing</a>
+  <a href="/en/#ueber">About</a>
+  <a href="/en/contact">Contact</a>
+</div>
+
+<main>
+
+<!-- PAGE HEAD -->
+<section class="page-head">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/en/">Home</a>
+      <span class="sep">/</span>
+      <span>References</span>
+    </div>
+    <span class="mono head-kicker reveal">— Live work · in production</span>
+    <h1 class="reveal">Sites that are <span class="accent">live</span> today.</h1>
+    <p class="lead reveal">These are not mockups and not dressed-up case-study shots. Every reference below is a system that is running right now — with real orders, bookings and users.</p>
+
+    <div class="live-strip reveal" role="status" aria-live="polite">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span class="lbl"><b>Live</b> · All systems operational</span>
+      <span class="live-sep"></span>
+      <span class="live-item"><span class="v">6</span> systems active</span>
+      <span class="live-sep"></span>
+      <span class="live-item"><span class="v">99,97%</span> uptime · 30 days</span>
+      <span class="live-sep"></span>
+      <span class="live-item"><span class="v" id="clock">14:32</span> Linz, AT</span>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section class="band light">
+  <div class="container">
+    <div class="showcase-head reveal">
+      <div>
+        <span class="mono">— Selected work</span>
+        <h2 class="display">Six companies. Six systems doing real work every day.</h2>
+      </div>
+      <p>Orders, bookings, deliveries, timetables. Software that does not sit idle in a portfolio, but runs in day-to-day operations.</p>
+    </div>
+
+    <div class="site-list">
+
+      <!-- 1. Yilmaz -->
+      <article class="site site-yilmaz reveal">
+        <div class="site-visual">
+          <span class="live-pin">Live · since March 2024</span>
+          <div class="browser">
+            <div class="bbar">
+              <span class="d"></span><span class="d"></span><span class="d"></span>
+              <span class="ad">shop.yilmaz-souvenirs.at</span>
+            </div>
+            <div class="bcontent">
+              <div class="yl-head">
+                <div class="yl-logo">Yilmaz Souvenirs</div>
+                <div class="yl-nav"><span>Shop</span><span>Neu</span><span>About</span><span style="color:var(--deep-mint);">◴ 2</span></div>
+              </div>
+              <div class="yl-hero">
+                <div class="t">Handmade in Austria.</div>
+                <div class="s">Shipping DE · AT · CH · TR</div>
+              </div>
+              <div class="yl-grid">
+                <div class="yl-card"><div class="yl-img a"></div><div class="yl-meta"><div class="t">Alpen-Miniatur</div><div class="p">€24,90</div></div></div>
+                <div class="yl-card"><div class="yl-img b"></div><div class="yl-meta"><div class="t">Wien-Edition</div><div class="p">€38,00</div></div></div>
+                <div class="yl-card"><div class="yl-img c"></div><div class="yl-meta"><div class="t">Handmade</div><div class="p">€19,50</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="site-info">
+          <span class="mono topline">E-Commerce · DE / EN / TR</span>
+          <h3>Yilmaz Souvenirs — Online shop with Stripe checkout and live stock.</h3>
+          <p>Live for two years. Serving customers in Austria, Germany, Switzerland and Turkey. Orders sync directly into the existing merchandise system.</p>
+          <a href="https://shop.yilmaz-souvenirs.at" class="url" target="_blank" rel="noopener">shop.yilmaz-souvenirs.at<span class="arrow">↗</span></a>
+          <div class="site-kv">
+            <div><div class="k">Live since</div><div class="v">March 2024</div></div>
+            <div><div class="k">Languages</div><div class="v">3<span class="s">&nbsp;· DE/EN/TR</span></div></div>
+            <div><div class="k">Uptime</div><div class="v">99,98%</div></div>
+          </div>
+          <div class="site-tags">
+            <span class="tag">Next.js</span><span class="tag">Spring Boot</span><span class="tag">Postgres</span><span class="tag">Stripe</span>
+          </div>
+          <div class="site-actions">
+            <a href="/en/case-study" class="btn btn-ghost-light" style="border-color:var(--border); color:var(--primary-dark);">Case study <span class="arrow">→</span></a>
+            <a href="/en/contact?ref=yilmaz-souvenirs" class="link-mint">Request something similar <span class="arrow arrow-pulse">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. Tennishalle (flip) -->
+      <article class="site site-tennis flip reveal">
+        <div class="site-visual">
+          <span class="live-pin">Live · since January 2025</span>
+          <div class="browser">
+            <div class="bbar">
+              <span class="d"></span><span class="d"></span><span class="d"></span>
+              <span class="ad">buchen.th-urfahr.at</span>
+            </div>
+            <div class="bcontent">
+              <div class="tn-head">
+                <div class="tn-logo">Tennishalle <span>Urfahr</span></div>
+                <div class="tn-ctrl"><div class="c">‹</div><div class="c">›</div></div>
+              </div>
+              <div class="tn-week">
+                <div class="tn-day">Mo<b>14</b></div>
+                <div class="tn-day active">Di<b>15</b></div>
+                <div class="tn-day">Mi<b>16</b></div>
+                <div class="tn-day">Do<b>17</b></div>
+                <div class="tn-day">Fr<b>18</b></div>
+                <div class="tn-day">Sa<b>19</b></div>
+                <div class="tn-day">So<b>20</b></div>
+              </div>
+              <div class="tn-grid">
+                <div class="th"></div><div class="th">Halle 1</div><div class="th">Halle 2</div><div class="th">Halle 3</div><div class="th">Halle 4</div>
+                <div class="th">17:00</div>
+                <div class="cell free">free</div>
+                <div class="cell booked">booked</div>
+                <div class="cell free">free</div>
+                <div class="cell mine">You</div>
+                <div class="th">18:00</div>
+                <div class="cell booked">booked</div>
+                <div class="cell booked">booked</div>
+                <div class="cell free">free</div>
+                <div class="cell free">free</div>
+                <div class="th">19:00</div>
+                <div class="cell free">free</div>
+                <div class="cell free">free</div>
+                <div class="cell booked">booked</div>
+                <div class="cell free">free</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="site-info">
+          <span class="mono topline">Sport · court booking</span>
+          <h3>Tennishalle Urfahr — Online booking for 4 courts and 320 active members.</h3>
+          <p>Replaced a 12-year-old Excel setup. Members book in the app, coaches see their weekly schedules, and billing runs automatically via Stripe.</p>
+          <a href="https://buchen.th-urfahr.at" class="url" target="_blank" rel="noopener">buchen.th-urfahr.at<span class="arrow">↗</span></a>
+          <div class="site-kv">
+            <div><div class="k">Live since</div><div class="v">January 2025</div></div>
+            <div><div class="k">Members</div><div class="v">320</div></div>
+            <div><div class="k">Bookings/mo.</div><div class="v">~2.400</div></div>
+          </div>
+          <div class="site-tags">
+            <span class="tag">Next.js</span><span class="tag">Postgres</span><span class="tag">Stripe</span><span class="tag">PWA</span>
+          </div>
+          <div class="site-actions">
+            <a href="/en/case-study" class="btn btn-ghost-light" style="border-color:var(--border); color:var(--primary-dark);">Case study <span class="arrow">→</span></a>
+            <a href="/en/contact?ref=tennishalle-urfahr" class="link-mint">Request something similar <span class="arrow arrow-pulse">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. Sommerhuber bakery -->
+      <article class="site site-bakery reveal">
+        <div class="site-visual">
+          <span class="live-pin">Live · since September 2023</span>
+          <div class="browser">
+            <div class="bbar">
+              <span class="d"></span><span class="d"></span><span class="d"></span>
+              <span class="ad">sommerhuber-baeckerei.at</span>
+            </div>
+            <div class="bcontent">
+              <div class="bk-nav">
+                <div class="bk-logo">Sommerhuber</div>
+                <div class="bk-nav-r"><span>Range</span><span>Pre-order</span><span>Branches</span></div>
+              </div>
+              <div class="bk-hero">
+                <div>
+                  <div class="t">Fresh today. Collect tomorrow.</div>
+                  <div class="sub">Pre-order until 18:00</div>
+                </div>
+                <div class="bk-pill">Order →</div>
+              </div>
+              <div class="bk-cats">
+                <div class="bk-cat">Bread<span>24 types</span></div>
+                <div class="bk-cat">Pastries<span>18 types</span></div>
+                <div class="bk-cat">Sweet<span>12 types</span></div>
+                <div class="bk-cat">Cakes<span>Made to order</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="site-info">
+          <span class="mono topline">E-commerce · pre-order</span>
+          <h3>Sommerhuber Bakery — Pre-order and collection shop for three branches.</h3>
+          <p>Daily assortments, collection time slots, repeat-customer login with saved favourites. Integrated into the branches’ existing till systems.</p>
+          <a href="https://sommerhuber-baeckerei.at" class="url" target="_blank" rel="noopener">sommerhuber-baeckerei.at<span class="arrow">↗</span></a>
+          <div class="site-kv">
+            <div><div class="k">Live since</div><div class="v">September 2023</div></div>
+            <div><div class="k">Branches</div><div class="v">3</div></div>
+            <div><div class="k">Orders/week</div><div class="v">~480</div></div>
+          </div>
+          <div class="site-tags">
+            <span class="tag">Next.js</span><span class="tag">Stripe</span><span class="tag">Till API</span>
+          </div>
+          <div class="site-actions">
+            <a href="/en/case-study" class="btn btn-ghost-light" style="border-color:var(--border); color:var(--primary-dark);">Case study <span class="arrow">→</span></a>
+            <a href="/en/contact?ref=baeckerei-sommerhuber" class="link-mint">Request something similar <span class="arrow arrow-pulse">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4. Haberl logistics (flip) -->
+      <article class="site site-haberl flip reveal">
+        <div class="site-visual" style="background: linear-gradient(135deg, #0A1520, #0F1E2E);">
+          <span class="live-pin">Live · since May 2025</span>
+          <div class="browser">
+            <div class="bbar">
+              <span class="d"></span><span class="d"></span><span class="d"></span>
+              <span class="ad">disposition.haberl-logistik.at</span>
+            </div>
+            <div class="bcontent">
+              <div class="hb-head">
+                <div class="hb-logo">Haberl · Dispatch</div>
+                <div class="hb-status">
+                  <span class="hb-chip">28 live</span>
+                  <span class="hb-chip off">3 paused</span>
+                </div>
+              </div>
+              <div class="hb-main">
+                <div class="hb-map">
+                  <div class="hb-route"></div>
+                  <span class="hb-truck">Truck-14 · Wels → Graz</span>
+                </div>
+                <div class="hb-side">
+                  <div class="hb-stat"><div class="v">142</div><div class="l">routes today</div></div>
+                  <div class="hb-stat"><div class="v">98,4%</div><div class="l">on time</div></div>
+                  <div class="hb-stat"><div class="v">6.240<span style="font-size:9px; color:rgba(255,255,255,.5);">&nbsp;km</span></div><div class="l">total</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="site-info">
+          <span class="mono topline">Custom SaaS · Disposition</span>
+          <h3>Haberl Logistik — Dispatch software for 28 vehicles and 42 drivers.</h3>
+          <p>Route planning, freight note generation, customer portal. Integrated into the existing accounting setup — no data breaks, no CSV export.</p>
+          <a href="https://disposition.haberl-logistik.at" class="url" target="_blank" rel="noopener">disposition.haberl-logistik.at<span class="arrow">↗</span></a>
+          <div class="site-kv">
+            <div><div class="k">Live since</div><div class="v">May 2025</div></div>
+            <div><div class="k">Vehicles</div><div class="v">28</div></div>
+            <div><div class="k">Routes/day</div><div class="v">~140</div></div>
+          </div>
+          <div class="site-tags">
+            <span class="tag">Spring Boot</span><span class="tag">React</span><span class="tag">MapBox</span><span class="tag">SAP-API</span>
+          </div>
+          <div class="site-actions">
+            <a href="/en/case-study" class="btn btn-ghost-light" style="border-color:var(--border); color:var(--primary-dark);">Case study <span class="arrow">→</span></a>
+            <a href="/en/contact?ref=haberl-logistik" class="link-mint">Request something similar <span class="arrow arrow-pulse">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5. Reitsport -->
+      <article class="site site-reit reveal">
+        <div class="site-visual">
+          <span class="live-pin">Live · since October 2024</span>
+          <div class="browser">
+            <div class="bbar">
+              <span class="d"></span><span class="d"></span><span class="d"></span>
+              <span class="ad">app.rz-traunsee.at</span>
+            </div>
+            <div class="bcontent">
+              <div class="rt-head">
+                <div class="rt-logo">Reitsportzentrum Traunsee</div>
+                <div class="rt-bell"></div>
+              </div>
+              <div class="rt-cards">
+                <div class="rt-card primary">
+                  <div class="rt-time">Today 17:30</div>
+                  <div class="rt-what">Jump training · Horse: Cayenne</div>
+                  <span class="rt-badge">Confirmed</span>
+                </div>
+                <div class="rt-card">
+                  <div class="rt-time">Thu · 09:00</div>
+                  <div class="rt-what">Dressage · Coach: Lena H.</div>
+                  <span class="rt-badge">Open</span>
+                </div>
+                <div class="rt-card">
+                  <div class="rt-time">Sa · 15:00</div>
+                  <div class="rt-what">Trail ride · Group</div>
+                  <span class="rt-badge">Waitlist</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="site-info">
+          <span class="mono topline">Sport · PWA · club</span>
+          <h3>Traunsee Equestrian Centre — Riding lesson platform with horse assignment.</h3>
+          <p>Members book lessons, coaches see weekly schedules, billing runs automatically. Built mobile-first — for stable work without a laptop.</p>
+          <a href="https://app.rz-traunsee.at" class="url" target="_blank" rel="noopener">app.rz-traunsee.at<span class="arrow">↗</span></a>
+          <div class="site-kv">
+            <div><div class="k">Live since</div><div class="v">October 2024</div></div>
+            <div><div class="k">Members</div><div class="v">186</div></div>
+            <div><div class="k">Horses</div><div class="v">24</div></div>
+          </div>
+          <div class="site-tags">
+            <span class="tag">Next.js</span><span class="tag">Postgres</span><span class="tag">PWA</span>
+          </div>
+          <div class="site-actions">
+            <a href="/en/case-study" class="btn btn-ghost-light" style="border-color:var(--border); color:var(--primary-dark);">Case study <span class="arrow">→</span></a>
+            <a href="/en/contact?ref=reitsportzentrum-traunsee" class="link-mint">Request something similar <span class="arrow arrow-pulse">→</span></a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- Timeline in dark band -->
+<section class="band surface-dark">
+  <div class="container">
+    <div class="showcase-head reveal" style="margin-bottom:40px;">
+      <div>
+        <span class="mono" style="color:var(--mint);">— How long they’ve been live</span>
+        <h2 class="display" style="color:#fff;">The oldest system is from 2022. It still runs.</h2>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <span class="y">2022 · Q3</span>
+        <div class="t">Möbel Weinberger</div>
+        <div class="d">B2B configurator — 3.6 years live, 0 critical outages.</div>
+      </div>
+      <div class="tl-item">
+        <span class="y">2023 · Q3</span>
+        <div class="t">Weinbau Grubmayer</div>
+        <div class="d">Digital cellar book — AMA-compliant, through 3 wine vintages.</div>
+      </div>
+      <div class="tl-item">
+        <span class="y">2023 · Q4</span>
+        <div class="t">Bäckerei Sommerhuber</div>
+        <div class="d">Pre-order shop — ~480 orders per week, stable.</div>
+      </div>
+      <div class="tl-item">
+        <span class="y">2024 · Q1</span>
+        <div class="t">Yilmaz Souvenirs</div>
+        <div class="d">Multi-language shop — +142% revenue, 4 countries.</div>
+      </div>
+      <div class="tl-item">
+        <span class="y">2024 · Q4</span>
+        <div class="t">Reitsportzentrum Traunsee</div>
+        <div class="d">Riding PWA — 186 members, 24 horses, 1,200 lessons/year.</div>
+      </div>
+      <div class="tl-item">
+        <span class="y">2025 · Q1</span>
+        <div class="t">Tennishalle Urfahr</div>
+        <div class="d">Court booking — 320 members, ~2,400 bookings per month.</div>
+      </div>
+      <div class="tl-item">
+        <span class="y">2025 · Q2</span>
+        <div class="t">Haberl Logistik</div>
+        <div class="d">Dispatch SaaS — 28 vehicles, 140+ routes per day.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wall of clients -->
+<section class="band cream">
+  <div class="container">
+    <div class="showcase-head reveal">
+      <div>
+        <span class="mono">— Long-running partnerships</span>
+        <h2 class="display">Clients we have been working with for years.</h2>
+      </div>
+      <p>Most of the references here have been live for at least two years. We support what we build.</p>
+    </div>
+
+    <div class="wall reveal">
+      <div class="cell">
+        <div class="n">Yilmaz Souvenirs</div>
+        <div class="m">Multi-language online shop</div>
+        <div class="since">Since 03 / 2024</div>
+      </div>
+      <div class="cell">
+        <div class="n">Tennishalle Urfahr</div>
+        <div class="m">Court booking & billing</div>
+        <div class="since">Since 01 / 2025</div>
+      </div>
+      <div class="cell">
+        <div class="n">Sommerhuber</div>
+        <div class="m">Pre-order shop · 3 branches</div>
+        <div class="since">Since 09 / 2023</div>
+      </div>
+      <div class="cell">
+        <div class="n">Haberl Logistik</div>
+        <div class="m">Dispatch software</div>
+        <div class="since">Since 05 / 2025</div>
+      </div>
+      <div class="cell">
+        <div class="n">Reitsportzentrum Traunsee</div>
+        <div class="m">Riding PWA with horse assignment</div>
+        <div class="since">Since 10 / 2024</div>
+      </div>
+      <div class="cell">
+        <div class="n">Weinbau Grubmayer</div>
+        <div class="m">Digital cellar book</div>
+        <div class="since">Since 08 / 2023</div>
+      </div>
+      <div class="cell">
+        <div class="n">Möbel Weinberger</div>
+        <div class="m">B2B configurator</div>
+        <div class="since">Since 09 / 2022</div>
+      </div>
+      <div class="cell">
+        <div class="n">… your company?</div>
+        <div class="m">There is still room on this wall.</div>
+        <div class="since" style="color:var(--muted);">Let’s talk about it →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="band light">
+  <div class="container">
+    <div class="quote-card reveal">
+      <blockquote>
+        Buckberry did not sell us a platform — they built one for us. Three years later it still runs, and every new revenue report is a good one to read.
+      </blockquote>
+      <div class="quote-foot">
+        <div class="avatar" aria-hidden="true">MY</div>
+        <div>
+          <div class="who">Mehmet Yilmaz</div>
+          <div class="role">Managing Director · Yilmaz Souvenirs</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <div class="cta-orb" id="ctaOrb" aria-hidden="true"></div>
+  <div class="dotgrid" aria-hidden="true"></div>
+  <div class="container">
+    <div class="cta-inner">
+      <h2 class="reveal">Want to be the next system that is actually live?</h2>
+      <p class="lead reveal">30 minutes. No sales pitch. We tell you honestly whether we are the right fit for the job.</p>
+      <a href="/en/contact" class="btn btn-primary reveal" style="font-size:16px; padding:18px 30px;">Book a call <span class="arrow arrow-pulse">→</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-col foot-brand">
+        <a href="/en/" class="brand">
+          <img src="/logo/karelogo.png" alt="" aria-hidden="true" style="width:24px;height:24px;object-fit:contain;border-radius:0;background:none;box-shadow:none;">
+          <span class="wordmark">buckberry</span>
+        </a>
+        <p class="tagline">Software, carefully chosen.</p>
+        <span class="mono loc">Linz, Austria</span>
+      </div>
+      <div class="foot-col">
+        <span class="mono foot-h">Solutions</span>
+        <ul>
+          <li><a href="/en/solutions">Shop</a></li>
+          <li><a href="/en/solutions">Sport</a></li>
+          <li><a href="/en/solutions">Custom</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <span class="mono foot-h">Company</span>
+        <ul>
+          <li><a href="/en/#ueber">About</a></li>
+          <li><a href="/en/references">References</a></li>
+          <li><a href="/en/pricing">Pricing</a></li>
+          <li><a href="/en/contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bar">
+      <span>© 2026 Buckberry Labs</span>
+      <span class="mono">built in Linz, AT · hosted on Vercel</span>
+      <a href="/de/hinweis" style="font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.5); text-decoration:none; transition:color .2s;" onmouseover="this.style.color='#3DD9C4'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">— Status</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Hamburger
+  const ham = document.getElementById('hamburger');
+  const panel = document.getElementById('mobilePanel');
+  ham?.addEventListener('click', () => {
+    const open = ham.classList.toggle('open');
+    panel.classList.toggle('open', open);
+    ham.setAttribute('aria-expanded', open);
+  });
+  panel?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    ham.classList.remove('open'); panel.classList.remove('open');
+  }));
+
+  // Cursor
+  if (!reduced && window.matchMedia('(pointer:fine)').matches) {
+    const cursor = document.getElementById('cursor');
+    let tx=0, ty=0, cx=0, cy=0;
+    window.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+    const loop = () => {
+      cx += (tx-cx)*0.18; cy += (ty-cy)*0.18;
+      cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+      requestAnimationFrame(loop);
+    };
+    loop();
+    document.querySelectorAll('a, button, .site, .quote-card, .wall .cell, .tl-item').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+  } else {
+    const c = document.getElementById('cursor'); if (c) c.style.display='none';
+    document.body.style.cursor='auto';
+  }
+
+  // Live clock (Linz)
+  const clock = document.getElementById('clock');
+  const tick = () => {
+    const d = new Date();
+    const h = String(d.getHours()).padStart(2,'0');
+    const m = String(d.getMinutes()).padStart(2,'0');
+    if (clock) clock.textContent = `${h}:${m}`;
+  };
+  tick(); setInterval(tick, 30000);
+
+  // Animations
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    if (!reduced) {
+      gsap.utils.toArray('.reveal').forEach(el => {
+        gsap.to(el, {
+          opacity:1, y:0, duration:.7,
+          ease:'cubic-bezier(0.2,0.8,0.2,1)',
+          scrollTrigger:{ trigger:el, start:'top 88%' }
+        });
+      });
+      gsap.to('#ctaOrb', { x:80, duration:10, yoyo:true, repeat:-1, ease:'sine.inOut' });
+    } else {
+      document.querySelectorAll('.reveal, .site').forEach(el => { el.style.opacity=1; el.style.transform='none'; });
+    }
+  }
+})();
+</script>
+<script>
+const LANG_SWITCH_MAP = {
+  "de/": {
+    "de": "/de/",
+    "en": "/en/",
+    "tr": "/tr/"
+  },
+  "de/loesungen": {
+    "de": "/de/loesungen",
+    "en": "/en/solutions",
+    "tr": "/tr/cozumler"
+  },
+  "de/referenzen": {
+    "de": "/de/referenzen",
+    "en": "/en/references",
+    "tr": "/tr/referanslar"
+  },
+  "de/preise": {
+    "de": "/de/preise",
+    "en": "/en/pricing",
+    "tr": "/tr/fiyatlar"
+  },
+  "de/fallstudie": {
+    "de": "/de/fallstudie",
+    "en": "/en/case-study",
+    "tr": "/tr/vaka-calismasi"
+  },
+  "de/kontakt": {
+    "de": "/de/kontakt",
+    "en": "/en/contact",
+    "tr": "/tr/iletisim"
+  }
+};
+const LANG_SWITCH_KEY = "de/referenzen";
+(() => {
+  const current = LANG_SWITCH_MAP[LANG_SWITCH_KEY];
+  if (!current) return;
+  const suffix = location.search + location.hash;
+  document.querySelectorAll('[data-lang-switch]').forEach((link) => {
+    const target = current[link.getAttribute('data-lang-switch')];
+    if (target) link.href = target + suffix;
+  });
+})();
+</script>
+</body>
+</html>
