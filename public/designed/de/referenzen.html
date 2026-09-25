@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Referenzen — Buckberry Labs</title>
-<meta name="description" content="Sechs reale Systeme, die heute live sind: Shops, Buchungssysteme, Portale und operative Software im täglichen Einsatz." />
+<meta name="description" content="Drei Systeme, die heute im Einsatz sind: ein Online-Shop mit Stripe-Checkout, ein Buchungssystem für eine Soccer Arena und eine Fotografie-Website mit privatem Kundenportal." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
@@ -17,538 +17,277 @@
   :root{
     --primary-dark:#0F1E2E;
     --surface-dark:#0A1520;
+    --graphite-2:#172533;
+    --graphite-3:#1D2C3B;
     --mint:#3DD9C4;
     --deep-mint:#14B8A6;
     --grad: linear-gradient(135deg,#3DD9C4 0%,#14B8A6 100%);
-    --light:#FAFAFA;
     --cream:#F4F2ED;
-    --white:#FFFFFF;
-    --border:#E5E7EB;
-    --muted:#6B7280;
+    --line:rgba(255,255,255,.1);
+    --text-dim:rgba(255,255,255,.66);
     --ease:cubic-bezier(0.2,0.8,0.2,1);
-    --bounce:cubic-bezier(0.34,1.56,0.64,1);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
-  body{
-    font-family:'Inter',system-ui,sans-serif;
-    color:var(--primary-dark); background:var(--light);
-    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-    overflow-x:hidden; line-height:1.6; cursor:none;
-  }
-  @media (max-width:900px){ body{cursor:auto;}}
-  ::selection{ background:var(--mint); color:var(--surface-dark);}
-  .display{ font-family:'Geist','Inter',sans-serif; font-weight:600; letter-spacing:-0.02em;}
-  .mono{ font-family:'Geist Mono','ui-monospace',monospace; font-weight:500; letter-spacing:.15em; text-transform:uppercase; font-size:12px;}
-  .container{ max-width:1200px; margin:0 auto; padding:0 24px;}
-  a{ color:inherit; }
+  body{ font-family:'Inter',system-ui,sans-serif; line-height:1.6; color:#fff; background:var(--surface-dark); -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  ::selection{ background:var(--mint); color:var(--surface-dark); }
+  .mono{ font-family:'Geist Mono',monospace; font-weight:500; letter-spacing:.15em; text-transform:uppercase; font-size:12px; }
+  .container{ max-width:1240px; margin:0 auto; padding:0 24px; }
 
-  /* Buttons */
-  .btn{
-    display:inline-flex; align-items:center; gap:8px; padding:14px 24px;
-    border-radius:10px; font-weight:600; font-size:15px;
-    font-family:'Geist','Inter',sans-serif; letter-spacing:-0.01em;
-    text-decoration:none; border:1px solid transparent;
-    transition: transform .2s var(--ease), box-shadow .3s var(--ease), border-color .2s, color .2s, background .2s;
-    cursor:none;
-  }
-  @media(max-width:900px){ .btn{cursor:pointer;}}
-  .btn-primary{ background:var(--grad); color:var(--surface-dark); box-shadow:0 4px 16px -4px rgba(61,217,196,.25);}
-  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 16px 32px -8px rgba(61,217,196,.5);}
-  .btn-ghost-dark{ border-color:rgba(255,255,255,.2); color:#fff;}
-  .btn-ghost-dark:hover{ border-color:var(--mint); color:var(--mint);}
-  .arrow{ display:inline-block; transition: transform .2s var(--ease);}
-  .btn:hover .arrow{ transform:translateX(4px);}
-  .arrow-pulse{ animation: arrowPulse 1.8s ease-in-out infinite;}
-  @keyframes arrowPulse { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);}}
-
-  .link-mint{ color:var(--deep-mint); font-weight:500; text-decoration:none; display:inline-flex; align-items:center; gap:6px; position:relative;}
-  .link-mint::after{ content:''; position:absolute; left:0; bottom:-2px; height:1px; width:0; background:currentColor; transition:width .25s var(--ease);}
-  .link-mint:hover::after{ width:100%; }
-  .link-mint:hover .arrow{ transform:translateX(4px);}
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding:14px 24px; border-radius:10px; font-weight:600; font-size:15px; font-family:'Geist','Inter',sans-serif; text-decoration:none; border:1px solid transparent; transition:transform .2s var(--ease), box-shadow .3s var(--ease), border-color .25s, color .25s, background .25s; }
+  .btn-primary{ background:var(--grad); color:var(--surface-dark); box-shadow:0 4px 16px -4px rgba(61,217,196,.25); }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 16px 32px -8px rgba(61,217,196,.5); }
+  .btn-ghost-dark{ border-color:rgba(255,255,255,.22); color:#fff; background:transparent; }
+  .btn-ghost-dark:hover{ border-color:var(--mint); color:var(--mint); }
+  .arrow{ display:inline-block; transition:transform .2s var(--ease); }
+  .btn:hover .arrow{ transform:translateX(4px); }
+  .arrow-pulse{ animation:arrowPulse 1.8s ease-in-out infinite; }
+  @keyframes arrowPulse{ 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
+  .link-under{ color:#fff; font-family:'Geist',sans-serif; font-weight:600; font-size:18px; text-decoration:none; display:inline-flex; align-items:center; gap:10px; }
+  .link-under .t{ border-bottom:2px solid currentColor; padding-bottom:2px; }
+  .link-under:hover{ color:var(--mint); }
+  .link-under:hover .arrow{ transform:translateX(4px); }
 
   /* NAV */
-  .nav{
-    position:fixed; top:0; left:0; right:0; z-index:50; height:72px;
-    display:flex; align-items:center;
-    background: rgba(250,250,250,.85);
-    backdrop-filter: blur(16px); -webkit-backdrop-filter:blur(16px);
-    border-bottom:1px solid var(--border);
+  .nav{ position:fixed; top:0; left:0; right:0; z-index:50; height:84px; display:flex; align-items:center; transition:background .3s linear, height .3s var(--ease), border-color .3s linear; border-bottom:1px solid transparent; }
+  .nav.sticky{ height:72px; background:rgba(10,21,32,.78); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom-color:var(--line); }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; width:100%; }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+  .brand img{ height:40px; width:auto; }
+  .brand .wm{ font-family:'Geist',sans-serif; font-weight:600; font-size:21px; letter-spacing:-.03em; color:#fff; }
+  .nav-links{ display:flex; gap:40px; align-items:center; }
+  @media (max-width:1280px){ .nav-links{ gap:26px; } .nav-link{ font-size:14px; } }
+  @media (max-width:1140px){ .nav-links a[href$="#ueber"]{ display:none; } }
+  .nav-link{ font-family:'Geist',sans-serif; font-size:15px; font-weight:500; color:rgba(255,255,255,.88); text-decoration:none; transition:color .2s; position:relative; padding:8px 0; }
+  .nav-link:hover, .nav-link.active{ color:var(--mint); }
+  .nav-link::after{ content:''; position:absolute; left:50%; bottom:0; width:4px; height:4px; border-radius:50%; background:var(--mint); opacity:0; transform:translate(-50%,6px); transition:opacity .2s, transform .2s var(--ease); }
+  .nav-link:hover::after, .nav-link.active::after{ opacity:1; transform:translate(-50%,0); }
+  .nav-right{ display:flex; align-items:center; gap:20px; }
+  .nav-cta{ padding:12px 22px; font-size:14px; border-radius:6px; background:transparent; color:#fff; border:1px solid rgba(255,255,255,.85); box-shadow:none; }
+  .nav-cta:hover{ border-color:var(--mint); color:var(--mint); }
+  .nav.sticky .nav-cta{ background:var(--grad); color:var(--surface-dark); border-color:transparent; }
+  .hamburger{ display:none; cursor:pointer; width:32px; height:32px; flex-direction:column; justify-content:center; align-items:center; gap:5px; background:none; border:none; }
+  .hamburger span{ width:22px; height:1.5px; background:#fff; transition:transform .18s var(--ease), opacity .18s; }
+  .hamburger.open span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2){ opacity:0; }
+  .hamburger.open span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+  .mobile-panel{ position:fixed; top:0; right:0; width:min(360px,90vw); height:100vh; background:var(--primary-dark); z-index:45; transform:translateX(100%); transition:transform .3s var(--ease); padding:96px 32px 32px; display:none; flex-direction:column; gap:4px; }
+  .mobile-panel.open{ transform:translateX(0); }
+  @media (max-width:980px){
+    .nav-links, .nav-right .nav-cta{ display:none; }
+    .hamburger{ display:flex; }
+    .mobile-panel{ display:flex; }
+    .mobile-panel a{ color:#fff; text-decoration:none; font-family:'Geist',sans-serif; font-size:24px; font-weight:500; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.08); }
+    .mobile-panel .btn{ margin-top:16px; justify-content:center; border-bottom:none; }
   }
-  .nav-inner{ display:flex; align-items:center; justify-content:space-between; width:100%;}
-  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none;}
-  .berry{ width:32px; height:32px; border-radius:50%; background:var(--grad); position:relative; box-shadow: inset 0 -4px 8px rgba(0,0,0,.15), 0 2px 8px rgba(61,217,196,.3);}
-  .berry::before{ content:''; position:absolute; top:6px; left:9px; width:8px; height:8px; background:rgba(255,255,255,.5); border-radius:50%; filter:blur(2px);}
-  .berry::after{ content:''; position:absolute; top:-4px; left:12px; width:8px; height:8px; background:#0F1E2E; border-radius:0 100% 0 0; transform:rotate(-20deg);}
-  .wordmark{ font-family:'Geist','Inter',sans-serif; font-weight:600; font-size:20px; letter-spacing:-0.025em; color:var(--primary-dark);}
-  .nav-links{ display:flex; gap:32px; align-items:center;}
-  .nav-link{ font-size:14px; font-weight:500; color:var(--primary-dark); text-decoration:none; transition:color .2s; position:relative; padding:8px 0;}
-  .nav-link:hover{ color:var(--deep-mint);}
-  .nav-link.active{ color:var(--deep-mint);}
-  .nav-link.active::before{ content:''; position:absolute; left:50%; bottom:0; width:4px; height:4px; border-radius:50%; background:var(--mint); transform:translateX(-50%);}
-  .nav-right{ display:flex; align-items:center; gap:12px;}
-  .btn-kontakt{ font-size:14px; font-weight:500; color:var(--primary-dark); background:transparent; border:none; padding:8px 12px; text-decoration:none; cursor:none; position:relative;}
-  @media(max-width:900px){ .btn-kontakt{cursor:pointer;}}
-  .btn-kontakt::after{ content:''; position:absolute; left:12px; right:12px; bottom:4px; height:1px; background:currentColor; transform:scaleX(0); transform-origin:left; transition:transform .25s var(--ease);}
-  .btn-kontakt:hover::after{ transform:scaleX(1);}
-  .nav .btn-primary{ padding:10px 18px; font-size:14px;}
-  .hamburger{ display:none; width:32px; height:32px; flex-direction:column; justify-content:center; align-items:center; gap:5px; background:none; border:none; cursor:none;}
-  @media(max-width:900px){ .hamburger{cursor:pointer;}}
-  .hamburger span{ width:22px; height:1.5px; background:var(--primary-dark); transition: transform .18s var(--ease), opacity .18s;}
-  .hamburger.open span:nth-child(1){ transform:translateY(6.5px) rotate(45deg);}
-  .hamburger.open span:nth-child(2){ opacity:0;}
-  .hamburger.open span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg);}
-  .mobile-panel{
-    position:fixed; top:0; right:0; width:min(360px,90vw); height:100vh;
-    background:var(--surface-dark); z-index:45;
-    transform:translateX(100%); transition:transform .3s var(--ease);
-    padding:96px 32px 32px; display:none; flex-direction:column; gap:4px;
+  .lang-switch{ display:flex; align-items:center; gap:10px; font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+  .lang-switch a{ color:#fff; text-decoration:none; opacity:.55; transition:opacity .2s, color .2s; }
+  .lang-switch a:hover{ opacity:1; }
+  .lang-switch a.active{ opacity:1; color:var(--mint); font-weight:700; }
+  .lang-switch .sep{ opacity:.28; }
+
+  /* HERO ----------------------------------------------------- */
+  .hero{ position:relative; min-height:100vh; min-height:100svh; overflow:hidden; isolation:isolate; display:flex; align-items:center; padding:120px 0 72px; }
+  .hero-glow{ position:absolute; inset:0; z-index:-2; pointer-events:none;
+    background: radial-gradient(60% 70% at var(--glow-x,76%) 50%, var(--glow-c, rgba(30,58,95,.55)), transparent 70%), radial-gradient(50% 60% at 0% 20%, rgba(20,184,166,.16), transparent 70%);
+    transition:background 1.2s linear; }
+  .hero-noise{ position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:.35; background-image:radial-gradient(rgba(61,217,196,.35) 1px, transparent 1px); background-size:34px 34px; mask-image:radial-gradient(ellipse at 70% 50%, black 10%, transparent 65%); -webkit-mask-image:radial-gradient(ellipse at 70% 50%, black 10%, transparent 65%); }
+  .hero-grid{ position:relative; width:100%; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; align-items:center; }
+  .hero-copy{ position:relative; z-index:4; }
+  .breadcrumb{ display:flex; gap:10px; font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.5); margin-bottom:28px; opacity:0; }
+  .breadcrumb a{ color:inherit; text-decoration:none; } .breadcrumb a:hover{ color:var(--mint); }
+  .breadcrumb .cur{ color:var(--mint); }
+  .hero h1{ font-family:'Geist',sans-serif; font-weight:500; font-size:clamp(46px,6vw,92px); line-height:1; letter-spacing:-.045em; margin-bottom:36px; }
+  .h1-line{ display:block; overflow:hidden; padding-bottom:.08em; }
+  .h1-inner{ display:block; opacity:0; transform:translateY(40%); }
+  .h1-inner.mint{ color:var(--mint); }
+  .hero-lead{ max-width:520px; font-family:'Geist',sans-serif; font-weight:500; font-size:clamp(17px,1.5vw,20px); line-height:1.55; color:rgba(255,255,255,.88); margin-bottom:44px; opacity:0; }
+  .jump{ display:flex; flex-wrap:wrap; gap:10px 32px; opacity:0; }
+  .jump a{ display:flex; align-items:baseline; gap:10px; color:#fff; text-decoration:none; font-family:'Geist',sans-serif; font-size:16px; font-weight:500; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.2); transition:border-color .2s, color .2s; }
+  .jump a .n{ font-family:'Geist Mono',monospace; font-size:11px; color:var(--mint); letter-spacing:.1em; }
+  .jump a:hover{ color:var(--mint); border-color:var(--mint); }
+
+  /* deck of project cards (hero animation) */
+  .stage{ position:relative; height:600px; z-index:2; }
+  .deck{ position:absolute; left:50%; top:46%; width:420px; height:420px; transform:translate(-50%,-50%); }
+  .dcard{ position:absolute; inset:0; overflow:visible; display:flex; align-items:center; justify-content:center; box-shadow:none; will-change:transform; }
+  .dcard .cap{ display:none; position:absolute; left:20px; bottom:18px; right:20px; justify-content:space-between; align-items:center; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; }
+  .dcard.v-mint .cap, .dcard.v-cream .cap{ color:#0A1520; }
+  .dcard.v-steel .cap{ color:#fff; }
+  .stage-progress{ position:absolute; left:50%; bottom:-8px; transform:translateX(-50%); display:flex; gap:10px; z-index:5; }
+  .stage-progress span{ width:40px; height:2px; background:rgba(255,255,255,.14); border-radius:2px; overflow:hidden; position:relative; }
+  .stage-progress span i{ position:absolute; inset:0; background:var(--mint); transform:scaleX(0); transform-origin:left; }
+  .stage-label{ position:absolute; left:50%; bottom:28px; transform:translateX(-50%); font-family:'Geist',sans-serif; font-size:15px; font-weight:500; white-space:nowrap; color:rgba(255,255,255,.85); }
+  @media (max-width:1180px){ .deck{ transform:translate(-50%,-50%) scale(.84); } }
+  @media (max-width:980px){
+    .hero{ padding:112px 0 56px; }
+    .hero-grid{ grid-template-columns:1fr; gap:8px; }
+    .stage{ height:480px; margin:0 -24px; }
+    .deck{ transform:translate(-50%,-50%) scale(.78); }
   }
-  .mobile-panel.open{ transform:translateX(0);}
+  @media (max-width:560px){ .stage{ height:400px; } .deck{ transform:translate(-50%,-50%) scale(.64); } }
+
+  /* shared visual pieces */
+  .v-mint{ background:transparent; }
+  .v-cream{ background:transparent; }
+  .v-steel{ background:transparent; }
+
+
+
+  .duo{ position:relative; width:400px; height:500px; }
+  .rphone{ position:absolute; width:210px; aspect-ratio:70.6/146.6; border-radius:16.5% / 7.95%; container-type:inline-size;
+    background:linear-gradient(90deg,#3d3d40 0%,#6b6b70 3%,#48484b 9%,#2e2e31 50%,#48484b 91%,#6b6b70 97%,#3d3d40 100%);
+    box-shadow:0 44px 64px -22px rgba(0,0,0,.6), 0 16px 26px -14px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.18); }
+  .rphone::before{ content:''; position:absolute; left:-.9cqw; top:40cqw; width:1cqw; height:13cqw; border-radius:.6cqw 0 0 .6cqw; background:#4a4a4e; box-shadow:0 17cqw 0 #4a4a4e, 0 -17cqw 0 -.1cqw #4a4a4e; }
+  .rphone::after{ content:''; position:absolute; right:-.9cqw; top:50cqw; width:1cqw; height:21cqw; border-radius:0 .6cqw .6cqw 0; background:#4a4a4e; }
+  .rphone .scr{ position:absolute; inset:1.2cqw; display:flex; flex-direction:column; overflow:hidden; border-radius:15.3cqw; border:3.3cqw solid #000; background:#000; }
+  .rphone .scr::before{ content:''; position:absolute; z-index:3; top:2.1cqw; left:50%; transform:translateX(-50%); width:30cqw; height:8.8cqw; border-radius:5cqw; background:#000; }
+  .rphone .sb{ position:relative; flex:none; height:14.2cqw; background:var(--sb,#fafafa); color:#000; font-family:-apple-system,'SF Pro Text','Inter',system-ui,sans-serif; }
+  .rphone .sb.light{ color:#fff; }
+  .rphone .sb i{ position:absolute; left:9.5cqw; top:6.5cqw; transform:translateY(-50%); font-style:normal; font-weight:600; font-size:4.3cqw; letter-spacing:-.01em; line-height:1; }
+  .rphone .sb .ic{ position:absolute; right:6.8cqw; top:6.5cqw; transform:translateY(-50%); display:flex; align-items:center; gap:1.2cqw; }
+  .rphone .sb .ic svg{ display:block; height:3.1cqw; width:auto; fill:currentColor; }
+  .rphone .sb .ic svg.bat{ height:3.4cqw; }
+  .rphone img, .rphone .stack{ display:block; flex:1; min-height:0; width:100%; object-fit:cover; object-position:top; }
+  .rphone .stack{ position:relative; }
+  .rphone .stack img{ position:absolute; inset:0; height:100%; }
+  .rphone .hb{ position:absolute; z-index:3; bottom:1.7cqw; left:50%; transform:translateX(-50%); width:35cqw; height:1.3cqw; border-radius:1cqw; background:#fff; mix-blend-mode:difference; opacity:.9; }
+  .duo .rphone.back{ left:10px; top:40px; transform:rotate(-8deg); }
+  .duo .rphone.front{ right:10px; top:0; transform:rotate(6deg); z-index:1; }
+
+  /* SECTIONS ------------------------------------------------- */
+  section.band{ padding:120px 0; position:relative; overflow:hidden; }
+  @media(min-width:1024px){ section.band{ padding:144px 0; } }
+  .band.graphite{ background:var(--graphite-2); }
+  .band.surface{ background:var(--surface-dark); }
+  .band.steel{ background:#1a2735; }
+  .sec-title{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(32px,4vw,54px); line-height:1.12; letter-spacing:-.035em; max-width:22ch; }
+  .sec-title b{ font-weight:600; }
+  .sec-head{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; margin-bottom:88px; }
+  .sec-head .lead{ font-size:clamp(17px,1.5vw,21px); line-height:1.6; color:rgba(255,255,255,.85); }
+  @media(max-width:900px){ .sec-head{ grid-template-columns:1fr; gap:20px; margin-bottom:56px; } }
+  .reveal{ opacity:0; transform:translateY(24px); }
+
+  /* CASE BLOCKS ---------------------------------------------- */
+  .case{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:clamp(40px,7vw,120px); align-items:center; scroll-margin-top:100px; }
+  .case.flip .case-visual{ order:-1; }
+  .case-meta{ display:flex; flex-wrap:wrap; gap:8px 24px; align-items:center; margin-bottom:22px; }
+  .case-meta .mono{ font-size:11px; color:var(--mint); }
+  .case-meta .since{ font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.5); }
+  .case .client{ display:block; margin-bottom:16px; color:rgba(255,255,255,.9); }
+  .cl-yilmaz{ font-family:Georgia,'Times New Roman',serif; font-style:italic; font-size:26px; }
+  .cl-sala{ font-family:'Geist',sans-serif; font-weight:600; font-size:17px; letter-spacing:.2em; text-transform:uppercase; }
+  .cl-sala b{ color:var(--mint); font-weight:600; }
+  .cl-alya{ font-family:'Geist',sans-serif; font-weight:300; font-size:28px; letter-spacing:-.02em; }
+  .case h2{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(30px,3.4vw,46px); letter-spacing:-.035em; line-height:1.12; margin-bottom:28px; }
+  .case h2 b{ font-weight:600; }
+  .case .txt{ font-size:18px; line-height:1.65; color:rgba(255,255,255,.85); margin-bottom:40px; max-width:52ch; }
+  .kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin-bottom:36px; }
+  .kpi{ background:var(--graphite-3); padding:26px 22px; }
+  .band.graphite .kpi{ background:#22344a; }
+  .kpi .v{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(28px,2.6vw,40px); letter-spacing:-.04em; line-height:1; margin-bottom:12px; white-space:nowrap; }
+  .kpi .l{ font-size:14px; line-height:1.4; color:rgba(255,255,255,.78); }
+  .stack{ font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:36px; }
+  .stack b{ color:rgba(255,255,255,.75); font-weight:500; }
+  .case-links{ display:flex; flex-wrap:wrap; gap:18px 36px; align-items:center; }
+  .case-links .ext{ color:rgba(255,255,255,.7); font-size:15px; text-decoration:none; border-bottom:1px solid rgba(255,255,255,.25); padding-bottom:2px; }
+  .case-links .ext.off{ border-bottom-style:dashed; color:rgba(255,255,255,.5); cursor:default; }
+  .case-links .ext:hover{ color:var(--mint); border-color:var(--mint); }
+  .case-visual{ aspect-ratio:1; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
+  .case-visual > .inner{ transition:scale .8s var(--ease); }
+  .case-visual:hover > .inner{ scale:1.04; }
   @media(max-width:900px){
-    .nav-links, .nav-right .btn-kontakt, .nav-right .btn-primary{ display:none; }
-    .hamburger{ display:flex; } .mobile-panel{ display:flex; }
+    .case{ grid-template-columns:1fr; }
+    .case.flip .case-visual{ order:0; }
   }
-  .mobile-panel a{ color:#fff; text-decoration:none; font-family:'Geist','Inter',sans-serif; font-size:24px; font-weight:500; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.08);}
+  @media(min-width:901px) and (max-width:1120px){ .case-visual .duo{ transform:scale(.8); } }
+  @media(max-width:560px){ .kpis{ grid-template-columns:1fr; } .case-visual .duo{ transform:scale(.66); } }
 
-  /* PAGE HEAD */
-  .page-head{
-    padding: 144px 0 72px; position:relative;
-    background:var(--light); border-bottom:1px solid var(--border); overflow:hidden;
+  /* Kundenportal flow (Alyagraphy) */
+  .flow{ margin-top:112px; }
+  .flow-head{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:end; margin-bottom:56px; }
+  .flow-head h3{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(28px,3vw,40px); letter-spacing:-.03em; line-height:1.15; }
+  .flow-head h3 b{ font-weight:600; }
+  .flow-head p{ font-size:17px; color:rgba(255,255,255,.8); }
+  .flow-steps{ position:relative; display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid rgba(255,255,255,.18); }
+  .flow-line{ position:absolute; left:0; top:-1px; height:2px; width:0; background:var(--grad); box-shadow:0 0 12px rgba(61,217,196,.6); }
+  .fstep{ padding:32px 28px 0 0; }
+  .fstep .n{ display:block; font-family:'Geist',sans-serif; font-weight:300; font-size:clamp(44px,4.4vw,64px); letter-spacing:-.04em; line-height:1; margin-bottom:22px; color:rgba(255,255,255,.35); transition:color .4s; }
+  .fstep.on h4{ color:var(--mint); }
+  .fstep h4{ font-family:'Geist',sans-serif; font-weight:600; font-size:19px; margin-bottom:8px; }
+  .fstep p{ font-size:15px; line-height:1.6; color:rgba(255,255,255,.7); }
+  .fstep .who{ display:block; margin-top:14px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.4); }
+  @media(max-width:900px){
+    .flow-head{ grid-template-columns:1fr; gap:14px; }
+    .flow-steps{ grid-template-columns:1fr 1fr; row-gap:40px; }
   }
-  .page-head::before{
-    content:''; position:absolute; top:-80px; right:-140px; width:520px; height:520px; border-radius:50%;
-    background: radial-gradient(circle, rgba(61,217,196,.18), transparent 65%);
-    filter: blur(50px); pointer-events:none;
-  }
-  .breadcrumb{ color:var(--muted); font-size:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px;}
-  .breadcrumb a{ color:var(--muted); text-decoration:none;}
-  .breadcrumb a:hover{ color:var(--deep-mint);}
-  .breadcrumb .sep{ opacity:.5;}
-  .page-head h1{
-    font-family:'Geist','Inter',sans-serif; font-weight:600;
-    font-size: clamp(40px, 7vw, 76px);
-    line-height:1.02; letter-spacing:-0.035em;
-    max-width: 16ch; margin-bottom:22px;
-  }
-  .page-head h1 .accent{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; font-style:italic; font-weight:500;}
-  .page-head .lead{ font-size:18px; color:var(--muted); max-width:58ch;}
-  .head-kicker{ display:inline-flex; align-items:center; gap:10px; color:var(--deep-mint); margin-bottom:22px;}
-  .head-kicker::before{ content:''; width:24px; height:1px; background:var(--deep-mint); opacity:.6;}
+  @media(max-width:520px){ .flow-steps{ grid-template-columns:1fr; } .flow-line{ display:none; } }
 
-  /* LIVE STRIP */
-  .live-strip{
-    margin-top: 56px;
-    display:flex; align-items:center; gap:32px; flex-wrap:wrap;
-    padding: 18px 24px;
-    background:#fff; border:1px solid var(--border); border-radius:999px;
-  }
-  @media(max-width:700px){ .live-strip{ border-radius:20px; padding:16px 20px;}}
-  .live-dot{
-    width:8px; height:8px; border-radius:50%; background:var(--mint);
-    box-shadow: 0 0 0 0 rgba(61,217,196,.5);
-    animation: livePulse 2s ease-in-out infinite;
-    flex:none;
-  }
-  @keyframes livePulse {
-    0%{ box-shadow: 0 0 0 0 rgba(61,217,196,.5);}
-    70%{ box-shadow: 0 0 0 10px rgba(61,217,196,0);}
-    100%{ box-shadow: 0 0 0 0 rgba(61,217,196,0);}
-  }
-  .live-strip .lbl{ font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--primary-dark);}
-  .live-strip .lbl b{ color:var(--deep-mint); font-weight:600;}
-  .live-sep{ width:1px; height:18px; background:var(--border);}
-  .live-item{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted);}
-  .live-item .v{ font-family:'Geist',sans-serif; font-weight:600; color:var(--primary-dark); font-size:15px; letter-spacing:-0.02em;}
+  .shots{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:88px; }
+  .shot{ margin:0; }
+  .shot .rphone{ position:relative; width:100%; }
+  .shot figcaption{ margin-top:16px; font-size:14px; color:rgba(255,255,255,.7); }
+  .shot figcaption b{ display:block; color:#fff; font-family:'Geist',sans-serif; font-weight:600; font-size:15px; margin-bottom:2px; }
+  @media(max-width:900px){ .shots{ grid-template-columns:1fr 1fr; row-gap:40px; } }
 
-  /* SECTIONS */
-  section.band{ padding: 80px 0; position:relative;}
-  @media(min-width:1024px){ section.band{ padding: 112px 0;}}
-  .band.dark{ background:var(--primary-dark); color:#fff;}
-  .band.surface-dark{ background:var(--surface-dark); color:#fff;}
-  .band.cream{ background:var(--cream);}
-  .band.light{ background:var(--light);}
+  /* Yilmaz: lamp-driven colour theme */
+  .theme-row{ display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:clamp(40px,7vw,120px); align-items:center; margin-top:128px; }
+  .theme-k{ display:block; color:var(--mint); font-size:11px; margin-bottom:16px; }
+  .theme-row h3{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(28px,3vw,40px); letter-spacing:-.03em; line-height:1.15; margin-bottom:20px; }
+  .theme-row h3 b{ font-weight:600; }
+  .theme-row p{ font-size:17px; line-height:1.65; color:rgba(255,255,255,.82); max-width:50ch; }
+  .theme-phone{ display:flex; justify-content:center; }
+  .theme-phone .rphone{ position:relative; width:250px; }
+  .theme-phone .rphone img.alt{ opacity:0; transition:opacity .9s var(--ease); }
+  .theme-phone .rphone img.alt.on{ opacity:1; }
+  @media(max-width:900px){ .theme-row{ grid-template-columns:1fr; margin-top:88px; } }
 
-  /* SHOWCASE — live site cards */
-  .showcase-head{
-    display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;
-    margin-bottom: 56px;
-  }
-  .showcase-head .mono{ color:var(--deep-mint);}
-  .showcase-head h2{
-    font-size: clamp(32px, 4.5vw, 52px); line-height:1.08; letter-spacing:-0.03em;
-    max-width: 18ch; margin-top: 14px;
-  }
-  .showcase-head p{ font-size:15px; color:var(--muted); max-width: 40ch;}
-
-  /* Big site cards */
-  .site-list{ display:flex; flex-direction:column; gap: 32px;}
-
-  .site{
-    background:#fff; border:1px solid var(--border);
-    border-radius: 28px; overflow:hidden;
-    display:grid; grid-template-columns: 1.15fr 1fr;
-    transition: border-color .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease);
-    position:relative;
-  }
-  .site:hover{
-    border-color: var(--mint);
-    box-shadow: 0 30px 60px -20px rgba(15,30,46,.15);
-  }
-  @media(max-width:1024px){ .site{ grid-template-columns: 1fr;} }
-
-  .site.flip{ grid-template-columns: 1fr 1.15fr;}
-  @media(max-width:1024px){ .site.flip{ grid-template-columns: 1fr;} }
-  .site.flip .site-visual{ order:2;}
-  @media(max-width:1024px){ .site.flip .site-visual{ order:1;} }
-
-  .site-visual{
-    position:relative;
-    aspect-ratio: 16/11;
-    overflow:hidden;
-    background: linear-gradient(135deg, #F4F2ED, #FAFAFA);
-    border-right:1px solid var(--border);
-  }
-  @media(max-width:1024px){ .site-visual{ border-right:none; border-bottom:1px solid var(--border);} }
-  .site.flip .site-visual{ border-right:none; border-left:1px solid var(--border);}
-  @media(max-width:1024px){ .site.flip .site-visual{ border-left:none; border-bottom:1px solid var(--border);} }
-
-  .browser{
-    position:absolute; inset: 32px; border-radius: 12px; overflow:hidden;
-    background:#fff; border:1px solid var(--border);
-    box-shadow: 0 30px 60px -24px rgba(15,30,46,.2);
-    display:flex; flex-direction:column;
-    transition: transform .5s var(--ease);
-    transform-style: preserve-3d;
-  }
-  .site:hover .browser{ transform: translateY(-4px);}
-  @media(max-width:700px){ .browser{ inset: 18px;} }
-
-  .bbar{ display:flex; align-items:center; gap:8px; padding: 9px 12px; background:#F4F2ED; border-bottom:1px solid var(--border); flex:none;}
-  .bbar .d{ width:8px; height:8px; border-radius:50%;}
-  .bbar .d:nth-child(1){ background:#FF5F57;} .bbar .d:nth-child(2){ background:#FEBC2E;} .bbar .d:nth-child(3){ background:#28C840;}
-  .bbar .ad{ margin-left:10px; flex:1; font-family:'Geist Mono',monospace; font-size:10px; color:var(--muted); background:#fff; padding:3px 10px; border-radius:5px; border:1px solid var(--border); display:inline-flex; align-items:center; gap:6px;}
-  .bbar .ad::before{ content:''; width:8px; height:8px; border-radius:50%; background:var(--mint); flex:none;}
-
-  .live-pin{
-    position:absolute; top: 12px; right: 12px; z-index:3;
-    padding: 5px 10px 5px 22px;
-    background: rgba(10,21,32,.8); color:#fff;
-    border-radius: 999px;
-    font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
-    backdrop-filter: blur(8px);
-  }
-  .live-pin::before{
-    content:''; position:absolute; left:9px; top:50%; transform:translateY(-50%);
-    width:6px; height:6px; border-radius:50%; background: var(--mint);
-    box-shadow: 0 0 8px var(--mint);
-    animation: livePulse 2s ease-in-out infinite;
-  }
-
-  .bcontent{ flex:1; background:#fff; position:relative; overflow:hidden;}
-
-  /* Site 1 — Yilmaz (e-commerce storefront) */
-  .site-yilmaz .bcontent{
-    padding: 16px;
-    display:grid; grid-template-rows: auto auto auto; gap:12px;
-    align-content: start;
-    background: linear-gradient(180deg, #fff, #FAFAFA);
-  }
-  .yl-head{ display:flex; align-items:center; justify-content:space-between;}
-  .yl-logo{ display:flex; align-items:center; gap:8px; font-family:'Geist',sans-serif; font-weight:600; font-size:13px; letter-spacing:-0.01em;}
-  .yl-logo::before{ content:''; width:18px; height:18px; border-radius:50%; background: var(--grad);}
-  .yl-nav{ display:flex; gap:14px; font-size:10px; color:var(--muted);}
-  .yl-hero{
-    height:62px; border-radius:8px; overflow:hidden; position:relative;
-    background: linear-gradient(120deg, #0F1E2E 0%, #14B8A6 140%);
-    color:#fff; padding: 12px 16px;
-    display:flex; flex-direction:column; justify-content:center;
-  }
-  .yl-hero .t{ font-family:'Geist',sans-serif; font-weight:600; font-size:12px; letter-spacing:-0.01em;}
-  .yl-hero .s{ font-size:9px; opacity:.75; margin-top:2px;}
-  .yl-hero::after{ content:''; position:absolute; right:-20px; top:-10px; width:90px; height:90px; border-radius:50%; background: radial-gradient(circle, rgba(61,217,196,.5), transparent 60%);}
-  .yl-grid{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;}
-  .yl-card{ border:1px solid var(--border); border-radius:8px; overflow:hidden; display:flex; flex-direction:column;}
-  .yl-img{ height:58px; position:relative;}
-  .yl-img::after{ content:''; position:absolute; inset:14px; border:1px dashed rgba(15,30,46,.15); border-radius:5px;}
-  .yl-img.a{ background: linear-gradient(135deg, #F4F2ED, #E5E7EB);}
-  .yl-img.b{ background: linear-gradient(135deg, #0F1E2E, #14B8A6);}
-  .yl-img.b::after{ border-color:rgba(255,255,255,.25);}
-  .yl-img.c{ background: linear-gradient(135deg, #F4F2ED, #3DD9C4);}
-  .yl-meta{ padding:7px 8px 9px;}
-  .yl-meta .t{ font-family:'Geist',sans-serif; font-weight:500; font-size:9px;}
-  .yl-meta .p{ font-family:'Geist Mono',monospace; font-size:9px; color:var(--deep-mint); margin-top:2px;}
-
-  /* Site 2 — Tennishalle (booking calendar) */
-  .site-tennis .bcontent{
-    padding: 14px 16px; background:#fff;
-    display:grid; grid-template-rows: auto auto auto; gap:10px;
-    align-content: start;
-  }
-  .tn-head{ display:flex; justify-content:space-between; align-items:center;}
-  .tn-logo{ font-family:'Geist',sans-serif; font-weight:600; font-size:13px; letter-spacing:-0.015em;}
-  .tn-logo span{ color:var(--deep-mint);}
-  .tn-ctrl{ display:flex; gap:6px;}
-  .tn-ctrl .c{ width:20px; height:20px; border-radius:5px; background:var(--cream); display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--muted);}
-  .tn-week{ display:flex; gap:4px;}
-  .tn-day{ flex:1; padding:5px 4px; text-align:center; border:1px solid var(--border); border-radius:6px; font-size:9px; color:var(--muted);}
-  .tn-day.active{ background:var(--primary-dark); color:#fff; border-color:var(--primary-dark);}
-  .tn-day b{ display:block; font-family:'Geist',sans-serif; font-size:11px; color:inherit; font-weight:600; letter-spacing:-0.01em;}
-  .tn-grid{ display:grid; grid-template-columns: 36px repeat(4, 1fr); gap: 3px; font-size:8px;}
-  .tn-grid .th{ color:var(--muted); padding:3px 4px; font-family:'Geist Mono',monospace; letter-spacing:.08em; text-transform:uppercase;}
-  .tn-grid .cell{ padding:5px 4px; border-radius:4px; border:1px solid var(--border); min-height:16px; font-family:'Geist',sans-serif;}
-  .tn-grid .cell.free{ background:#fff; color:var(--muted); font-size:8px;}
-  .tn-grid .cell.booked{ background:rgba(15,30,46,.9); color:#fff; border-color:rgba(15,30,46,.9); font-size:8px;}
-  .tn-grid .cell.mine{ background: var(--grad); color:var(--surface-dark); border-color:var(--deep-mint); font-weight:600; font-size:8px;}
-
-  /* Site 3 — Sommerhuber bakery (landing) */
-  .site-bakery .bcontent{
-    background: var(--cream); padding: 14px 16px;
-    display:grid; grid-template-rows: auto auto auto; gap:10px;
-    align-content: start;
-  }
-  .bk-nav{ display:flex; justify-content:space-between; align-items:center;}
-  .bk-logo{ font-family:'Geist',serif; font-style:italic; font-weight:500; font-size:14px; color:var(--primary-dark); letter-spacing:-0.01em;}
-  .bk-nav-r{ display:flex; gap:10px; font-size:9px; color:var(--muted);}
-  .bk-hero{
-    background:#fff; border-radius:8px; padding:12px 14px;
-    display:grid; grid-template-columns: 1fr auto; align-items:end; gap:10px;
-    position:relative; overflow:hidden;
-  }
-  .bk-hero .t{ font-family:'Geist',serif; font-style:italic; font-size:16px; line-height:1.1; letter-spacing:-0.02em; color:var(--primary-dark); max-width:14ch;}
-  .bk-hero .sub{ font-size:8px; color:var(--muted); margin-top:4px;}
-  .bk-pill{ font-family:'Geist Mono',monospace; font-size:8px; background:var(--grad); color:var(--surface-dark); padding:4px 8px; border-radius:999px; letter-spacing:.08em;}
-  .bk-hero::after{ content:''; position:absolute; right:-20px; top:-10px; width:60px; height:60px; border-radius:50%; background: rgba(61,217,196,.2);}
-  .bk-cats{ display:grid; grid-template-columns: repeat(4,1fr); gap:6px;}
-  .bk-cat{ background:#fff; border-radius:6px; padding:8px 6px; text-align:center; font-family:'Geist',sans-serif; font-size:9px; font-weight:500; color:var(--primary-dark);}
-  .bk-cat span{ display:block; font-size:7px; color:var(--muted); margin-top:1px; font-family:'Geist Mono',monospace;}
-
-  /* Site 4 — Haberl logistics dashboard */
-  .site-haberl .bcontent{
-    background:#0F1E2E; color:#fff; padding: 14px 16px;
-    display:grid; grid-template-rows: auto 1fr; gap:10px;
-    min-height: 0;
-  }
-  .site-haberl .hb-main{ min-height: 0;}
-  .hb-head{ display:flex; justify-content:space-between; align-items:center;}
-  .hb-logo{ font-family:'Geist',sans-serif; font-weight:600; font-size:12px; letter-spacing:-0.01em; color:#fff;}
-  .hb-logo::before{ content:'◤'; color:var(--mint); margin-right:6px;}
-  .hb-status{ display:flex; gap:6px;}
-  .hb-chip{ font-family:'Geist Mono',monospace; font-size:8px; padding:3px 6px; background: rgba(61,217,196,.15); color: var(--mint); border-radius:3px; letter-spacing:.08em;}
-  .hb-chip.off{ background: rgba(255,255,255,.08); color: rgba(255,255,255,.6);}
-  .hb-main{ display:grid; grid-template-columns: 1fr 100px; gap:10px; min-height:0;}
-  .hb-map{ position:relative; border-radius:8px; overflow:hidden; background:#0A1520;
-    background-image:
-      linear-gradient(rgba(61,217,196,.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(61,217,196,.06) 1px, transparent 1px);
-    background-size: 16px 16px;
-    border:1px solid rgba(255,255,255,.05);
-  }
-  .hb-route{ position:absolute; top:30%; left:15%; right:25%; height:1px; background: var(--mint); opacity:.7;}
-  .hb-route::after{ content:''; position:absolute; right:-3px; top:-3px; width:7px; height:7px; border-radius:50%; background:var(--mint); box-shadow:0 0 10px var(--mint);}
-  .hb-truck{ position:absolute; top:60%; left:40%; font-family:'Geist Mono',monospace; font-size:8px; color:var(--mint); padding:2px 5px; background:rgba(61,217,196,.1); border-radius:3px; border:1px solid rgba(61,217,196,.3);}
-  .hb-side{ display:flex; flex-direction:column; gap:6px;}
-  .hb-stat{ background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:6px; padding:8px; }
-  .hb-stat .v{ font-family:'Geist',sans-serif; font-weight:600; font-size:14px; letter-spacing:-0.02em;}
-  .hb-stat .l{ font-size:7px; color:rgba(255,255,255,.5); letter-spacing:.08em; text-transform:uppercase; font-family:'Geist Mono',monospace; margin-top:2px;}
-
-  /* Site 5 — Reitsport (PWA card) */
-  .site-reit .bcontent{
-    background: linear-gradient(180deg, #F4F2ED, #fff);
-    padding: 14px 16px;
-    display:grid; grid-template-rows: auto auto; gap:10px;
-    align-content: start;
-  }
-  .rt-head{ display:flex; justify-content:space-between; align-items:center;}
-  .rt-logo{ font-family:'Geist',serif; font-weight:500; font-size:13px; letter-spacing:-0.015em;}
-  .rt-bell{ width:22px; height:22px; border-radius:50%; background:#fff; border:1px solid var(--border); position:relative;}
-  .rt-bell::after{ content:''; position:absolute; top:3px; right:3px; width:5px; height:5px; border-radius:50%; background:var(--deep-mint);}
-  .rt-cards{ display:flex; flex-direction:column; gap:6px;}
-  .rt-card{ background:#fff; border:1px solid var(--border); border-radius:8px; padding:9px 10px; display:flex; justify-content:space-between; align-items:center;}
-  .rt-card.primary{ border-color: var(--deep-mint); background:linear-gradient(135deg, rgba(61,217,196,.1), #fff);}
-  .rt-time{ font-family:'Geist Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:.08em;}
-  .rt-card.primary .rt-time{ color:var(--deep-mint); font-weight:600;}
-  .rt-what{ font-family:'Geist',sans-serif; font-weight:500; font-size:10px; flex:1; margin-left:10px;}
-  .rt-badge{ font-family:'Geist Mono',monospace; font-size:7px; padding:3px 6px; background:var(--cream); border-radius:4px; letter-spacing:.06em; color:var(--muted);}
-  .rt-card.primary .rt-badge{ background:var(--grad); color:var(--surface-dark);}
-
-  /* Site text column */
-  .site-info{
-    padding: 44px 44px;
-    display:flex; flex-direction:column; justify-content:center;
-  }
-  @media(max-width:1024px){ .site-info{ padding: 32px 28px;} }
-  .site-info .mono.topline{ color:var(--deep-mint); display:inline-flex; align-items:center; gap:10px; margin-bottom:16px;}
-  .site-info .mono.topline::before{ content:''; width:20px; height:1px; background:currentColor; opacity:.6;}
-  .site-info h3{
-    font-family:'Geist',sans-serif; font-weight:600;
-    font-size: clamp(22px, 2.2vw, 30px);
-    line-height:1.12; letter-spacing:-0.025em;
-    margin-bottom: 14px;
-  }
-  .site-info p{ font-size:14.5px; color:var(--muted); margin-bottom:20px; max-width: 44ch;}
-  .site-info .url{
-    display:inline-flex; align-items:center; gap:8px;
-    font-family:'Geist Mono',monospace; font-size:12px; color:var(--primary-dark);
-    background:var(--cream); padding:6px 12px; border-radius:6px;
-    text-decoration:none;
-    margin-bottom: 24px; align-self:flex-start;
-    border:1px solid var(--border);
-    transition: all .2s var(--ease);
-  }
-  .site-info .url:hover{ border-color:var(--mint); color:var(--deep-mint);}
-  .site-info .url::before{
-    content:''; width:6px; height:6px; border-radius:50%; background:var(--mint); box-shadow:0 0 6px var(--mint);
-    animation: livePulse 2s ease-in-out infinite;
-  }
-  .site-kv{
-    display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;
-    margin-bottom: 22px;
-    padding: 16px 0;
-    border-top:1px solid var(--border);
-    border-bottom:1px solid var(--border);
-  }
-  .site-kv .k{ font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; font-family:'Geist Mono',monospace; margin-bottom:4px;}
-  .site-kv .v{ font-family:'Geist',sans-serif; font-weight:600; font-size:16px; letter-spacing:-0.02em; color:var(--primary-dark);}
-  .site-kv .v .s{ font-size:11px; color:var(--muted); font-weight:400; letter-spacing:0;}
-  .site-tags{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom: 22px;}
-  .tag{ padding:4px 9px; border-radius:5px; background:var(--light); color:var(--primary-dark); font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; border:1px solid var(--border);}
-  .site-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
-
-  /* TIMELINE */
-  .timeline{
-    display:flex; gap:40px; overflow-x:auto;
-    padding: 4px 4px 24px;
-    scrollbar-width: thin;
-  }
-  .tl-item{
-    min-width: 260px; padding: 24px;
-    background:#fff; border:1px solid rgba(255,255,255,.08);
-    border-radius: 18px;
-    position: relative;
-    background: rgba(255,255,255,.03);
-  }
-  .tl-item .y{ font-family:'Geist Mono',monospace; font-size:11px; color:var(--mint); letter-spacing:.1em; margin-bottom:10px; display:block;}
-  .tl-item .t{ font-family:'Geist',sans-serif; font-weight:500; font-size:16px; color:#fff; letter-spacing:-0.015em; margin-bottom:6px;}
-  .tl-item .d{ font-size:13px; color:rgba(255,255,255,.6);}
-
-  /* LOGOS WALL */
-  .wall{
-    display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1px; background:var(--border);
-    border:1px solid var(--border); border-radius: 20px; overflow:hidden;
-  }
-  .wall .cell{
-    background:#fff; padding: 28px 20px;
-    display:flex; flex-direction:column; gap:6px;
-    min-height: 120px;
-    transition: background .2s;
-  }
-  .wall .cell:hover{ background: var(--cream);}
-  .wall .n{ font-family:'Geist',sans-serif; font-weight:500; font-size:15px; letter-spacing:-0.01em; color:var(--primary-dark);}
-  .wall .m{ font-size:11px; color:var(--muted);}
-  .wall .since{ margin-top:auto; font-family:'Geist Mono',monospace; font-size:9px; color:var(--deep-mint); letter-spacing:.1em;}
-
-  /* TESTIMONIAL */
-  .quote-card{
-    max-width: 880px; margin: 0 auto;
-    padding: 48px 44px; background:#fff; border:1px solid var(--border);
-    border-radius: 24px; position:relative;
-  }
-  @media(max-width:700px){ .quote-card{ padding: 36px 24px;}}
-  .quote-card blockquote{
-    font-family:'Geist',sans-serif; font-weight:500;
-    font-size: clamp(20px, 2.3vw, 26px);
-    line-height:1.42; letter-spacing:-0.02em;
-    color:var(--primary-dark); margin-bottom: 28px;
-    padding-left: 22px; border-left: 2px solid var(--mint);
-  }
-  .quote-foot{ display:flex; align-items:center; gap:14px;}
-  .avatar{
-    width:42px; height:42px; border-radius:50%; background:var(--grad); color:var(--surface-dark);
-    font-family:'Geist',sans-serif; font-weight:600;
-    display:flex; align-items:center; justify-content:center; font-size:15px; letter-spacing:-0.02em;
-  }
-  .quote-foot .who{ font-weight:500; font-size:15px;}
-  .quote-foot .role{ font-size:12px; color:var(--muted);}
+  /* TIMELINE ------------------------------------------------- */
+  .tl{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); }
+  .tl-item{ padding:36px 28px 0 0; border-left:1px solid var(--line); padding-left:28px; }
+  .tl-item:first-child{ border-left:none; padding-left:0; }
+  .tl-item .when{ font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--mint); }
+  .tl-item h4{ font-family:'Geist',sans-serif; font-weight:600; font-size:21px; letter-spacing:-.02em; margin:14px 0 6px; }
+  .tl-item p{ font-size:15px; color:rgba(255,255,255,.66); }
+  .tl-item.next h4{ color:rgba(255,255,255,.5); }
+  .tl-item.next a{ display:inline-block; margin-top:14px; color:var(--mint); text-decoration:none; font-weight:500; }
+  .tl-item.next a:hover{ text-decoration:underline; }
+  @media(max-width:900px){ .tl{ grid-template-columns:1fr 1fr; row-gap:36px; } .tl-item:nth-child(3){ border-left:none; padding-left:0; } }
+  @media(max-width:520px){ .tl{ grid-template-columns:1fr; } .tl-item{ border-left:none; padding-left:0; } }
 
   /* CTA */
-  .cta-banner{ position:relative; padding: 120px 0; text-align:center; overflow:hidden; background:var(--surface-dark); color:#fff;}
-  .cta-orb{
-    position:absolute; width:700px; height:700px; border-radius:50%;
-    left:50%; top:50%; transform:translate(-50%,-50%);
-    background: radial-gradient(circle, rgba(61,217,196,.22), rgba(20,184,166,.08) 40%, transparent 70%);
-    filter:blur(120px); pointer-events:none; will-change:transform;
-  }
-  .dotgrid{
-    position:absolute; inset:0;
-    background-image: radial-gradient(rgba(61,217,196,.3) 1px, transparent 1px);
-    background-size: 32px 32px; opacity:.08; pointer-events:none;
-    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-  }
-  .cta-inner{ position:relative; z-index:2; max-width:720px; margin:0 auto;}
-  .cta-inner h2{
-    font-family:'Geist',sans-serif; font-weight:600;
-    font-size: clamp(32px, 4.5vw, 48px);
-    letter-spacing:-0.03em; line-height:1.1; color:#fff; margin-bottom:18px;
-  }
-  .cta-inner .lead{ color:rgba(255,255,255,.7); font-size:17px; margin-bottom:32px;}
+  .cta-banner{ position:relative; padding:150px 0; text-align:center; overflow:hidden; background:var(--surface-dark); }
+  .cta-orb{ position:absolute; width:800px; height:800px; border-radius:50%; left:50%; top:50%; transform:translate(-50%,-50%); background:radial-gradient(circle, rgba(61,217,196,.25), rgba(20,184,166,.1) 40%, transparent 70%); filter:blur(120px); pointer-events:none; }
+  .cta-inner{ position:relative; z-index:2; max-width:780px; margin:0 auto; }
+  .cta-inner h2{ font-family:'Geist',sans-serif; font-weight:500; font-size:clamp(38px,5.4vw,68px); letter-spacing:-.04em; line-height:1.06; margin-bottom:24px; }
+  .cta-inner h2 .m{ color:var(--mint); }
+  .cta-inner .lead{ color:var(--text-dim); font-size:18px; margin-bottom:36px; }
+  .pulse-glow{ animation:glowPulse 2.4s ease-in-out infinite; }
+  @keyframes glowPulse{ 0%,100%{ box-shadow:0 0 32px rgba(61,217,196,.3), 0 4px 16px -4px rgba(61,217,196,.3);} 50%{ box-shadow:0 0 48px rgba(61,217,196,.6), 0 4px 16px -4px rgba(61,217,196,.5);} }
 
   /* FOOTER */
-  footer{ background: var(--primary-dark); color:#fff; padding: 72px 0 24px;}
-  .foot-grid{
-    display:grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap:48px;
-    padding-bottom:48px; border-bottom:1px solid rgba(255,255,255,.08);
-  }
-  @media(max-width:900px){ .foot-grid{ grid-template-columns: 1fr 1fr; gap:32px;}}
-  @media(max-width:520px){ .foot-grid{ grid-template-columns: 1fr;}}
-  .foot-brand .brand{ margin-bottom:16px;}
-  .foot-brand .wordmark{ color:#fff;}
-  .foot-brand .tagline{ font-size:14px; color:rgba(255,255,255,.7); max-width:28ch; margin-bottom:12px;}
-  .foot-brand .loc{ color:rgba(255,255,255,.45); font-size:10px;}
-  .foot-h{ color:rgba(255,255,255,.5); margin-bottom:18px; display:block;}
-  .foot-col ul{ list-style:none; display:flex; flex-direction:column; gap:10px;}
-  .foot-col a{ font-size:14px; color:rgba(255,255,255,.7); text-decoration:none; transition:color .2s;}
-  .foot-col a:hover{ color:var(--mint);}
-  .foot-bar{
-    padding-top:24px;
-    display:flex; justify-content:space-between; align-items:center; gap:24px;
-    font-size:12px; color:rgba(255,255,255,.45);
-  }
-  @media(max-width:700px){ .foot-bar{ flex-direction:column; align-items:flex-start; gap:12px;}}
+  footer{ background:var(--surface-dark); padding:80px 0 24px; border-top:1px solid var(--line); }
+  .foot-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:48px; padding-bottom:56px; border-bottom:1px solid rgba(255,255,255,.08); }
+  @media(max-width:900px){ .foot-grid{ grid-template-columns:1fr 1fr; gap:40px; } }
+  @media(max-width:520px){ .foot-grid{ grid-template-columns:1fr; } }
+  .foot-brand .brand{ margin-bottom:16px; }
+  .foot-brand .brand img{ width:24px; height:24px; object-fit:contain; }
+  .foot-brand .brand .wm{ font-size:20px; }
+  .foot-brand .tagline{ font-size:14px; color:rgba(255,255,255,.7); max-width:28ch; margin-bottom:12px; }
+  .foot-brand .loc{ color:rgba(255,255,255,.45); font-size:10px; }
+  .foot-h{ color:rgba(255,255,255,.5); margin-bottom:20px; display:block; }
+  .foot-col ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .foot-col a{ font-size:14px; color:rgba(255,255,255,.7); text-decoration:none; transition:color .2s; }
+  .foot-col a:hover{ color:var(--mint); }
+  .foot-bar{ padding-top:24px; display:flex; justify-content:space-between; align-items:center; gap:24px; font-size:12px; color:rgba(255,255,255,.45); }
+  .foot-bar .mono{ font-size:10px; }
+  @media(max-width:700px){ .foot-bar{ flex-direction:column; align-items:flex-start; gap:12px; } }
 
-  /* CURSOR */
-  .cursor{
-    position:fixed; top:0; left:0; pointer-events:none; z-index:9999;
-    width:16px; height:16px; border-radius:50%; background:var(--mint);
-    opacity:.3; transform: translate(-50%,-50%);
-    transition: width .18s var(--ease), height .18s var(--ease), opacity .18s;
-    mix-blend-mode: difference;
-  }
-  .cursor.hover{ width:40px; height:40px; opacity:.15;}
-  @media(max-width:900px){ .cursor{ display:none;}}
-
-  :focus-visible{ outline:3px solid var(--mint); outline-offset:3px; border-radius:8px;}
-  .reveal{ opacity:0; transform:translateY(20px);}
-
+  :focus-visible{ outline:3px solid var(--mint); outline-offset:3px; }
   @media (prefers-reduced-motion: reduce){
-    *{ animation-duration:.001ms !important; transition-duration:.2s !important;}
-    .cursor{ display:none;} body{ cursor:auto !important;}
-    .reveal, .site{ opacity:1 !important; transform:none !important;}
+    *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.2s !important; }
+    .reveal, .h1-inner, .breadcrumb, .hero-lead, .jump{ opacity:1 !important; transform:none !important; }
   }
-
-  .lang-switch{display:flex;align-items:center;gap:10px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;}
-  .lang-switch a{display:inline;color:inherit;text-decoration:none;opacity:.55;transition:opacity .2s,color .2s;font-size:12px;padding:0;border:0;}
-  .lang-switch a:hover{opacity:1;}
-  .lang-switch a.active{opacity:1;color:var(--deep-mint);font-weight:700;}
-  .lang-switch .sep{opacity:.28;}
-  .mobile-panel .lang-switch{margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);}
-  .mobile-panel .lang-switch a{color:#fff;}
-  .mobile-panel .lang-switch a.active{color:var(--mint);}
-  
-  @media(min-width:901px){ .mobile-panel .lang-switch{display:none;} }
-
 </style>
 <link rel="canonical" href="https://buckberrylabs.com/de/referenzen" />
 <link rel="alternate" hreflang="de" href="https://buckberrylabs.com/de/referenzen" />
@@ -558,334 +297,242 @@
 </head>
 <body>
 
-<div class="cursor" id="cursor" aria-hidden="true"></div>
-
-<!-- NAV -->
-<header class="nav" aria-label="Hauptnavigation">
+<header class="nav" id="nav" aria-label="Hauptnavigation">
   <div class="container nav-inner">
-    <a href="/de/" class="brand" aria-label="Buckberry Labs Startseite">
-      <img src="/logo/karelogo.png" alt="Buckberry Labs" style="height:44px;width:auto;object-fit:contain;">
-    </a>
+    <a href="/de/" class="brand" aria-label="Buckberry Labs Startseite"><img src="/logo/karelogo.png" alt=""><span class="wm">buckberry</span></a>
     <nav class="nav-links" aria-label="Primär">
       <a href="/de/loesungen" class="nav-link">Lösungen</a>
-      <a href="/de/referenzen" class="nav-link active">Referenzen</a>
+      <a href="/de/admin-panel" class="nav-link">Admin-Panel</a>
+      <a href="/de/referenzen" class="nav-link active" aria-current="page">Referenzen</a>
       <a href="/de/preise" class="nav-link">Preise</a>
       <a href="/de/#ueber" class="nav-link">Über uns</a>
+      <a href="/de/kontakt" class="nav-link">Kontakt</a>
     </nav>
     <div class="nav-right">
-    <div class="lang-switch" aria-label="Sprache wechseln">
-      <a href="/de/referenzen" data-lang-switch="de" class="active">DE</a>
-      <span class="sep">·</span>
-      <a href="/en/references" data-lang-switch="en" class="">EN</a>
-      <span class="sep">·</span>
-      <a href="/tr/referanslar" data-lang-switch="tr" class="">TR</a>
-    </div>
-      <a href="/de/kontakt" class="btn-kontakt">Kontakt</a>
-      <a href="/de/kontakt" class="btn btn-primary">Projekt starten <span class="arrow">→</span></a>
-      <button class="hamburger" id="hamburger" aria-label="Menü" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="lang-switch" aria-label="Sprache wechseln">
+        <a href="/de/referenzen" data-lang-switch="de" class="active">DE</a><span class="sep">·</span>
+        <a href="/en/references" data-lang-switch="en">EN</a><span class="sep">·</span>
+        <a href="/tr/referanslar" data-lang-switch="tr">TR</a>
+      </div>
+      <a href="/de/kontakt" class="btn nav-cta">Projekt starten <span class="arrow">→</span></a>
+      <button class="hamburger" id="hamburger" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
 
 <div class="mobile-panel" id="mobilePanel" aria-hidden="true">
   <a href="/de/loesungen">Lösungen</a>
+  <a href="/de/admin-panel">Admin-Panel</a>
   <a href="/de/referenzen">Referenzen</a>
   <a href="/de/preise">Preise</a>
   <a href="/de/#ueber">Über uns</a>
   <a href="/de/kontakt">Kontakt</a>
+  <a href="/de/kontakt" class="btn btn-primary">Projekt starten <span class="arrow">→</span></a>
 </div>
 
 <main>
 
-<!-- PAGE HEAD -->
-<section class="page-head">
-  <div class="container">
-    <div class="breadcrumb">
-      <a href="/de/">Start</a>
-      <span class="sep">/</span>
-      <span>Referenzen</span>
-    </div>
-    <span class="mono head-kicker reveal">— Laufende Arbeiten · Live im Einsatz</span>
-    <h1 class="reveal">Sites, die <span class="accent">heute</span> laufen.</h1>
-    <p class="lead reveal">Das sind keine Mockups und keine Case-Study-Fotos. Jede Referenz unten ist ein System, das gerade jetzt in Betrieb ist — mit echten Bestellungen, Buchungen und Nutzern.</p>
+<!-- HERO -->
+<section class="hero" aria-label="Referenzen">
+  <div class="hero-glow" id="heroGlow" aria-hidden="true"></div>
+  <div class="hero-noise" aria-hidden="true"></div>
 
-    <div class="live-strip reveal" role="status" aria-live="polite">
-      <span class="live-dot" aria-hidden="true"></span>
-      <span class="lbl"><b>Live</b> · Alle Systeme betriebsbereit</span>
-      <span class="live-sep"></span>
-      <span class="live-item"><span class="v">6</span> Sites aktiv</span>
-      <span class="live-sep"></span>
-      <span class="live-item"><span class="v">99,97%</span> Uptime · 30 Tage</span>
-      <span class="live-sep"></span>
-      <span class="live-item"><span class="v" id="clock">14:32</span> Linz, AT</span>
+  <div class="container hero-grid">
+    <div class="hero-copy" id="heroCopy">
+      <nav class="breadcrumb" id="crumb" aria-label="Brotkrumen"><a href="/de/">Start</a><span>/</span><span class="cur">Referenzen</span></nav>
+      <h1>
+        <span class="h1-line"><span class="h1-inner">Systeme, die</span></span>
+        <span class="h1-line"><span class="h1-inner mint">heute laufen.</span></span>
+      </h1>
+      <p class="hero-lead" id="heroLead">Keine Konzeptstudien. Jede Referenz hier ist bei einem echten Kunden im Einsatz — mit echten Bestellungen, Buchungen und Galerien.</p>
+      <div class="jump" id="jump">
+        <a href="#yilmaz">Yilmaz Souvenirs</a>
+        <a href="#salamanda">Salamanda Arena</a>
+        <a href="#alyagraphy">Alyagraphy</a>
+      </div>
+    </div>
+
+    <!-- Animated deck: the three projects rotate to the front -->
+    <div class="stage" aria-hidden="true">
+      <div class="deck" id="deck">
+        <div class="dcard v-mint" data-label="Yilmaz Souvenirs · Online-Shop">
+          <div class="duo" style="transform:scale(.78);">
+            <div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz/01-hero-blau.webp" alt="" width="660" height="1446"><span class="hb"></span></div></div>
+            <div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz/05-produkt.webp" alt="" width="656" height="1438"><span class="hb"></span></div></div>
+          </div>
+          <div class="cap"><span>E-Commerce</span><span>01</span></div>
+        </div>
+        <div class="dcard v-cream" data-label="Salamanda Arena · Platzbuchung">
+          <div class="duo" style="transform:scale(.78);">
+            <div class="rphone back"><div class="scr"><span class="sb light" style="--sb:#0a0a0a"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/salamanda/01-hero.webp" alt="Salamanda Soccer Arena Startseite: Dein Spiel. Dein Platz." loading="lazy" width="672" height="1440"><span class="hb"></span></div></div>
+            <div class="rphone front"><div class="scr"><span class="sb light" style="--sb:#0e0c0a"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/salamanda/03-buchung.webp" alt="Platzbuchung mit Filter, Spielart, Dauer und freien Zeiten" loading="lazy" width="654" height="1416"><span class="hb"></span></div></div>
+          </div>
+          <div class="cap"><span>Sport · Buchung</span><span>02</span></div>
+        </div>
+        <div class="dcard v-steel" data-label="Alyagraphy · Kundenportal">
+          <div class="duo" style="transform:scale(.78);">
+            <div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy/02-arbeiten.webp" alt="" width="662" height="1440"><span class="hb"></span></div></div>
+            <div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy/05-kundenportal.webp" alt="" width="650" height="1436"><span class="hb"></span></div></div>
+          </div>
+          <div class="cap"><span>Fotografie · Portal</span><span>03</span></div>
+        </div>
+      </div>
+      <div class="stage-label" id="deckLabel">Yilmaz Souvenirs · Online-Shop</div>
+      <div class="stage-progress"><span><i></i></span><span><i></i></span><span><i></i></span></div>
     </div>
   </div>
 </section>
 
-<!-- SHOWCASE -->
-<section class="band light">
+<!-- 01 YILMAZ -->
+<section class="band graphite">
   <div class="container">
-    <div class="showcase-head reveal">
+    <article class="case" id="yilmaz">
       <div>
-        <span class="mono">— Ausgewählte Arbeiten</span>
-        <h2 class="display">Sechs Unternehmen. Sechs Systeme, die jeden Tag arbeiten.</h2>
+        <div class="case-meta reveal"><span class="mono">E-Commerce</span><span class="since">Live seit September 2025</span></div>
+        <span class="client cl-yilmaz reveal">Yilmaz Souvenirs</span>
+        <h2 class="reveal">Online-Shop mit <b>Stripe-Checkout, Kundenkonto &amp; Live-Lager</b></h2>
+        <p class="txt reveal">Türkische Handwerkskunst aus einem Laden in Österreich — jetzt auch online. Wir haben den kompletten Shop gebaut: Produktvarianten mit Live-Lagerbestand, Bezahlung über Stripe, ein Kundenkonto mit Bestellhistorie und Retouren, und das Admin-Panel dahinter.</p>
+        <div class="kpis reveal">
+          <div class="kpi"><div class="v"><span data-count="99.98" data-dec="2">0</span>%</div><div class="l">Uptime</div></div>
+          <div class="kpi"><div class="v"><span data-count="3">0</span></div><div class="l">Sprachen: DE, EN, TR</div></div>
+          <div class="kpi"><div class="v"><span data-count="4">0</span></div><div class="l">Lieferländer: AT, DE, CH, TR</div></div>
+        </div>
+        <p class="stack reveal">Stack · <b lang="en">Next.js · Spring Boot · PostgreSQL · Stripe</b></p>
+        <div class="case-links reveal">
+          <a href="/de/kontakt?ref=yilmaz-souvenirs" class="link-under"><span class="t">Ähnliches anfragen</span><span class="arrow">→</span></a>
+          <a href="https://shop.yilmaz-souvenirs.at" class="ext" target="_blank" rel="noopener">shop.yilmaz-souvenirs.at ↗</a>
+        </div>
       </div>
-      <p>Bestellungen, Buchungen, Auslieferungen, Stundenpläne. Software, die nicht im Portfolio schläft, sondern im Alltag läuft.</p>
-    </div>
-
-    <div class="site-list">
-
-      <!-- 1. Yilmaz -->
-      <article class="site site-yilmaz reveal">
-        <div class="site-visual">
-          <span class="live-pin">Live · Seit Sep 2025</span>
-          <div class="browser">
-            <div class="bbar">
-              <span class="d"></span><span class="d"></span><span class="d"></span>
-              <span class="ad">shop.yilmaz-souvenirs.at</span>
-            </div>
-            <div class="bcontent">
-              <div class="yl-head">
-                <div class="yl-logo">Yilmaz Souvenirs</div>
-                <div class="yl-nav"><span>Shop</span><span>Neu</span><span>Über uns</span><span style="color:var(--deep-mint);">◴ 2</span></div>
-              </div>
-              <div class="yl-hero">
-                <div class="t">Handgemachtes aus Österreich.</div>
-                <div class="s">Versand DE · AT · CH · TR</div>
-              </div>
-              <div class="yl-grid">
-                <div class="yl-card"><div class="yl-img a"></div><div class="yl-meta"><div class="t">Alpen-Miniatur</div><div class="p">€24,90</div></div></div>
-                <div class="yl-card"><div class="yl-img b"></div><div class="yl-meta"><div class="t">Wien-Edition</div><div class="p">€38,00</div></div></div>
-                <div class="yl-card"><div class="yl-img c"></div><div class="yl-meta"><div class="t">Handgemacht</div><div class="p">€19,50</div></div></div>
-              </div>
-            </div>
-          </div>
+      <div class="case-visual v-mint reveal">
+        <div class="inner duo">
+          <div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz/01-hero-blau.webp" alt="Yilmaz Souvenirs Startseite mit Mosaiklampe" loading="lazy" width="660" height="1446"><span class="hb"></span></div></div>
+          <div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz/05-produkt.webp" alt="Produktseite mit Farbvarianten und Lagerbestand" loading="lazy" width="656" height="1438"><span class="hb"></span></div></div>
         </div>
-        <div class="site-info">
-          <span class="mono topline">E-Commerce · DE / EN / TR</span>
-          <h3>Yilmaz Souvenirs — Online-Shop mit Stripe-Checkout und Echtzeit-Lagerbestand.</h3>
-          <p>Seit zwei Jahren live. Bedient Kunden in Österreich, Deutschland, der Schweiz und der Türkei. Bestellungen werden direkt ins bestehende Warenwirtschaftssystem synchronisiert.</p>
-          <a href="https://shop.yilmaz-souvenirs.at" class="url" target="_blank" rel="noopener">shop.yilmaz-souvenirs.at<span class="arrow">↗</span></a>
-          <div class="site-kv">
-            <div><div class="k">Live seit</div><div class="v">September 2025</div></div>
-            <div><div class="k">Sprachen</div><div class="v">3<span class="s">&nbsp;· DE/EN/TR</span></div></div>
-            <div><div class="k">Uptime</div><div class="v">99,98%</div></div>
-          </div>
-          <div class="site-tags">
-            <span class="tag">Next.js</span><span class="tag">Spring Boot</span><span class="tag">Postgres</span><span class="tag">Stripe</span>
-          </div>
-          <div class="site-actions">
-            <a href="/de/fallstudie" class="btn btn-ghost-light" style="border-color:var(--border); color:var(--primary-dark);">Fallstudie <span class="arrow">→</span></a>
-            <a href="/de/kontakt?ref=yilmaz-souvenirs" class="link-mint">Ähnliches anfragen <span class="arrow arrow-pulse">→</span></a>
-          </div>
-        </div>
-      </article>
+      </div>
+    </article>
 
-      <!-- 2. Tennishalle (flip) -->
-      <article class="site site-tennis flip reveal">
-        <div class="site-visual">
-          <span class="live-pin">Live · Seit Jän 2026</span>
-          <div class="browser">
-            <div class="bbar">
-              <span class="d"></span><span class="d"></span><span class="d"></span>
-              <span class="ad">salamandasoccerarena.com</span>
-            </div>
-            <div class="bcontent">
-              <div class="tn-head">
-                <div class="tn-logo">Salamanda <span>Arena</span></div>
-                <div class="tn-ctrl"><div class="c">‹</div><div class="c">›</div></div>
-              </div>
-              <div class="tn-week">
-                <div class="tn-day">Mo<b>14</b></div>
-                <div class="tn-day active">Di<b>15</b></div>
-                <div class="tn-day">Mi<b>16</b></div>
-                <div class="tn-day">Do<b>17</b></div>
-                <div class="tn-day">Fr<b>18</b></div>
-                <div class="tn-day">Sa<b>19</b></div>
-                <div class="tn-day">So<b>20</b></div>
-              </div>
-              <div class="tn-grid">
-                <div class="th"></div><div class="th">Halle 1</div><div class="th">Halle 2</div><div class="th">Halle 3</div><div class="th">Halle 4</div>
-                <div class="th">17:00</div>
-                <div class="cell free">frei</div>
-                <div class="cell booked">belegt</div>
-                <div class="cell free">frei</div>
-                <div class="cell mine">Sie</div>
-                <div class="th">18:00</div>
-                <div class="cell booked">belegt</div>
-                <div class="cell booked">belegt</div>
-                <div class="cell free">frei</div>
-                <div class="cell free">frei</div>
-                <div class="th">19:00</div>
-                <div class="cell free">frei</div>
-                <div class="cell free">frei</div>
-                <div class="cell booked">belegt</div>
-                <div class="cell free">frei</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="site-info">
-          <span class="mono topline">Sport · Platzbuchung</span>
-          <h3>Salamanda Soccer Arena — Online-Buchung für 2 Hallen und 100+ aktive Mitglieder.</h3>
-          <p>Modernes Buchungssystem für die Arena. Mitglieder buchen in der App, Staff verwaltet ihre Zeiten, Abrechnungen laufen automatisch.</p>
-          
-          <div class="site-kv">
-            <div><div class="k">Live seit</div><div class="v">Januar 2026</div></div>
-            <div><div class="k">Mitglieder</div><div class="v">100+</div></div>
-            <div><div class="k">Buchungen/Mo.</div><div class="v">200+</div></div>
-          </div>
-          <div class="site-tags">
-            <span class="tag">Java</span><span class="tag">Spring</span><span class="tag">TypeScript</span><span class="tag">Tailwind</span>
-          </div>
-          <div class="site-actions">
-            
-            <a href="/de/kontakt?ref=tennishalle-urfahr" class="link-mint">Ähnliches anfragen <span class="arrow arrow-pulse">→</span></a>
-          </div>
-        </div>
-      </article>
-
-      <!-- 3. Sommerhuber bakery -->
-      <article class="site site-bakery reveal">
-        <div class="site-visual">
-          <span class="live-pin">Live · Seit Feb 2026</span>
-          <div class="browser">
-            <div class="bbar">
-              <span class="d"></span><span class="d"></span><span class="d"></span>
-              <span class="ad">alyagraphy.com</span>
-            </div>
-            <div class="bcontent">
-              <div class="bk-nav">
-                <div class="bk-logo">Alyagraphy</div>
-                <div class="bk-nav-r"><span>Pakete</span><span>Galerie</span><span>Kontakt</span></div>
-              </div>
-              <div class="bk-hero">
-                <div>
-                  <div class="t">Shootings einfach online buchen.</div>
-                  <div class="sub">Wunschtermin wählen &amp; reservieren</div>
-                </div>
-                <div class="bk-pill">Termin buchen →</div>
-              </div>
-              <div class="bk-cats">
-                <div class="bk-cat">Porträt<span>Ab 120€</span></div>
-                <div class="bk-cat">Hochzeit<span>Ab 800€</span></div>
-                <div class="bk-cat">Familie<span>Ab 150€</span></div>
-                <div class="bk-cat">Event<span>Auf Anfrage</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="site-info">
-          <span class="mono topline">Buchungssystem · Fotografie</span>
-          <h3>Alyagraphy FotoStudio — Buchungssystem für Fotografen.</h3>
-          <p>Einfache Online-Terminbuchung für Fotoshootings. Kunden wählen Pakete, zahlen online und erhalten automatische Erinnerungen.</p>
-          
-          <div class="site-kv">
-            <div><div class="k">Live seit</div><div class="v">Feb 2026</div></div>
-            <div><div class="k">Filialen</div><div class="v">1</div></div>
-            <div><div class="k">Reservierungen/Mo.</div><div class="v">10+</div></div>
-          </div>
-          <div class="site-tags">
-            <span class="tag">Next.js</span><span class="tag">Postgres</span><span class="tag">Stripe</span><span class="tag">PWA</span>
-          </div>
-          <div class="site-actions">
-            
-            <a href="/de/kontakt?ref=baeckerei-sommerhuber" class="link-mint">Ähnliches anfragen <span class="arrow arrow-pulse">→</span></a>
-          </div>
-        </div>
-      </article>
-
-      
-
-      
-
-    </div>
-  </div>
-</section>
-
-<!-- Timeline in dark band -->
-<section class="band surface-dark">
-  <div class="container">
-    <div class="showcase-head reveal" style="margin-bottom:40px;">
+    <!-- signature detail: the lamp picks the colour theme -->
+    <div class="theme-row">
       <div>
-        <span class="mono" style="color:var(--mint);">— Seit wann laufen sie</span>
-        <h2 class="display" style="color:#fff;">Die älteste Site ist aus 2025. Sie läuft immer noch.</h2>
+        <span class="mono theme-k reveal">Detail, das hängen bleibt</span>
+        <h3 class="reveal">Die Lampe <b>wählt das Farbthema</b></h3>
+        <p class="reveal">Im Slider der Startseite hängen echte Mosaiklampen aus dem Sortiment. Wer zur nächsten Lampe wischt, färbt die ganze Seite um — Überschrift, Buttons, Navigation. Ein kleines Detail, das den Laden online so bunt macht wie im Geschäft.</p>
+      </div>
+      <div class="theme-phone reveal" aria-label="Startseite im blauen und roten Farbthema">
+        <div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><div class="stack"><img src="/work/yilmaz/01-hero-blau.webp" alt="Startseite im blauen Lampen-Thema" loading="lazy" width="660" height="1446"><img class="alt" id="themeAlt" src="/work/yilmaz/02-hero-rot.webp" alt="Startseite im roten Lampen-Thema" loading="lazy" width="662" height="1440"></div><span class="hb"></span></div></div>
       </div>
     </div>
-    <div class="timeline">
 
-      <div class="tl-item">
-        <span class="y">2025 · Q3</span>
-        <div class="t">Yilmaz Souvenirs</div>
-        <div class="d">Mehrsprachiger Online-Shop</div>
-      </div>
-      <div class="tl-item">
-        <span class="y">2026 · Q1</span>
-        <div class="t">Salamanda Soccer Arena</div>
-        <div class="d">Online-Buchung für 2 Hallen...</div>
-      </div>
-      <div class="tl-item">
-        <span class="y">2026 · Q1</span>
-        <div class="t">Alyagraphy FotoStudio</div>
-        <div class="d">Buchungssystem für Fotografen.</div>
-      </div>
-      </div>
+    <div class="shots">
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz/03-kategorie.webp" alt="Kategorie Lampen und Leuchten mit Filter und Sortierung" loading="lazy" width="660" height="1438"><span class="hb"></span></div></div><figcaption><b>Kategorien</b>Filter und Sortierung</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#828383"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz/04-menu.webp" alt="Seitenmenü mit Konto, Kategorien und Sprachwahl" loading="lazy" width="670" height="1444"><span class="hb"></span></div></div><figcaption><b>Menü</b>Konto, Kategorien, DE / EN / TR</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#c3d2cb"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz/06-konto.webp" alt="Kundenkonto mit Profil, Wunschliste und Adressen" loading="lazy" width="654" height="1434"><span class="hb"></span></div></div><figcaption><b>Kundenkonto</b>Profil, Wunschliste, Adressen</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#b7c4be"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz/07-bestellungen.webp" alt="Bestellhistorie mit Status und Teilrückerstattung" loading="lazy" width="668" height="1446"><span class="hb"></span></div></div><figcaption><b>Bestellungen</b>Status, Retouren, Rückerstattung</figcaption></figure>
+    </div>
   </div>
 </section>
 
-<!-- Wall of clients -->
-<section class="band cream">
+<!-- 02 SALAMANDA -->
+<section class="band surface">
   <div class="container">
-    <div class="showcase-head reveal">
+    <article class="case flip" id="salamanda">
       <div>
-        <span class="mono">— Gemeinsam laufend</span>
-        <h2 class="display">Kunden, die seit Jahren mit uns arbeiten.</h2>
-      </div>
-      <p>Die meisten Referenzen hier sind seit mindestens zwei Jahren live. Wir betreuen, was wir bauen.</p>
-    </div>
-
-    <div class="wall reveal">
-
-      <div class="cell">
-        <div class="n">Yilmaz Souvenirs</div>
-        <div class="m">Mehrsprachiger Online-Shop</div>
-        <div class="since">Seit 09 / 2025</div>
-      </div>
-      <div class="cell">
-        <div class="n">Salamanda Soccer Arena</div>
-        <div class="m">Platzbuchung & Abrechnung</div>
-        <div class="since">Seit 01 / 2026</div>
-      </div>
-      <div class="cell">
-        <div class="n">Alyagraphy FotoStudio</div>
-        <div class="m">Terminbuchung & Zahlungen</div>
-        <div class="since">Seit 02 / 2026</div>
-      </div>
-      <div class="cell">
-        <div class="n">… Ihr Unternehmen?</div>
-        <div class="m">Noch Platz auf dieser Wand.</div>
-        <div class="since" style="color:var(--muted);">Reden wir darüber →</div>
-      </div>
-      </div>
-  </div>
-</section>
-
-<!-- TESTIMONIAL -->
-<section class="band light">
-  <div class="container">
-    <div class="quote-card reveal">
-      <blockquote>
-        Buckberry hat uns keine Plattform verkauft — sie haben uns eine gebaut. Drei Jahre später läuft sie noch immer, und jeder neue Umsatzbericht macht Spaß.
-      </blockquote>
-      <div class="quote-foot">
-        <div class="avatar" aria-hidden="true">MY</div>
-        <div>
-          <div class="who">Mehmet Yilmaz</div>
-          <div class="role">Geschäftsführer · Yilmaz Souvenirs</div>
+        <div class="case-meta reveal"><span class="mono">Sport · Platzbuchung</span><span class="since">Live seit Januar 2026 · Stadl-Paura</span></div>
+        <span class="client cl-sala reveal">Salamanda <b>Arena</b></span>
+        <h2 class="reveal">Online-Buchung für <b>zwei Indoor-Plätze und 100+ Mitglieder</b></h2>
+        <p class="txt reveal">Plätze wurden per Telefon und Excel vergeben. Heute buchen Spieler ihren Platz online — Fußball oder Bubble Soccer, im 30-Minuten-Raster — und mieten Fußballschuhe und Ausrüstung direkt bei der Buchung dazu. Turniere, Happy-Hour-Rabatte und Buchungsänderungen laufen über dasselbe System, gesteuert aus dem Admin-Panel.</p>
+        <div class="kpis reveal">
+          <div class="kpi"><div class="v"><span data-count="2">0</span></div><div class="l">Indoor-Plätze online buchbar</div></div>
+          <div class="kpi"><div class="v"><span data-count="100">0</span>+</div><div class="l">aktive Mitglieder</div></div>
+          <div class="kpi"><div class="v"><span data-count="200">0</span>+</div><div class="l">Buchungen pro Monat</div></div>
+        </div>
+        <p class="stack reveal">Stack · <b lang="en">Java · Spring · TypeScript · Tailwind</b></p>
+        <div class="case-links reveal">
+          <a href="/de/kontakt?ref=tennishalle-urfahr" class="link-under"><span class="t">Ähnliches anfragen</span><span class="arrow">→</span></a>
+          <span class="ext off">Website derzeit in Wartung</span>
         </div>
       </div>
+      <div class="case-visual v-cream reveal">
+        <div class="inner duo">
+            <div class="rphone back"><div class="scr"><span class="sb light" style="--sb:#2a2824"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/salamanda/02-angebot.webp" alt="Angebot: Bubble Soccer mit Ausrüstung und Einweisung" loading="lazy" width="660" height="1450"><span class="hb"></span></div></div>
+            <div class="rphone front"><div class="scr"><span class="sb light" style="--sb:#0e0c0a"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/salamanda/03-buchung.webp" alt="Platzbuchung mit Filter, Spielart, Dauer und freien Zeiten" loading="lazy" width="654" height="1416"><span class="hb"></span></div></div>
+          </div>
+      </div>
+    </article>
+
+    <div class="shots">
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#2a2824"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/salamanda/02-angebot.webp" alt="Angebot: Bubble Soccer mit Ausrüstung und Einweisung" loading="lazy" width="660" height="1450"><span class="hb"></span></div></div><figcaption><b>Angebot</b>Fußball, Bubble Soccer, Profi</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#0e0c0a"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/salamanda/03-buchung.webp" alt="Platzbuchung mit Filter, Spielart, Dauer und freien Zeiten" loading="lazy" width="654" height="1416"><span class="hb"></span></div></div><figcaption><b>Platzbuchung</b>Filter, Spielart, freie Zeiten</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#0c100c"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/salamanda/04-turniere.webp" alt="Turniere mit Team-Anmeldung und Warteliste" loading="lazy" width="640" height="1350"><span class="hb"></span></div></div><figcaption><b>Turniere</b>Team-Anmeldung und Warteliste</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#0a0a0a"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/salamanda/05-buchung-verwalten.webp" alt="Buchung verwalten mit Buchungs-ID und Zugriffscode" loading="lazy" width="658" height="1428"><span class="hb"></span></div></div><figcaption><b>Buchung verwalten</b>Buchungs-ID und Zugriffscode</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 03 ALYAGRAPHY -->
+<section class="band steel">
+  <div class="container">
+    <article class="case" id="alyagraphy">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Fotografie · Kundenportal</span><span class="since">Live seit Februar 2026</span></div>
+        <span class="client cl-alya reveal">alyagraphy</span>
+        <h2 class="reveal">Hochzeitsfotografie mit <b>privater Kundengalerie</b></h2>
+        <p class="txt reveal">Das größte Problem vieler Fotografen: Fotos verschicken und dann wochenlang auf die Album-Auswahl warten. Bei Alyagraphy läuft das über ein eigenes Kundenportal — hochladen, das Brautpaar wird automatisch benachrichtigt und wählt seine Album-Bilder direkt online aus.</p>
+        <div class="kpis reveal">
+          <div class="kpi"><div class="v">1 Code</div><div class="l">Zugang zur privaten Galerie</div></div>
+          <div class="kpi"><div class="v"><span data-count="3">0</span> Schritte</div><div class="l">Online-Buchung eines Shootings</div></div>
+          <div class="kpi"><div class="v">Auto</div><div class="l">E-Mail ans Brautpaar nach jedem Upload</div></div>
+        </div>
+        <p class="stack reveal">Stack · <b lang="en">Next.js · PostgreSQL · Admin-Panel · E-Mail-Automatisierung</b></p>
+        <div class="case-links reveal">
+          <a href="/de/kontakt?ref=baeckerei-sommerhuber" class="link-under"><span class="t">Ähnliches anfragen</span><span class="arrow">→</span></a>
+          <a href="https://alyagraphy.com" class="ext" target="_blank" rel="noopener">alyagraphy.com ↗</a>
+        </div>
+      </div>
+      <div class="case-visual v-steel reveal">
+        <div class="inner duo">
+          <div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy/01-hero.webp" alt="Alyagraphy Startseite: Momente, die bleiben" loading="lazy" width="664" height="1424"><span class="hb"></span></div></div>
+          <div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy/05-kundenportal.webp" alt="Alyagraphy Kundenportal: Login mit Ticket-Code und E-Mail" loading="lazy" width="650" height="1436"><span class="hb"></span></div></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- how the client portal works -->
+    <div class="flow" id="flow">
+      <div class="flow-head">
+        <h3 class="reveal">So funktioniert das <b>Kundenportal</b></h3>
+        <p class="reveal">Vier Schritte, null Nachlaufen — und alles aus einem Admin-Panel gesteuert.</p>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-line" id="flowLine"></div>
+        <div class="fstep"><h4>Fotos hochladen</h4><p>Das Studio lädt die Bilder eines Shootings im Admin-Panel hoch.</p><span class="who">Studio · Admin-Panel</span></div>
+        <div class="fstep"><h4>E-Mail mit Code</h4><p>Das Brautpaar bekommt automatisch eine E-Mail mit persönlichem Ticket-Code.</p><span class="who">Automatisch</span></div>
+        <div class="fstep"><h4>Private Galerie</h4><p>Mit Code und E-Mail öffnet es seine geschützte Galerie auf alyagraphy.com.</p><span class="who">Brautpaar · Website</span></div>
+        <div class="fstep"><h4>Album-Auswahl</h4><p>Die Lieblingsbilder fürs Album werden online markiert — die Auswahl landet direkt im Panel.</p><span class="who">Brautpaar → Studio</span></div>
+      </div>
+    </div>
+
+    <div class="shots">
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy/02-arbeiten.webp" alt="Ausgewählte Arbeiten als horizontale Galerie" loading="lazy" width="662" height="1440"><span class="hb"></span></div></div><figcaption><b>Ausgewählte Arbeiten</b>Horizontale Scroll-Galerie</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#c3c1c0"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy/03-portfolio.webp" alt="Portfolio-Highlights mit Kategorien" loading="lazy" width="668" height="1448"><span class="hb"></span></div></div><figcaption><b>Portfolio</b>Highlights nach Kategorie</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#d7d7d5"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy/04-paket.webp" alt="Paketübersicht Standardpaket" loading="lazy" width="654" height="1438"><span class="hb"></span></div></div><figcaption><b>Pakete</b>Leistungen klar aufgelistet</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy/06-buchung.webp" alt="Buchungsschritt 1: Leistung auswählen" loading="lazy" width="652" height="1432"><span class="hb"></span></div></div><figcaption><b>Online-Buchung</b>Schritt 1: Leistung wählen</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="band surface">
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title reveal">Seit wann <b>sie laufen</b></h2>
+      <p class="lead reveal">Wir betreuen, was wir bauen. Jedes dieser Systeme wird von uns gehostet, gewartet und weiterentwickelt.</p>
+    </div>
+    <div class="tl">
+      <div class="tl-item reveal"><span class="when">09 / 2025</span><h4>Yilmaz Souvenirs</h4><p>Mehrsprachiger Online-Shop mit Stripe-Checkout</p></div>
+      <div class="tl-item reveal"><span class="when">01 / 2026</span><h4>Salamanda Arena</h4><p>Platzbuchung &amp; Mitgliederverwaltung</p></div>
+      <div class="tl-item reveal"><span class="when">02 / 2026</span><h4>Alyagraphy</h4><p>Portfolio, Online-Buchung &amp; Kundenportal</p></div>
+      <div class="tl-item next reveal"><span class="when">Als Nächstes</span><h4>Ihr Unternehmen?</h4><p>Hier ist noch Platz.</p><a href="/de/kontakt">Reden wir darüber →</a></div>
     </div>
   </div>
 </section>
@@ -893,41 +540,37 @@
 <!-- CTA -->
 <section class="cta-banner">
   <div class="cta-orb" id="ctaOrb" aria-hidden="true"></div>
-  <div class="dotgrid" aria-hidden="true"></div>
   <div class="container">
     <div class="cta-inner">
-      <h2 class="reveal">Sie möchten die nächste laufende Site sein?</h2>
+      <h2 class="reveal">Das nächste System, <span class="m">das läuft?</span></h2>
       <p class="lead reveal">30 Minuten Gespräch. Kein Verkaufspitch. Wir sagen Ihnen ehrlich, ob wir die Richtigen für Ihre Aufgabe sind.</p>
-      <a href="/de/kontakt" class="btn btn-primary reveal" style="font-size:16px; padding:18px 30px;">Termin buchen <span class="arrow arrow-pulse">→</span></a>
+      <a href="/de/kontakt" class="btn btn-primary pulse-glow reveal" style="font-size:16px; padding:18px 30px;">Termin buchen <span class="arrow arrow-pulse">→</span></a>
     </div>
   </div>
 </section>
-
 </main>
 
 <footer>
   <div class="container">
     <div class="foot-grid">
       <div class="foot-col foot-brand">
-        <a href="/de/" class="brand">
-          <img src="/logo/karelogo.png" alt="" aria-hidden="true" style="width:24px;height:24px;object-fit:contain;border-radius:0;background:none;box-shadow:none;">
-          <span class="wordmark">buckberry</span>
-        </a>
+        <a href="/de/" class="brand" aria-label="Buckberry Labs"><img src="/logo/karelogo.png" alt="" aria-hidden="true"><span class="wm">buckberry</span></a>
         <p class="tagline">Software, handverlesen.</p>
         <span class="mono loc">Linz, Österreich</span>
       </div>
       <div class="foot-col">
         <span class="mono foot-h">Lösungen</span>
         <ul>
-          <li><a href="/de/loesungen">Shop</a></li>
-          <li><a href="/de/loesungen">Sport</a></li>
-          <li><a href="/de/loesungen">Custom</a></li>
+          <li><a href="/de/loesungen#shop">Shop</a></li>
+          <li><a href="/de/loesungen#sport">Sport</a></li>
+          <li><a href="/de/loesungen#custom">Custom</a></li>
         </ul>
       </div>
       <div class="foot-col">
         <span class="mono foot-h">Unternehmen</span>
         <ul>
           <li><a href="/de/#ueber">Über uns</a></li>
+          <li><a href="/de/admin-panel">Admin-Panel</a></li>
           <li><a href="/de/referenzen">Referenzen</a></li>
           <li><a href="/de/preise">Preise</a></li>
           <li><a href="/de/kontakt">Kontakt</a></li>
@@ -936,8 +579,7 @@
     </div>
     <div class="foot-bar">
       <span>© 2026 Buckberry Labs</span>
-      <span class="mono">entwickelt in Linz, AT · hosted on Vercel</span>
-      
+      <span class="mono">entwickelt in Linz, AT</span>
     </div>
   </div>
 </footer>
@@ -945,8 +587,12 @@
 <script>
 (() => {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmt = (v, dec) => v.toLocaleString('de-AT', { minimumFractionDigits: dec, maximumFractionDigits: dec });
 
-  // Hamburger
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('sticky', window.scrollY > 60);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
   const ham = document.getElementById('hamburger');
   const panel = document.getElementById('mobilePanel');
   ham?.addEventListener('click', () => {
@@ -954,90 +600,106 @@
     panel.classList.toggle('open', open);
     ham.setAttribute('aria-expanded', open);
   });
-  panel?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    ham.classList.remove('open'); panel.classList.remove('open');
-  }));
+  panel?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { ham.classList.remove('open'); panel.classList.remove('open'); }));
 
-  // Cursor
-  if (!reduced && window.matchMedia('(pointer:fine)').matches) {
-    const cursor = document.getElementById('cursor');
-    let tx=0, ty=0, cx=0, cy=0;
-    window.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
-    const loop = () => {
-      cx += (tx-cx)*0.18; cy += (ty-cy)*0.18;
-      cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
-      requestAnimationFrame(loop);
-    };
-    loop();
-    document.querySelectorAll('a, button, .site, .quote-card, .wall .cell, .tl-item').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-    });
+  // Yilmaz theme demo: swap between the blue and red lamp theme
+  const themeAlt = document.getElementById('themeAlt');
+  if (themeAlt && !reduced) setInterval(() => themeAlt.classList.toggle('on'), 2800);
+
+  const showAll = () => document.querySelectorAll('.reveal, .h1-inner, #crumb, #heroLead, #jump')
+    .forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+  if (!window.gsap) { showAll(); return; }
+  const ease = 'power3.out';
+  if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+  /* HERO intro */
+  if (!reduced) {
+    gsap.timeline({ defaults: { ease } })
+      .to('#crumb', { opacity: 1, duration: .5 }, 0)
+      .to('.h1-inner', { opacity: 1, y: 0, duration: .9, stagger: .12 }, .1)
+      .to('#heroLead', { opacity: 1, duration: .7 }, .45)
+      .fromTo('#jump', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .6 }, .65);
   } else {
-    const c = document.getElementById('cursor'); if (c) c.style.display='none';
-    document.body.style.cursor='auto';
+    gsap.set('#crumb, .h1-inner, #heroLead, #jump', { opacity: 1, y: 0 });
   }
 
-  // Live clock (Linz)
-  const clock = document.getElementById('clock');
-  const tick = () => {
-    const d = new Date();
-    const h = String(d.getHours()).padStart(2,'0');
-    const m = String(d.getMinutes()).padStart(2,'0');
-    if (clock) clock.textContent = `${h}:${m}`;
+  /* HERO deck: cards rotate front → back */
+  const cards = gsap.utils.toArray('#deck .dcard');
+  const bars = gsap.utils.toArray('.stage-progress i');
+  const label = document.getElementById('deckLabel');
+  const glow = document.getElementById('heroGlow');
+  const glows = [['74%', 'rgba(20,184,166,.30)'], ['78%', 'rgba(244,242,237,.10)'], ['72%', 'rgba(30,58,82,.75)']];
+  const slots = [
+    { x: 0,   y: 0,   rotation: 0,  scale: 1,   zIndex: 3, opacity: 1 },
+    { x: 60,  y: 0,   rotation: 0,  scale: .96, zIndex: 2, opacity: 0 },
+    { x: 60,  y: 0,   rotation: 0,  scale: .96, zIndex: 1, opacity: 0 },
+  ];
+  let front = 0;
+  const place = (animate) => {
+    cards.forEach((c, i) => {
+      const slot = slots[(i - front + cards.length) % cards.length];
+      animate ? gsap.to(c, { ...slot, duration: .9, ease: 'power3.inOut' }) : gsap.set(c, slot);
+    });
+    label.textContent = cards[front].dataset.label;
+    glow.style.setProperty('--glow-x', glows[front][0]);
+    glow.style.setProperty('--glow-c', glows[front][1]);
+    bars.forEach((b, i) => gsap.set(b, { scaleX: i < front ? 1 : 0 }));
   };
-  tick(); setInterval(tick, 30000);
-
-  // Animations
-  if (window.gsap && window.ScrollTrigger) {
-    gsap.registerPlugin(ScrollTrigger);
-    if (!reduced) {
-      gsap.utils.toArray('.reveal').forEach(el => {
-        gsap.to(el, {
-          opacity:1, y:0, duration:.7,
-          ease:'cubic-bezier(0.2,0.8,0.2,1)',
-          scrollTrigger:{ trigger:el, start:'top 88%' }
-        });
-      });
-      gsap.to('#ctaOrb', { x:80, duration:10, yoyo:true, repeat:-1, ease:'sine.inOut' });
-    } else {
-      document.querySelectorAll('.reveal, .site').forEach(el => { el.style.opacity=1; el.style.transform='none'; });
-    }
+  place(false);
+  if (!reduced) {
+    const S = 3.6;
+    const cycle = () => {
+      gsap.fromTo(bars[front], { scaleX: 0 }, { scaleX: 1, duration: S, ease: 'none', onComplete: () => {
+        // front card flies out, then everything shifts forward
+        const leaving = cards[front];
+        gsap.to(leaving, { x: -60, y: 0, rotation: 0, opacity: 0, duration: .5, ease: 'power2.in', onComplete: () => {
+          front = (front + 1) % cards.length;
+          if (front === 0) bars.forEach(b => gsap.set(b, { scaleX: 0 }));
+          place(true);
+          cycle();
+        }});
+      }});
+    };
+    cycle();
   }
+
+  if (!window.ScrollTrigger || reduced) {
+    showAll();
+    document.querySelectorAll('[data-count]').forEach(el => el.textContent = fmt(parseFloat(el.dataset.count), +(el.dataset.dec || 0)));
+    document.querySelectorAll('.fstep').forEach(s => s.classList.add('on'));
+    return;
+  }
+
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseFloat(el.dataset.count), dec = +(el.dataset.dec || 0), o = { v: 0 };
+    gsap.to(o, { v: target, duration: 1.6, ease: 'power2.out', onUpdate: () => el.textContent = fmt(o.v, dec), scrollTrigger: { trigger: el, start: 'top 90%' } });
+  });
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.to(el, { opacity: 1, y: 0, duration: .8, ease, scrollTrigger: { trigger: el, start: 'top 88%' } });
+  });
+  gsap.matchMedia().add('(min-width: 981px)', () => {
+    gsap.to('#heroCopy', { y: 100, opacity: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  });
+
+  // portal flow: the line fills and lights up each step as you scroll
+  const steps = gsap.utils.toArray('.fstep');
+  gsap.to('#flowLine', { width: '100%', ease: 'none',
+    scrollTrigger: { trigger: '#flow', start: 'top 70%', end: 'bottom 60%', scrub: true,
+      onUpdate: self => steps.forEach((s, i) => s.classList.toggle('on', self.progress >= i / steps.length + .02)) } });
+
+  gsap.to('#ctaOrb', { x: 100, duration: 10, yoyo: true, repeat: -1, ease: 'sine.inOut' });
 })();
 </script>
 <script>
+// jump to #section links once layout (fonts, images, animations) has settled
+window.addEventListener('load', () => {
+  const el = location.hash && document.querySelector(location.hash);
+  if (el) setTimeout(() => el.scrollIntoView({ behavior: 'auto' }), 60);
+});
+</script>
+<script>
 const LANG_SWITCH_MAP = {
-  "de/": {
-    "de": "/de/",
-    "en": "/en/",
-    "tr": "/tr/"
-  },
-  "de/loesungen": {
-    "de": "/de/loesungen",
-    "en": "/en/solutions",
-    "tr": "/tr/cozumler"
-  },
-  "de/referenzen": {
-    "de": "/de/referenzen",
-    "en": "/en/references",
-    "tr": "/tr/referanslar"
-  },
-  "de/preise": {
-    "de": "/de/preise",
-    "en": "/en/pricing",
-    "tr": "/tr/fiyatlar"
-  },
-  "de/fallstudie": {
-    "de": "/de/fallstudie",
-    "en": "/en/case-study",
-    "tr": "/tr/vaka-calismasi"
-  },
-  "de/kontakt": {
-    "de": "/de/kontakt",
-    "en": "/en/contact",
-    "tr": "/tr/iletisim"
-  }
+  "de/referenzen": { "de": "/de/referenzen", "en": "/en/references", "tr": "/tr/referanslar" }
 };
 const LANG_SWITCH_KEY = "de/referenzen";
 (() => {

@@ -75,6 +75,7 @@ const MAIL_COPY: Record<
       scope: "Umfang",
       integrations: "Integrationen",
       languages: "Sprachen",
+      adminPanel: "Admin-Panel",
       maintenance: "Wartung",
       estimate: "Richtpreis",
       range: "Spanne",
@@ -126,6 +127,7 @@ const MAIL_COPY: Record<
       scope: "Scope",
       integrations: "Integrations",
       languages: "Languages",
+      adminPanel: "Admin panel",
       maintenance: "Maintenance",
       estimate: "Budgetary estimate",
       range: "Range",
@@ -177,6 +179,7 @@ const MAIL_COPY: Record<
       scope: "Kapsam",
       integrations: "Entegrasyonlar",
       languages: "Diller",
+      adminPanel: "Admin paneli",
       maintenance: "Bakım",
       estimate: "Tahmini bütçe",
       range: "Aralık",
@@ -201,14 +204,15 @@ const LAB: Record<
     int: Record<string, string>;
     lang: Record<string, string>;
     maint: Record<string, string>;
+    panel: Record<string, string>;
   }
 > = {
   de: {
     type: {
-      "990": "Website",
-      "1490": "Multi-Language",
-      "1990": "Komplett-Paket",
-      "2990": "Custom / B2B",
+      "990": "Start",
+      "1790": "Pro",
+      "2690": "Signature",
+      "3490": "Custom / B2B",
     },
     size: {},
     int: {
@@ -218,24 +222,25 @@ const LAB: Record<
       "700": "Zahlungen / Shop",
     },
     lang: {
-      "0": "1 Sprache",
-      "300": "2 Sprachen",
-      "500": "3 Sprachen",
-      "800": "4+ Sprachen",
+      "1": "1 Sprache",
+      "2": "2 Sprachen",
+      "3": "3 Sprachen",
+      "4": "4+ Sprachen",
     },
+    panel: { "0": "Nein", "1": "Ja" },
     maint: {
       "0": "Keine",
-      "79": "Care Basic · €79/Monat",
-      "129": "Care Plus · €129/Monat",
-      "175": "Care Premium · €175/Monat",
+      "39": "Care Basic · €39/Monat",
+      "79": "Care Plus · €79/Monat",
+      "149": "Care Premium · €149/Monat",
     },
   },
   en: {
     type: {
-      "990": "Website",
-      "1490": "Multi-Language",
-      "1990": "Complete Package",
-      "2990": "Custom / B2B",
+      "990": "Start",
+      "1790": "Pro",
+      "2690": "Signature",
+      "3490": "Custom / B2B",
     },
     size: {},
     int: {
@@ -245,24 +250,25 @@ const LAB: Record<
       "700": "Payments / Shop",
     },
     lang: {
-      "0": "1 language",
-      "300": "2 languages",
-      "500": "3 languages",
-      "800": "4+ languages",
+      "1": "1 language",
+      "2": "2 languages",
+      "3": "3 languages",
+      "4": "4+ languages",
     },
+    panel: { "0": "No", "1": "Yes" },
     maint: {
       "0": "None",
-      "79": "Care Basic · €79/month",
-      "129": "Care Plus · €129/month",
-      "175": "Care Premium · €175/month",
+      "39": "Care Basic · €39/month",
+      "79": "Care Plus · €79/month",
+      "149": "Care Premium · €149/month",
     },
   },
   tr: {
     type: {
-      "990": "Web sitesi",
-      "1490": "Çok Dilli",
-      "1990": "Komple Paket",
-      "2990": "Özel / B2B",
+      "990": "Start",
+      "1790": "Pro",
+      "2690": "Signature",
+      "3490": "Custom / B2B",
     },
     size: {},
     int: {
@@ -272,24 +278,25 @@ const LAB: Record<
       "700": "Ödemeler / Mağaza",
     },
     lang: {
-      "0": "1 dil",
-      "300": "2 dil",
-      "500": "3 dil",
-      "800": "4+ dil",
+      "1": "1 dil",
+      "2": "2 dil",
+      "3": "3 dil",
+      "4": "4+ dil",
     },
+    panel: { "0": "Hayır", "1": "Evet" },
     maint: {
       "0": "Yok",
-      "79": "Care Basic · €79/ay",
-      "129": "Care Plus · €129/ay",
-      "175": "Care Premium · €175/ay",
+      "39": "Care Basic · €39/ay",
+      "79": "Care Plus · €79/ay",
+      "149": "Care Premium · €149/ay",
     },
   },
 };
 
 const LAB_REF: Record<string, string> = {
   "yilmaz-souvenirs": "Yilmaz Souvenirs",
-  "tennishalle-urfahr": "Tennishalle Urfahr",
-  "baeckerei-sommerhuber": "Bäckerei Sommerhuber",
+  "tennishalle-urfahr": "Salamanda Arena",
+  "baeckerei-sommerhuber": "Alyagraphy",
   "haberl-logistik": "Haberl Logistik",
   "reitsportzentrum-traunsee": "Reitsportzentrum Traunsee",
 };
@@ -383,6 +390,7 @@ export async function POST(req: NextRequest) {
   const cfgType = String(body.type || "");
   const cfgInt = String(body.int || "");
   const cfgLang = String(body.lang || "");
+  const cfgPanel = String(body.panel || "");
   const cfgMaint = String(body.maint || "");
   const cfgEst = String(body.est || "");
   const refSlug = String(body.ref || "");
@@ -419,6 +427,7 @@ export async function POST(req: NextRequest) {
     lines.push(`  ${copy.labels.projectType}: ${lab.type[cfgType]}`);
     lines.push(`  ${copy.labels.integrations}: ${lab.int[cfgInt] || copy.fallback.integrations}`);
     lines.push(`  ${copy.labels.languages}: ${lab.lang[cfgLang] || copy.fallback.languages}`);
+    if (lab.panel[cfgPanel]) lines.push(`  ${copy.labels.adminPanel}: ${lab.panel[cfgPanel]}`);
     lines.push(`  ${copy.labels.maintenance}: ${lab.maint[cfgMaint] || copy.fallback.maintenance}`);
     if (estNum > 0) {
       lines.push(
@@ -469,6 +478,7 @@ export async function POST(req: NextRequest) {
     html += `<tr><td style="${keyStyle}${rowStyle}">${esc(copy.labels.projectType)}</td><td style="${valStyle}${rowStyle}">${esc(lab.type[cfgType])}</td></tr>`;
     html += `<tr><td style="${keyStyle}${rowStyle}">${esc(copy.labels.integrations)}</td><td style="${valStyle}${rowStyle}">${esc(lab.int[cfgInt] || copy.fallback.integrations)}</td></tr>`;
     html += `<tr><td style="${keyStyle}${rowStyle}">${esc(copy.labels.languages)}</td><td style="${valStyle}${rowStyle}">${esc(lab.lang[cfgLang] || copy.fallback.languages)}</td></tr>`;
+    if (lab.panel[cfgPanel]) html += `<tr><td style="${keyStyle}${rowStyle}">${esc(copy.labels.adminPanel)}</td><td style="${valStyle}${rowStyle}">${esc(lab.panel[cfgPanel])}</td></tr>`;
     html += `<tr><td style="${keyStyle}${rowStyle}">${esc(copy.labels.maintenance)}</td><td style="${valStyle}${rowStyle}">${esc(lab.maint[cfgMaint] || copy.fallback.maintenance)}</td></tr>`;
     html += `</tbody></table>`;
     if (estNum > 0) {

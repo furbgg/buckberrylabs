@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Admin-Panel — Buckberry Labs</title>
+<meta name="description" content="Ihr eigenes Admin-Panel: Buchungen, Bestellungen, Anfragen, Rechnungen und Website-Inhalte vom Handy aus verwalten — als App installierbar, mit Push-Benachrichtigung. Am Beispiel von Alyagraphy und Yilmaz Souvenirs." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<style>
+  :root{
+    --primary-dark:#0F1E2E;
+    --surface-dark:#0A1520;
+    --graphite-2:#172533;
+    --graphite-3:#1D2C3B;
+    --mint:#3DD9C4;
+    --deep-mint:#14B8A6;
+    --grad: linear-gradient(135deg,#3DD9C4 0%,#14B8A6 100%);
+    --cream:#F4F2ED;
+    --line:rgba(255,255,255,.1);
+    --text-dim:rgba(255,255,255,.66);
+    --ease:cubic-bezier(0.2,0.8,0.2,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ font-family:'Inter',system-ui,sans-serif; line-height:1.6; color:#fff; background:var(--surface-dark); -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  ::selection{ background:var(--mint); color:var(--surface-dark); }
+  .mono{ font-family:'Geist Mono',monospace; font-weight:500; letter-spacing:.15em; text-transform:uppercase; font-size:12px; }
+  .container{ max-width:1240px; margin:0 auto; padding:0 24px; }
+
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding:14px 24px; border-radius:10px; font-weight:600; font-size:15px; font-family:'Geist','Inter',sans-serif; text-decoration:none; border:1px solid transparent; transition:transform .2s var(--ease), box-shadow .3s var(--ease), border-color .25s, color .25s, background .25s; }
+  .btn-primary{ background:var(--grad); color:var(--surface-dark); box-shadow:0 4px 16px -4px rgba(61,217,196,.25); }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 16px 32px -8px rgba(61,217,196,.5); }
+  .btn-ghost-dark{ border-color:rgba(255,255,255,.22); color:#fff; background:transparent; }
+  .btn-ghost-dark:hover{ border-color:var(--mint); color:var(--mint); }
+  .arrow{ display:inline-block; transition:transform .2s var(--ease); }
+  .btn:hover .arrow{ transform:translateX(4px); }
+  .arrow-pulse{ animation:arrowPulse 1.8s ease-in-out infinite; }
+  @keyframes arrowPulse{ 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
+  .link-under{ color:#fff; font-family:'Geist',sans-serif; font-weight:600; font-size:18px; text-decoration:none; display:inline-flex; align-items:center; gap:10px; }
+  .link-under .t{ border-bottom:2px solid currentColor; padding-bottom:2px; }
+  .link-under:hover{ color:var(--mint); }
+  .link-under:hover .arrow{ transform:translateX(4px); }
+
+  /* NAV */
+  .nav{ position:fixed; top:0; left:0; right:0; z-index:50; height:84px; display:flex; align-items:center; transition:background .3s linear, height .3s var(--ease), border-color .3s linear; border-bottom:1px solid transparent; }
+  .nav.sticky{ height:72px; background:rgba(10,21,32,.78); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom-color:var(--line); }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; width:100%; }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+  .brand img{ height:40px; width:auto; }
+  .brand .wm{ font-family:'Geist',sans-serif; font-weight:600; font-size:21px; letter-spacing:-.03em; color:#fff; }
+  .nav-links{ display:flex; gap:40px; align-items:center; }
+  @media (max-width:1280px){ .nav-links{ gap:26px; } .nav-link{ font-size:14px; } }
+  @media (max-width:1140px){ .nav-links a[href$="#ueber"]{ display:none; } }
+  .nav-link{ font-family:'Geist',sans-serif; font-size:15px; font-weight:500; color:rgba(255,255,255,.88); text-decoration:none; transition:color .2s; position:relative; padding:8px 0; }
+  .nav-link:hover, .nav-link.active{ color:var(--mint); }
+  .nav-link::after{ content:''; position:absolute; left:50%; bottom:0; width:4px; height:4px; border-radius:50%; background:var(--mint); opacity:0; transform:translate(-50%,6px); transition:opacity .2s, transform .2s var(--ease); }
+  .nav-link:hover::after, .nav-link.active::after{ opacity:1; transform:translate(-50%,0); }
+  .nav-right{ display:flex; align-items:center; gap:20px; }
+  .nav-cta{ padding:12px 22px; font-size:14px; border-radius:6px; background:transparent; color:#fff; border:1px solid rgba(255,255,255,.85); box-shadow:none; }
+  .nav-cta:hover{ border-color:var(--mint); color:var(--mint); }
+  .nav.sticky .nav-cta{ background:var(--grad); color:var(--surface-dark); border-color:transparent; }
+  .hamburger{ display:none; cursor:pointer; width:32px; height:32px; flex-direction:column; justify-content:center; align-items:center; gap:5px; background:none; border:none; }
+  .hamburger span{ width:22px; height:1.5px; background:#fff; transition:transform .18s var(--ease), opacity .18s; }
+  .hamburger.open span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2){ opacity:0; }
+  .hamburger.open span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+  .mobile-panel{ position:fixed; top:0; right:0; width:min(360px,90vw); height:100vh; background:var(--primary-dark); z-index:45; transform:translateX(100%); transition:transform .3s var(--ease); padding:96px 32px 32px; display:none; flex-direction:column; gap:4px; }
+  .mobile-panel.open{ transform:translateX(0); }
+  @media (max-width:980px){
+    .nav-links, .nav-right .nav-cta{ display:none; }
+    .hamburger{ display:flex; }
+    .mobile-panel{ display:flex; }
+    .mobile-panel a{ color:#fff; text-decoration:none; font-family:'Geist',sans-serif; font-size:24px; font-weight:500; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.08); }
+    .mobile-panel .btn{ margin-top:16px; justify-content:center; border-bottom:none; }
+  }
+  .lang-switch{ display:flex; align-items:center; gap:10px; font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+  .lang-switch a{ color:#fff; text-decoration:none; opacity:.55; transition:opacity .2s, color .2s; }
+  .lang-switch a:hover{ opacity:1; }
+  .lang-switch a.active{ opacity:1; color:var(--mint); font-weight:700; }
+  .lang-switch .sep{ opacity:.28; }
+
+
+  /* HERO ----------------------------------------------------- */
+  .hero{ position:relative; min-height:100vh; min-height:100svh; overflow:hidden; isolation:isolate; display:flex; align-items:center; padding:120px 0 72px; }
+  .hero-glow{ position:absolute; inset:0; z-index:-2; pointer-events:none; background: radial-gradient(55% 65% at 74% 50%, rgba(201,169,110,.13), transparent 70%), radial-gradient(50% 60% at 0% 20%, rgba(20,184,166,.16), transparent 70%); }
+  .hero-noise{ position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:.35; background-image:radial-gradient(rgba(61,217,196,.35) 1px, transparent 1px); background-size:34px 34px; mask-image:radial-gradient(ellipse at 70% 50%, black 10%, transparent 65%); -webkit-mask-image:radial-gradient(ellipse at 70% 50%, black 10%, transparent 65%); }
+  .hero-grid{ position:relative; width:100%; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; align-items:center; }
+  .hero-copy{ position:relative; z-index:4; }
+  .breadcrumb{ display:flex; gap:10px; font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.5); margin-bottom:28px; opacity:0; }
+  .breadcrumb a{ color:inherit; text-decoration:none; } .breadcrumb a:hover{ color:var(--mint); }
+  .breadcrumb .cur{ color:var(--mint); }
+  .hero h1{ font-family:'Geist',sans-serif; font-weight:500; font-size:clamp(46px,6vw,92px); line-height:1; letter-spacing:-.045em; margin-bottom:36px; }
+  .h1-line{ display:block; overflow:hidden; padding-bottom:.08em; }
+  .h1-inner{ display:block; opacity:0; transform:translateY(40%); }
+  .h1-inner.mint{ color:var(--mint); }
+  .hero-lead{ max-width:540px; font-family:'Geist',sans-serif; font-weight:500; font-size:clamp(17px,1.5vw,20px); line-height:1.55; color:rgba(255,255,255,.88); margin-bottom:44px; opacity:0; }
+  .jump{ display:flex; flex-wrap:wrap; gap:10px 28px; opacity:0; }
+  .jump a{ color:#fff; text-decoration:none; font-family:'Geist',sans-serif; font-size:16px; font-weight:500; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.2); transition:border-color .2s, color .2s; }
+  .jump a:hover{ color:var(--mint); border-color:var(--mint); }
+
+  .stage{ position:relative; height:640px; z-index:2; }
+  .stage .hwin{ position:absolute; left:-6%; top:50%; width:74%; transform:translateY(-62%) rotate(-3deg); opacity:.5; filter:saturate(.8); }
+  .stage .hphone{ left:auto; right:14%; top:46%; width:272px; transform:translateY(-50%); }
+  .stage-label{ position:absolute; right:14%; width:272px; bottom:6px; text-align:center; font-family:'Geist',sans-serif; font-size:15px; font-weight:500; color:rgba(255,255,255,.85); height:24px; }
+  .stage-label span{ position:absolute; inset:0; opacity:0; transition:opacity .4s; white-space:nowrap; }
+  .stage-label span.on{ opacity:1; }
+  .stage-progress{ position:absolute; right:14%; width:272px; bottom:-14px; display:flex; justify-content:center; gap:10px; }
+  .stage-progress span{ width:36px; height:2px; background:rgba(255,255,255,.14); border-radius:2px; overflow:hidden; position:relative; }
+  .stage-progress span i{ position:absolute; inset:0; background:var(--mint); transform:scaleX(0); transform-origin:left; }
+  @media (max-width:1180px){ .stage .hphone, .stage-label, .stage-progress{ right:8%; } }
+  @media (max-width:980px){
+    .hero{ padding:112px 0 64px; }
+    .hero-grid{ grid-template-columns:1fr; gap:40px; }
+    .stage{ height:600px; }
+    .stage .hwin{ display:none; }
+    .stage .hphone, .stage-label, .stage-progress{ right:50%; margin-right:-136px; }
+  }
+  @media (max-width:560px){ .stage{ height:540px; } .stage .hphone{ width:244px; } .stage .hphone, .stage-label, .stage-progress{ margin-right:-122px; width:244px; } }
+
+  /* iPhone frame */
+  .rphone{ position:absolute; width:210px; aspect-ratio:70.6/146.6; border-radius:16.5% / 7.95%; container-type:inline-size;
+    background:linear-gradient(90deg,#3d3d40 0%,#6b6b70 3%,#48484b 9%,#2e2e31 50%,#48484b 91%,#6b6b70 97%,#3d3d40 100%);
+    box-shadow:0 44px 64px -22px rgba(0,0,0,.6), 0 16px 26px -14px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.18); }
+  .rphone::before{ content:''; position:absolute; left:-.9cqw; top:40cqw; width:1cqw; height:13cqw; border-radius:.6cqw 0 0 .6cqw; background:#4a4a4e; box-shadow:0 17cqw 0 #4a4a4e, 0 -17cqw 0 -.1cqw #4a4a4e; }
+  .rphone::after{ content:''; position:absolute; right:-.9cqw; top:50cqw; width:1cqw; height:21cqw; border-radius:0 .6cqw .6cqw 0; background:#4a4a4e; }
+  .rphone .scr{ position:absolute; inset:1.2cqw; display:flex; flex-direction:column; overflow:hidden; border-radius:15.3cqw; border:3.3cqw solid #000; background:#000; }
+  .rphone .scr::before{ content:''; position:absolute; z-index:3; top:2.1cqw; left:50%; transform:translateX(-50%); width:30cqw; height:8.8cqw; border-radius:5cqw; background:#000; }
+  .rphone .sb{ position:relative; flex:none; height:14.2cqw; background:var(--sb,#fafafa); color:#000; font-family:-apple-system,'SF Pro Text','Inter',system-ui,sans-serif; }
+  .rphone .sb.light{ color:#fff; }
+  .rphone .sb i{ position:absolute; left:9.5cqw; top:6.5cqw; transform:translateY(-50%); font-style:normal; font-weight:600; font-size:4.3cqw; letter-spacing:-.01em; line-height:1; }
+  .rphone .sb .ic{ position:absolute; right:6.8cqw; top:6.5cqw; transform:translateY(-50%); display:flex; align-items:center; gap:1.2cqw; }
+  .rphone .sb .ic svg{ display:block; height:3.1cqw; width:auto; fill:currentColor; }
+  .rphone .sb .ic svg.bat{ height:3.4cqw; }
+  .rphone img, .rphone .stack{ display:block; flex:1; min-height:0; width:100%; object-fit:cover; object-position:top; }
+  .rphone .stack{ position:relative; }
+  .rphone .stack img{ position:absolute; inset:0; height:100%; }
+  .rphone .hb{ position:absolute; z-index:3; bottom:1.7cqw; left:50%; transform:translateX(-50%); width:35cqw; height:1.3cqw; border-radius:1cqw; background:#fff; mix-blend-mode:difference; opacity:.9; }
+  .rphone .pstack{ position:relative; flex:1; min-height:0; overflow:hidden; background:#0b0a09; }
+  .rphone .pstack .layer{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top; }
+  .home{ padding:9cqw 7cqw 0; display:grid; grid-template-columns:repeat(4,1fr); gap:7cqw 6cqw; align-content:start;
+    background:radial-gradient(90% 60% at 15% 5%, rgba(61,217,196,.28), transparent 60%), radial-gradient(80% 60% at 100% 100%, rgba(201,169,110,.22), transparent 60%), linear-gradient(165deg,#1b2a38,#0d1117 75%); }
+  .app{ display:flex; flex-direction:column; align-items:center; gap:1.4cqw; }
+  .app b{ display:block; width:100%; aspect-ratio:1; border-radius:23%; background:linear-gradient(150deg, color-mix(in srgb, var(--c) 100%, #fff 18%), var(--c)); opacity:.55; }
+  .app.me b{ opacity:1; display:flex; align-items:center; justify-content:center; background:linear-gradient(150deg,#e2c690,#b8955a); color:#1a1612; font-family:Georgia,'Times New Roman',serif; font-style:italic; font-size:8.5cqw; box-shadow:0 1.5cqw 4cqw rgba(0,0,0,.35); }
+  .app small{ font-family:-apple-system,'Inter',sans-serif; font-size:2.8cqw; color:#fff; line-height:1; }
+  .dock{ position:absolute; left:4cqw; right:4cqw; bottom:4.5cqw; padding:3.4cqw 6cqw; border-radius:8.5cqw; background:rgba(255,255,255,.13); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); display:grid; grid-template-columns:repeat(4,1fr); gap:6cqw; }
+  .dock b{ display:block; aspect-ratio:1; border-radius:23%; background:rgba(255,255,255,.28); }
+  .push{ position:absolute; z-index:4; left:3.5cqw; right:3.5cqw; top:2.5cqw; padding:3.4cqw 3.8cqw; border-radius:6.5cqw; background:rgba(44,42,40,.86); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); display:flex; gap:3cqw; align-items:center; color:#fff; font-family:-apple-system,'Inter',sans-serif; box-shadow:0 3cqw 9cqw rgba(0,0,0,.45); opacity:0; }
+  .push .ico{ flex:none; width:10cqw; height:10cqw; border-radius:2.4cqw; background:linear-gradient(150deg,#e2c690,#b8955a); color:#1a1612; display:flex; align-items:center; justify-content:center; font-family:Georgia,serif; font-style:italic; font-size:5.6cqw; }
+  .push .body{ flex:1; min-width:0; line-height:1.25; }
+  .push .top{ display:flex; justify-content:space-between; font-size:2.8cqw; color:rgba(255,255,255,.55); }
+  .push .t{ display:block; font-weight:600; font-size:3.5cqw; }
+  .push .d{ display:block; font-size:3.2cqw; color:rgba(255,255,255,.8); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .toast{ position:absolute; z-index:4; left:5cqw; right:5cqw; top:3cqw; padding:3.4cqw 4.2cqw; border-radius:4cqw; background:#f4f2ed; color:#1a1612; font-family:-apple-system,'Inter',sans-serif; font-size:3.4cqw; font-weight:600; line-height:1.3; display:flex; gap:2.6cqw; align-items:center; box-shadow:0 3cqw 9cqw rgba(0,0,0,.45); opacity:0; }
+  .toast::before{ content:'✓'; flex:none; width:6cqw; height:6cqw; border-radius:50%; background:#2f9e6b; color:#fff; font-size:3.6cqw; display:flex; align-items:center; justify-content:center; }
+  .tap{ position:absolute; z-index:6; width:13cqw; height:13cqw; margin:-6.5cqw 0 0 -6.5cqw; border-radius:50%; background:rgba(255,255,255,.5); box-shadow:0 0 0 1.6cqw rgba(255,255,255,.18); opacity:0; pointer-events:none; }
+
+  /* browser window (desktop screenshot) */
+  .bwin{ border-radius:12px; overflow:hidden; background:#0b0a09; box-shadow:0 40px 80px -30px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.08); }
+  .bwin .bar{ display:flex; align-items:center; gap:6px; height:32px; padding:0 14px; background:#171615; border-bottom:1px solid rgba(255,255,255,.06); }
+  .bwin .bar i{ width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.2); }
+  .bwin .bar span{ margin-left:12px; padding:0 10px; height:19px; line-height:19px; border-radius:5px; background:rgba(255,255,255,.06); font-family:'Geist Mono',monospace; font-size:10px; color:rgba(255,255,255,.5); white-space:nowrap; overflow:hidden; }
+  .bwin img{ display:block; width:100%; height:auto; }
+
+  /* SECTIONS ------------------------------------------------- */
+  section.band{ padding:120px 0; position:relative; overflow:hidden; }
+  @media(min-width:1024px){ section.band{ padding:144px 0; } }
+  .band.graphite{ background:var(--graphite-2); }
+  .band.surface{ background:var(--surface-dark); }
+  .band.steel{ background:#1a2735; }
+  .kicker{ display:inline-block; color:var(--mint); margin-bottom:20px; }
+  .sec-title{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(32px,4vw,54px); line-height:1.12; letter-spacing:-.035em; max-width:22ch; }
+  .sec-title b{ font-weight:600; }
+  .sec-head{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; margin-bottom:88px; }
+  .sec-head .lead{ font-size:clamp(17px,1.5vw,21px); line-height:1.6; color:rgba(255,255,255,.85); }
+  @media(max-width:900px){ .sec-head{ grid-template-columns:1fr; gap:20px; margin-bottom:56px; } }
+  .reveal{ opacity:0; transform:translateY(24px); }
+
+  .facts{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); }
+  .fact{ padding:36px 28px 0 28px; border-left:1px solid var(--line); }
+  .fact:first-child{ border-left:none; padding-left:0; }
+  .fact h3{ font-family:'Geist',sans-serif; font-weight:600; font-size:21px; letter-spacing:-.02em; margin-bottom:10px; }
+  .fact p{ font-size:15px; line-height:1.6; color:rgba(255,255,255,.7); }
+  @media(max-width:900px){ .facts{ grid-template-columns:1fr 1fr; row-gap:40px; } .fact:nth-child(3){ border-left:none; padding-left:0; } }
+  @media(max-width:560px){ .facts{ grid-template-columns:1fr; } .fact{ border-left:none; padding-left:0; } }
+
+  .intro{ padding:120px 0 0; scroll-margin-top:40px; }
+  .intro.surface{ background:var(--surface-dark); }
+  .intro.graphite{ background:var(--graphite-2); }
+  .intro .sec-head{ margin-bottom:0; }
+  .intro + section.band{ padding-top:88px; }
+
+  /* feature blocks */
+  .case{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:clamp(40px,7vw,120px); align-items:center; scroll-margin-top:100px; }
+  .case.flip .case-visual{ order:-1; }
+  .case-meta{ margin-bottom:22px; }
+  .case-meta .mono{ font-size:11px; color:var(--mint); }
+  .case h2{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(30px,3.4vw,46px); letter-spacing:-.035em; line-height:1.12; margin-bottom:28px; }
+  .case h2 b{ font-weight:600; }
+  .case .txt{ font-size:18px; line-height:1.65; color:rgba(255,255,255,.85); margin-bottom:32px; max-width:52ch; }
+  .pts{ list-style:none; display:flex; flex-direction:column; gap:14px; margin-bottom:36px; max-width:52ch; }
+  .pts li{ position:relative; padding-left:26px; font-size:16px; line-height:1.5; color:rgba(255,255,255,.82); }
+  .pts li::before{ content:''; position:absolute; left:0; top:.72em; width:12px; height:2px; background:var(--mint); }
+  .note{ font-size:13px; color:rgba(255,255,255,.5); margin-top:-12px; }
+  .say{ margin-top:8px; padding:26px 28px; background:rgba(61,217,196,.07); border-left:2px solid var(--mint); font-family:'Geist',sans-serif; font-size:19px; line-height:1.5; letter-spacing:-.01em; max-width:48ch; }
+  .say b{ color:var(--mint); font-weight:600; }
+  .link-under{ color:#fff; font-family:'Geist',sans-serif; font-weight:600; font-size:17px; text-decoration:none; display:inline-flex; align-items:center; gap:10px; }
+  .link-under .t{ border-bottom:2px solid currentColor; padding-bottom:2px; }
+  .link-under:hover{ color:var(--mint); }
+  .link-under:hover .arrow{ transform:translateX(4px); }
+  .case-visual{ min-height:540px; display:flex; align-items:center; justify-content:center; position:relative; }
+  @media(max-width:900px){ .case{ grid-template-columns:1fr; } .case.flip .case-visual{ order:0; } .case-visual{ min-height:0; padding:24px 0; } }
+
+  .solo{ position:relative; width:270px; }
+  .solo .rphone{ position:relative; width:100%; }
+  .fpush{ position:absolute; z-index:3; left:-96px; top:74px; width:300px; padding:14px 16px; border-radius:22px; background:rgba(44,42,40,.9); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); display:flex; gap:12px; align-items:center; font-family:-apple-system,'Inter',sans-serif; box-shadow:0 24px 50px -12px rgba(0,0,0,.6); transform:rotate(-3deg); }
+  .fpush .ico{ flex:none; width:38px; height:38px; border-radius:9px; background:linear-gradient(150deg,#e2c690,#b8955a); color:#1a1612; display:flex; align-items:center; justify-content:center; font-family:Georgia,serif; font-style:italic; font-size:21px; }
+  .fpush .top{ display:flex; justify-content:space-between; gap:8px; font-size:11px; color:rgba(255,255,255,.55); }
+  .fpush .t{ display:block; font-weight:600; font-size:14px; }
+  .fpush .d{ display:block; font-size:13px; color:rgba(255,255,255,.8); }
+  .fpush .body{ flex:1; line-height:1.3; }
+  @media(max-width:560px){ .fpush{ left:-20px; width:260px; top:40px; } .solo{ width:240px; } }
+
+  .duo{ position:relative; width:400px; height:500px; }
+  .duo .rphone.back{ left:10px; top:40px; transform:rotate(-8deg); }
+  .duo .rphone.front{ right:10px; top:0; transform:rotate(6deg); z-index:1; }
+  .trio{ position:relative; width:540px; height:520px; }
+  .trio .rphone{ width:190px; }
+  .trio .rphone:nth-child(1){ left:0; top:56px; transform:rotate(-8deg); }
+  .trio .rphone:nth-child(2){ left:175px; top:0; z-index:2; }
+  .trio .rphone:nth-child(3){ right:0; top:56px; transform:rotate(8deg); z-index:1; }
+  .combo{ position:relative; width:560px; height:500px; }
+  .combo .bwin{ position:absolute; left:0; top:36px; width:500px; }
+  .combo .rphone{ right:0; top:110px; width:200px; transform:rotate(4deg); z-index:1; }
+  @media(min-width:901px) and (max-width:1180px){ .duo, .combo, .trio{ transform:scale(.8); } }
+  @media(max-width:620px){ .duo{ transform:scale(.72); margin:-70px 0; } .combo, .trio{ transform:scale(.6); margin:-100px -110px; } }
+
+  .shots{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(20px,4vw,56px); max-width:960px; margin:0 auto; }
+  .shot{ margin:0; }
+  .shot .rphone{ position:relative; width:100%; }
+  .shot figcaption{ margin-top:18px; font-size:14px; color:rgba(255,255,255,.7); }
+  .shot figcaption b{ display:block; color:#fff; font-family:'Geist',sans-serif; font-weight:600; font-size:16px; margin-bottom:2px; }
+  @media(max-width:760px){ .shots{ grid-template-columns:1fr 1fr; } .shots .shot:last-child{ grid-column:1 / -1; max-width:50%; justify-self:center; } }
+
+  /* comparison */
+  .cmp{ border-top:1px solid rgba(255,255,255,.18); }
+  .cmp-row{ display:grid; grid-template-columns:1fr 1.2fr 1.2fr; gap:24px; padding:22px 0; border-bottom:1px solid var(--line); align-items:baseline; }
+  .cmp-row.head{ padding:18px 0; }
+  .cmp-row.head span{ font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); }
+  .cmp-row.head span:last-child{ color:var(--mint); }
+  .cmp-row .k{ font-family:'Geist',sans-serif; font-weight:600; font-size:17px; }
+  .cmp-row .no{ color:rgba(255,255,255,.55); font-size:16px; }
+  .cmp-row .yes{ color:#fff; font-size:16px; }
+  .cmp-row .h{ display:none; }
+  @media(max-width:760px){
+    .cmp-row{ grid-template-columns:1fr; gap:6px; }
+    .cmp-row.head{ display:none; }
+    .cmp-row .h{ display:inline; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; margin-right:10px; color:rgba(255,255,255,.4); }
+    .cmp-row .yes .h{ color:var(--mint); }
+  }
+
+  /* modules */
+  .mods{ display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
+  .mod{ background:var(--graphite-3); padding:32px 28px; }
+  .mod.core{ background:rgba(61,217,196,.1); }
+  .mod h3{ font-family:'Geist',sans-serif; font-weight:600; font-size:20px; letter-spacing:-.02em; margin-bottom:6px; }
+  .mod .ex{ display:block; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--mint); margin-bottom:22px; }
+  .mod ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .mod li{ font-size:15px; color:rgba(255,255,255,.78); padding-left:18px; position:relative; }
+  .mod li::before{ content:''; position:absolute; left:0; top:.7em; width:8px; height:2px; background:rgba(61,217,196,.7); }
+  @media(max-width:980px){ .mods{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:560px){ .mods{ grid-template-columns:1fr; } }
+
+  /* price */
+  .pband{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(40px,7vw,120px); align-items:center; }
+  .pband .big{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(64px,9vw,128px); letter-spacing:-.05em; line-height:.95; }
+  .pband .big small{ display:block; margin-top:14px; font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.55); }
+  .pband p{ font-size:18px; line-height:1.65; color:rgba(255,255,255,.85); margin-bottom:32px; }
+  .pband .btns{ display:flex; flex-wrap:wrap; gap:14px; }
+  @media(max-width:900px){ .pband{ grid-template-columns:1fr; } }
+
+  /* CTA */
+  .cta-banner{ position:relative; padding:150px 0; text-align:center; overflow:hidden; background:var(--surface-dark); }
+  .cta-orb{ position:absolute; width:800px; height:800px; border-radius:50%; left:50%; top:50%; transform:translate(-50%,-50%); background:radial-gradient(circle, rgba(61,217,196,.25), rgba(20,184,166,.1) 40%, transparent 70%); filter:blur(120px); pointer-events:none; }
+  .cta-inner{ position:relative; z-index:2; max-width:780px; margin:0 auto; }
+  .cta-inner h2{ font-family:'Geist',sans-serif; font-weight:500; font-size:clamp(38px,5.4vw,68px); letter-spacing:-.04em; line-height:1.06; margin-bottom:24px; }
+  .cta-inner h2 .m{ color:var(--mint); }
+  .cta-inner .lead{ color:var(--text-dim); font-size:18px; margin-bottom:36px; }
+  .pulse-glow{ animation:glowPulse 2.4s ease-in-out infinite; }
+  @keyframes glowPulse{ 0%,100%{ box-shadow:0 0 32px rgba(61,217,196,.3), 0 4px 16px -4px rgba(61,217,196,.3);} 50%{ box-shadow:0 0 48px rgba(61,217,196,.6), 0 4px 16px -4px rgba(61,217,196,.5);} }
+
+  /* FOOTER */
+  footer{ background:var(--surface-dark); padding:80px 0 24px; border-top:1px solid var(--line); }
+  .foot-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:48px; padding-bottom:56px; border-bottom:1px solid rgba(255,255,255,.08); }
+  @media(max-width:900px){ .foot-grid{ grid-template-columns:1fr 1fr; gap:40px; } }
+  @media(max-width:520px){ .foot-grid{ grid-template-columns:1fr; } }
+  .foot-brand .brand{ margin-bottom:16px; }
+  .foot-brand .brand img{ width:24px; height:24px; object-fit:contain; }
+  .foot-brand .brand .wm{ font-size:20px; }
+  .foot-brand .tagline{ font-size:14px; color:rgba(255,255,255,.7); max-width:28ch; margin-bottom:12px; }
+  .foot-brand .loc{ color:rgba(255,255,255,.45); font-size:10px; }
+  .foot-h{ color:rgba(255,255,255,.5); margin-bottom:20px; display:block; }
+  .foot-col ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .foot-col a{ font-size:14px; color:rgba(255,255,255,.7); text-decoration:none; transition:color .2s; }
+  .foot-col a:hover{ color:var(--mint); }
+  .foot-bar{ padding-top:24px; display:flex; justify-content:space-between; align-items:center; gap:24px; font-size:12px; color:rgba(255,255,255,.45); }
+  .foot-bar .mono{ font-size:10px; }
+  @media(max-width:700px){ .foot-bar{ flex-direction:column; align-items:flex-start; gap:12px; } }
+
+  :focus-visible{ outline:3px solid var(--mint); outline-offset:3px; }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.2s !important; }
+    .reveal, .h1-inner, .breadcrumb, .hero-lead, .jump{ opacity:1 !important; transform:none !important; }
+  }
+</style>
+<link rel="canonical" href="https://buckberrylabs.com/de/admin-panel" />
+<link rel="alternate" hreflang="de" href="https://buckberrylabs.com/de/admin-panel" />
+<link rel="alternate" hreflang="en" href="https://buckberrylabs.com/en/admin-panel" />
+<link rel="alternate" hreflang="tr" href="https://buckberrylabs.com/tr/yonetim-paneli" />
+<link rel="alternate" hreflang="x-default" href="https://buckberrylabs.com/de/admin-panel" />
+</head>
+<body>
+
+<header class="nav" id="nav" aria-label="Hauptnavigation">
+  <div class="container nav-inner">
+    <a href="/de/" class="brand" aria-label="Buckberry Labs Startseite"><img src="/logo/karelogo.png" alt=""><span class="wm">buckberry</span></a>
+    <nav class="nav-links" aria-label="Primär">
+      <a href="/de/loesungen" class="nav-link">Lösungen</a>
+      <a href="/de/admin-panel" class="nav-link active" aria-current="page">Admin-Panel</a>
+      <a href="/de/referenzen" class="nav-link">Referenzen</a>
+      <a href="/de/preise" class="nav-link">Preise</a>
+      <a href="/de/#ueber" class="nav-link">Über uns</a>
+      <a href="/de/kontakt" class="nav-link">Kontakt</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-switch" aria-label="Sprache wechseln">
+        <a href="/de/admin-panel" data-lang-switch="de" class="active">DE</a><span class="sep">·</span>
+        <a href="/en/admin-panel" data-lang-switch="en">EN</a><span class="sep">·</span>
+        <a href="/tr/yonetim-paneli" data-lang-switch="tr">TR</a>
+      </div>
+      <a href="/de/kontakt" class="btn nav-cta">Projekt starten <span class="arrow">→</span></a>
+      <button class="hamburger" id="hamburger" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-panel" id="mobilePanel" aria-hidden="true">
+  <a href="/de/loesungen">Lösungen</a>
+  <a href="/de/admin-panel">Admin-Panel</a>
+  <a href="/de/referenzen">Referenzen</a>
+  <a href="/de/preise">Preise</a>
+  <a href="/de/#ueber">Über uns</a>
+  <a href="/de/kontakt">Kontakt</a>
+  <a href="/de/kontakt" class="btn btn-primary">Projekt starten <span class="arrow">→</span></a>
+</div>
+
+
+<main>
+
+<!-- HERO -->
+<section class="hero" aria-label="Admin-Panel">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-noise" aria-hidden="true"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy" id="heroCopy">
+      <nav class="breadcrumb" id="crumb" aria-label="Brotkrumen"><a href="/de/">Start</a><span>/</span><span class="cur">Admin-Panel</span></nav>
+      <h1>
+        <span class="h1-line"><span class="h1-inner">Ihr Betrieb.</span></span>
+        <span class="h1-line"><span class="h1-inner mint">In Ihrer Hosentasche.</span></span>
+      </h1>
+      <p class="hero-lead" id="heroLead">Zu jeder Website bauen wir auf Wunsch ein eigenes Admin-Panel — für Buchungen, Bestellungen, Anfragen, Rechnungen und Inhalte. Als App auf dem Handy, mit Push-Benachrichtigung und ohne dass Sie uns für jede Änderung anrufen müssen.</p>
+      <div class="jump" id="jump">
+        <a href="#studio">Fotostudio</a>
+        <a href="#shop">Online-Shop</a>
+        <a href="#rabatte">Rabattaktionen</a>
+        <a href="#sicherheit">Sicherheit</a>
+        <a href="#preis">Preis</a>
+      </div>
+    </div>
+
+    <!-- Animated phone: home screen → panel → push → confirm → invoice -->
+    <div class="stage" aria-hidden="true">
+      <div class="hwin"><div class="bwin"><div class="bar"><i></i><i></i><i></i><span>alyagraphy.com/admin/buchungen</span></div><img src="/work/alyagraphy-panel/02-buchungen.webp" alt="Buchungsliste mit Datum, Leistung, Paket, Status und Preis" loading="lazy" width="1680" height="766"></div></div>
+      <div class="rphone hphone"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span>
+        <div class="pstack" id="pStack">
+          <img class="layer" id="lDash" src="/work/alyagraphy-panel/01-dashboard.webp" alt="" width="648" height="1424">
+          <img class="layer" id="lReq" src="/work/alyagraphy-panel/04-anfrage-bearbeiten.webp" alt="" width="638" height="1424">
+          <img class="layer" id="lInv" src="/work/alyagraphy-panel/15-rechnungen.webp" alt="" width="628" height="1412">
+          <div class="layer home" id="lHome"><span class="app"><b style="--c:#5b7a99"></b></span><span class="app"><b style="--c:#3d6b5e"></b></span><span class="app"><b style="--c:#8a5a4a"></b></span><span class="app"><b style="--c:#4a4f7a"></b></span><span class="app"><b style="--c:#6b6b70"></b></span><span class="app"><b style="--c:#7a6a3d"></b></span><span class="app"><b style="--c:#3d5a7a"></b></span><span class="app"><b style="--c:#5a3d6b"></b></span><span class="app"><b style="--c:#4d7a6b"></b></span><span class="app me" id="appMe"><b>A</b><small>Admin</small></span><span class="app"><b style="--c:#556b3d"></b></span><span class="app"><b style="--c:#3d4d6b"></b></span><span class="app"><b style="--c:#6b4d3d"></b></span><span class="app"><b style="--c:#4d6b7a"></b></span><span class="app"><b style="--c:#7a7a4d"></b></span><span class="app"><b style="--c:#5a5a6b"></b></span><div class="dock"><b></b><b></b><b></b><b></b></div></div>
+          <div class="push" id="push"><span class="ico">A</span><span class="body"><span class="top"><span>Alyagraphy Admin</span><span>jetzt</span></span><span class="t">Neue Buchungsanfrage</span><span class="d">Hochzeitsfotografie · 14.11.2026</span></span></div>
+          <div class="toast" id="toast1">Bestätigt · Kunde per E-Mail informiert</div>
+          <div class="toast" id="toast2">Rechnung erstellt · PDF bereit</div>
+          <span class="tap" id="tap"></span>
+        </div>
+        <span class="hb"></span></div></div>
+      <div class="stage-label" id="stageLabel"><span class="on">Als App auf dem Homescreen</span><span>Push bei neuer Anfrage</span><span>Bestätigt — mit einem Tipp</span><span>Rechnung als PDF</span></div>
+      <div class="stage-progress"><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPLES -->
+<section class="band graphite">
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title reveal">Ein Backoffice, <b>das Sie wirklich benutzen</b></h2>
+      <p class="lead reveal">Kein Dashboard mit vierzig Menüpunkten, die niemand braucht. Jedes Panel wird für die Abläufe eines Betriebs gebaut — und zeigt nur, was Sie im Alltag wirklich brauchen.</p>
+    </div>
+    <div class="facts">
+      <div class="fact reveal"><h3>Als App installierbar</h3><p>Direkt aus dem Browser auf den Homescreen. Kein App Store, keine Updates zum Installieren.</p></div>
+      <div class="fact reveal"><h3>Push aufs Handy</h3><p>Neue Anfrage, neue Buchung: Sie erfahren es sofort — nicht erst beim nächsten Blick ins Postfach.</p></div>
+      <div class="fact reveal"><h3>Komplett mobil</h3><p>Jede Funktion ist fürs Handy gebaut. Buchungen bestätigen, Rechnungen schreiben, Fotos tauschen — auch unterwegs.</p></div>
+      <div class="fact reveal"><h3>Ohne Ticket an uns</h3><p>Texte, Bilder, Leistungen und Preise ändern Sie selbst. Kein Stundensatz für eine neue Telefonnummer.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKED EXAMPLE: PHOTO STUDIO -->
+<section class="intro surface" id="studio">
+  <div class="container">
+    <div class="sec-head">
+      <div><span class="mono kicker reveal">Aus der Praxis · Fotostudio</span><h2 class="sec-title reveal">Das Panel von <b>Alyagraphy</b></h2></div>
+      <p class="lead reveal">So sieht das Panel aus, mit dem das Fotostudio Alyagraphy seit Februar 2026 arbeitet. Echte Screenshots — nur die Kundendaten sind unkenntlich gemacht.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band surface">
+  <div class="container">
+    <article class="case" id="app">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Dashboard · Push</span></div>
+        <h2 class="reveal">Der Tag auf <b>einen Blick</b></h2>
+        <p class="txt reveal">Beim Öffnen sieht das Studio sofort, was ansteht: Buchungen im Monat, offene Bestätigungen, neue Anfragen. Mit einem Tipp auf „Jetzt einrichten“ kommen neue Anfragen als Push-Benachrichtigung aufs Handy — wie bei jeder anderen App.</p>
+        <ul class="pts reveal"><li>Begrüßung mit Datum und Zahl neuer Anfragen</li><li>Kennzahlen zu Buchungen und offenen Anfragen</li><li>Push-Benachrichtigungen mit einem Tipp aktivieren</li><li>Als App auf dem Homescreen — ohne App Store</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="solo"><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/01-dashboard.webp" alt="Dashboard: Begrüßung, Push-Hinweis und Kennzahlen" loading="lazy" width="648" height="1424"><span class="hb"></span></div></div><div class="fpush"><span class="ico">A</span><span class="body"><span class="top"><span>Alyagraphy Admin</span><span>jetzt</span></span><span class="t">Neue Buchungsanfrage</span><span class="d">Hochzeitsfotografie · 14.11.2026</span></span></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band graphite">
+  <div class="container">
+    <article class="case flip" id="buchungen">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Buchungen · Workflow</span></div>
+        <h2 class="reveal">Jede Buchung mit <b>klarem nächsten Schritt</b></h2>
+        <p class="txt reveal">Alle Buchungen in einer Liste — Datum, Leistung, Paket, Status und Preis. In jeder Buchung zeigt ein Workflow, was als Nächstes zu tun ist: bestätigen, Rechnung stellen, Zahlung erfassen, Medien liefern.</p>
+        <ul class="pts reveal"><li>Bestätigen oder ablehnen — mit persönlicher Nachricht an den Kunden</li><li>Preis anpassen und dem Kunden direkt mitteilen</li><li>Status und interne Notizen pro Buchung</li><li>Am Laptop als Tabelle, am Handy als Karten</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="combo"><div class="bwin"><div class="bar"><i></i><i></i><i></i><span>alyagraphy.com/admin/buchungen</span></div><img src="/work/alyagraphy-panel/02-buchungen.webp" alt="Buchungsliste mit Datum, Leistung, Paket, Status und Preis" loading="lazy" width="1680" height="766"></div><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/03-buchung-workflow.webp" alt="Buchungsdetail mit Workflow: bestätigt, Rechnung, bezahlt, Medien" loading="lazy" width="632" height="1436"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band surface">
+  <div class="container">
+    <article class="case" id="kalender">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Kalender</span></div>
+        <h2 class="reveal">Urlaub? <b>Tag blockieren.</b></h2>
+        <p class="txt reveal">Im Kalender sieht das Studio alle Termine des Monats. Tag antippen, Grund eintragen, „Tag blockieren“ — und für diesen Tag nimmt die Website keine Buchungen mehr an.</p>
+        <ul class="pts reveal"><li>Monatsansicht mit allen Terminen</li><li>Tage mit Grund blockieren — Urlaub, Messe, Krankheit</li><li>Die Online-Buchung richtet sich automatisch danach</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="duo"><div class="rphone back"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/04-anfrage-bearbeiten.webp" alt="Anfrage bearbeiten: Nachricht an den Kunden, bestätigen oder ablehnen" loading="lazy" width="638" height="1424"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/05-kalender.webp" alt="Kalender mit Tagesdetail und Button Tag blockieren" loading="lazy" width="654" height="1426"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band graphite">
+  <div class="container">
+    <article class="case flip" id="anfragen">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Inbox</span></div>
+        <h2 class="reveal">Alle Anfragen <b>in einem Posteingang</b></h2>
+        <p class="txt reveal">Kontaktformular, Shop, Medien und Buchungen landen nicht verstreut im E-Mail-Postfach, sondern in einer Inbox — mit Filter, Suche und Status. Aus einer Anfrage wird mit einem Klick ein Termin, aus dem Termin eine Rechnung.</p>
+        <ul class="pts reveal"><li>Filter nach Quelle: Kontakt, Shop, Medien, Buchungen</li><li>Status auf einen Blick: neu, beantwortet, archiviert</li><li>Interne Notiz fürs Team oder E-Mail-Antwort direkt aus dem Panel</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="duo"><div class="rphone back"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/08-anfragen.webp" alt="Inbox mit Filtern nach Kontakt, Shop, Medien und Buchungen" loading="lazy" width="606" height="1394"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/09-anfrage-detail.webp" alt="Anfrage-Detail: Termin bestätigt, Rechnung erstellen, interne Notiz" loading="lazy" width="604" height="1396"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band steel">
+  <div class="container">
+    <article class="case" id="medien">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Medien-Lieferung · das Herzstück</span></div>
+        <h2 class="reveal">Fotos liefern, <b>Album-Auswahl zurückbekommen</b></h2>
+        <p class="txt reveal">Kein Download-Link, der nach ein paar Tagen abläuft, keine Album-Auswahl per Chat. Das Studio erstellt eine Lieferung direkt zur Buchungsnummer, lädt die Fotos hoch und legt fest, wie lange der Zugang gilt. Der Kunde bekommt automatisch eine E-Mail mit Code, sieht seine Fotos in einer privaten Galerie und markiert dort seine Album-Favoriten.</p>
+        <ul class="pts reveal"><li>Lieferung mit der Buchung verknüpfen — Name und Datum sind schon da</li><li>Zugriffsdauer frei wählbar, zum Beispiel 90 Tage</li><li>Status je Lieferung: in Vorbereitung, bereit, heruntergeladen, abgelaufen</li></ul>
+        <a href="/de/referenzen#alyagraphy" class="link-under reveal"><span class="t">So erlebt es der Kunde</span><span class="arrow">→</span></a>
+      </div>
+      <div class="case-visual reveal"><div class="duo"><div class="rphone back"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/06-lieferungen.webp" alt="Medien-Lieferungen mit Ticket-Code und Dateien" loading="lazy" width="640" height="1396"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/07-neue-lieferung.webp" alt="Neue Medien-Lieferung mit verknüpfter Buchung und Zugriffsdauer" loading="lazy" width="624" height="1356"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band surface">
+  <div class="container">
+    <article class="case flip" id="inhalte">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Website-Inhalte · CMS</span></div>
+        <h2 class="reveal">Neues Hero-Video? <b>Vom Handy aus.</b></h2>
+        <p class="txt reveal">Das Video auf der Startseite, die Bilder im Portfolio, Highlights, Galerien, Videos und Kundenstimmen: Das Studio tauscht alles selbst aus — hochladen, speichern, live. Die Dateien liegen schnell ausgeliefert bei Cloudflare.</p>
+        <ul class="pts reveal"><li>Hero-Video und Hero-Bilder per Klick oder Drag &amp; Drop</li><li>Portfolio: Highlights, Galerien, Videos, Stimmen</li><li>Kundenstimmen pflegen, ohne Code anzufassen</li></ul>
+        <p class="say reveal">Viele Agenturen verdienen an jeder kleinen Änderung. <b>Wir nicht.</b> Was Sie selbst ändern können, sollen Sie auch selbst ändern können.</p>
+      </div>
+      <div class="case-visual reveal"><div class="duo"><div class="rphone back"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/10-inhalte.webp" alt="Website-Inhalte: Hero-Video hochladen" loading="lazy" width="616" height="1358"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/11-portfolio.webp" alt="Portfolio: Hero-Slider mit eigenem Bild" loading="lazy" width="634" height="1396"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<!-- CATALOGUE -->
+<section class="band graphite" id="katalog">
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title reveal">Leistungen, Add-ons und <b>Produkte selbst pflegen</b></h2>
+      <p class="lead reveal">Neues Paket, neuer Preis, saisonales Angebot: Das Studio legt Leistungen, Zusatzleistungen und Shop-Produkte selbst an, schaltet sie aktiv oder inaktiv und ändert Bilder und Preise.</p>
+    </div>
+    <div class="shots">
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/12-leistungen.webp" alt="Leistungen: Hochzeit, Verlobung, Familie, Babybauch" loading="lazy" width="616" height="1364"><span class="hb"></span></div></div><figcaption><b>Leistungen</b>Mit Bild, aktiv oder inaktiv</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/13-addons.webp" alt="Zusatzleistungen mit Bild und Preis" loading="lazy" width="630" height="1406"><span class="hb"></span></div></div><figcaption><b>Add-ons</b>Drohne, Videoclip, Album und mehr</figcaption></figure>
+      <figure class="shot reveal"><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/14-produkte.webp" alt="Produktkatalog mit Fotoalben und Preisen" loading="lazy" width="642" height="1410"><span class="hb"></span></div></div><figcaption><b>Produkte</b>Alben und USB-Sticks im Shop</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="band surface">
+  <div class="container">
+    <article class="case" id="rechnungen">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Finanzen</span></div>
+        <h2 class="reveal">Rechnungen <b>direkt aus der Buchung</b></h2>
+        <p class="txt reveal">Aus jeder Buchung entsteht mit einem Klick eine Rechnung mit fortlaufender Nummer. Als PDF herunterladen, per E-Mail an den Kunden schicken, als bezahlt markieren — und für die Buchhaltung nach Zeitraum filtern.</p>
+        <ul class="pts reveal"><li>Fortlaufende Rechnungsnummern</li><li>PDF-Download für die Buchhaltung</li><li>Status ausgestellt oder bezahlt, Filter nach Datum</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="solo"><div class="rphone"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/15-rechnungen.webp" alt="Rechnungen mit Status, Betrag, PDF-Download und E-Mail-Versand" loading="lazy" width="628" height="1412"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<!-- WORKED EXAMPLE: ONLINE SHOP -->
+<section class="intro graphite" id="shop">
+  <div class="container">
+    <div class="sec-head">
+      <div><span class="mono kicker reveal">Aus der Praxis · Online-Shop</span><h2 class="sec-title reveal">Das Panel von <b>Yilmaz Souvenirs</b></h2></div>
+      <p class="lead reveal">Der Shop läuft seit September 2025. Bestellungen, Zahlungen, Retouren, Kunden und Rabattaktionen verwaltet das Team komplett im Panel — auch vom Handy. Die Kunden auf den Screenshots sind Testkonten.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band graphite">
+  <div class="container">
+    <article class="case" id="shop-start">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Dashboard · Dringende Kontrolle</span></div>
+        <h2 class="reveal">Was liegen bleibt, <b>fällt sofort auf</b></h2>
+        <p class="txt reveal">Das Dashboard zeigt Umsatz, Zahlungen und die letzten Bestellungen in Echtzeit. Und es meldet sich, wenn etwas hängt: Bezahlte Bestellungen, die seit über 24 Stunden auf eine Sendungsnummer warten, stehen ganz oben — rot markiert.</p>
+        <ul class="pts reveal"><li>Warnung bei bezahlten, aber nicht versandten Bestellungen</li><li>Umsatz heute und Zahlungsübersicht auf einen Blick</li><li>Letzte Bestellungen in Echtzeit</li><li>Als App auf dem Homescreen, mit Benachrichtigungen</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="duo"><div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/02-zahlungsuebersicht.webp" alt="Zahlungsübersicht und letzte Bestellungen" loading="lazy" width="624" height="1398"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/01-dashboard.webp" alt="Dashboard mit Warnung zu verzögerten Bestellungen" loading="lazy" width="640" height="1398"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band surface">
+  <div class="container">
+    <article class="case flip" id="bestellungen">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Bestellungen</span></div>
+        <h2 class="reveal">Jede Bestellung, <b>jeder Status</b></h2>
+        <p class="txt reveal">Alle Bestellungen in einer Liste, filterbar nach Status — von „nicht versandt“ bis „erstattet“. Ein Tipp öffnet die Details: Artikel mit Variante und Artikelnummer, Netto, MwSt., Versand, Rabatt und Erstattungen. Die Rechnung wird bei Zahlungseingang automatisch ausgestellt.</p>
+        <ul class="pts reveal"><li>Filter: nicht versandt, bezahlt, versandt, geliefert, storniert, erstattet</li><li>Suche nach Bestellnummer und CSV-Export</li><li>Status, Erstattungen und Dokumente pro Bestellung</li><li>Rechnung automatisch bei Zahlungseingang</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="trio"><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/03-bestellungen.webp" alt="Bestellungen verwalten mit Statusfiltern und CSV-Export" loading="lazy" width="608" height="1422"><span class="hb"></span></div></div><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/04-bestelldetails.webp" alt="Bestelldetails mit Netto, MwSt., Versand, Rabatt und Erstattung" loading="lazy" width="634" height="1410"><span class="hb"></span></div></div><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/06-bestellliste.webp" alt="Bestellliste mit Status storniert, teilweise erstattet und geliefert" loading="lazy" width="620" height="1168"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band graphite">
+  <div class="container">
+    <article class="case" id="zahlungen">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Zahlungen · Stripe</span></div>
+        <h2 class="reveal">Zahlungen und Erstattungen <b>im selben Panel</b></h2>
+        <p class="txt reveal">Jede Stripe-Zahlung erscheint mit Kunde, Bestellung und Zahlungsart. Erstattungen — auch Teilbeträge — werden im Panel verwaltet und sauber verbucht: Zahlungsbetrag, Erstattung und Netto-Einnahme stehen nebeneinander.</p>
+        <ul class="pts reveal"><li>Filter: erfolgreich, ausstehend, fehlgeschlagen, erstattet</li><li>Teil- und Vollerstattungen mit Verlauf</li><li>Netto-Einnahme pro Zahlung auf einen Blick</li><li>Stripe-Payment-ID für die Buchhaltung</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="duo"><div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/07-zahlungen.webp" alt="Zahlungsliste mit Status und Zahlungsart" loading="lazy" width="586" height="1362"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/08-zahlung-detail.webp" alt="Zahlungsdetail mit Erstattung und Netto-Einnahme" loading="lazy" width="648" height="1392"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band surface">
+  <div class="container">
+    <article class="case flip" id="produkte">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Produkte</span></div>
+        <h2 class="reveal">Neues Produkt — <b>ein paar Tipps entfernt</b></h2>
+        <p class="txt reveal">Produkte legt der Shop direkt am Handy an: Grunddaten, Preisgestaltung, Varianten, Bilder, SEO-Felder und Startbestand — auf Deutsch, Englisch und Türkisch. Preis und Bestand lassen sich auch direkt in der Liste ändern, ohne das Produkt zu öffnen.</p>
+        <ul class="pts reveal"><li>Varianten, Bilder, SEO und Startbestand in einem Formular</li><li>Texte auf Deutsch, Englisch und Türkisch</li><li>Preis direkt in der Liste speichern</li><li>Verfügbarer und reservierter Bestand im Blick</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="duo"><div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/09-produktliste.webp" alt="Produktkarte mit Bestand, Varianten und Preis" loading="lazy" width="638" height="1352"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/10-neues-produkt.webp" alt="Neues Produkt mit Grunddaten in drei Sprachen" loading="lazy" width="644" height="1412"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band graphite">
+  <div class="container">
+    <article class="case" id="kunden">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Kunden</span></div>
+        <h2 class="reveal">Kunden kennen, <b>DSGVO im Griff</b></h2>
+        <p class="txt reveal">Jedes Kundenkonto mit Registrierung, Bestellungen, Umsatz, durchschnittlichem Bestellwert und Retouren. Filter nach Zeitraum, Bestellungen und Umsatz. Und wenn jemand Auskunft verlangt: DSGVO-Export mit einem Klick.</p>
+        <ul class="pts reveal"><li>Filter nach Zeitraum, Bestellungen und Umsatz</li><li>Kennzahlen pro Kunde</li><li>E-Mail oder Anruf direkt aus dem Profil</li><li>DSGVO-Export als Download</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="duo"><div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/11-kunden.webp" alt="Kundenliste mit Filtern, Umsatz und Bestellungen" loading="lazy" width="646" height="1430"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/12-kunde-detail.webp" alt="Kundenprofil mit DSGVO-Export und Kennzahlen" loading="lazy" width="646" height="1362"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band surface">
+  <div class="container">
+    <article class="case flip" id="retouren">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Retouren</span></div>
+        <h2 class="reveal">Retouren, <b>die nicht im Postfach versanden</b></h2>
+        <p class="txt reveal">Kunden melden Retouren im Shop, das Team sieht sie im Panel: Grund, Kommentar, Bestellung, Versand und Tracking. Freigeben mit einem Tipp — und Nachrichten an den Kunden gehen direkt aus dem Panel an seine E-Mail-Adresse.</p>
+        <ul class="pts reveal"><li>Übersicht: offen, in Bearbeitung, abgeschlossen, Retourenquote</li><li>Grund und Kommentar des Kunden</li><li>Retoure freigeben, Versand und Tracking erfassen</li><li>Nachricht an den Kunden — landet direkt in seinem Postfach</li></ul>
+      </div>
+      <div class="case-visual reveal"><div class="duo"><div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/13-retouren.webp" alt="Retouren-Übersicht mit offen, in Bearbeitung, abgeschlossen und Quote" loading="lazy" width="618" height="1406"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/14-retoure-detail.webp" alt="Retoure mit Grund, Kommentar und Button Retoure freigeben" loading="lazy" width="616" height="1408"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band steel">
+  <div class="container">
+    <article class="case" id="rabatte">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Gutscheine &amp; Rabattaktionen</span></div>
+        <h2 class="reveal">Rabattaktion starten — <b>in einer Minute, vom Handy</b></h2>
+        <p class="txt reveal">Gutscheincodes für Kunden oder zeitgebundene Aktionen für eine Kategorie oder den ganzen Shop: anlegen, Zeitraum wählen, fertig. Auf Wunsch erscheint die Aktion automatisch als Banner im Shop, der Rabatt wird im Warenkorb abgezogen.</p>
+        <ul class="pts reveal"><li>Gutscheincodes für einzelne Kunden</li><li>Rabattaktionen für Kategorien oder den ganzen Shop, mit Start- und Enddatum</li><li>Banner im Shop — automatisch, ohne Design-Auftrag</li><li>Einlösungen und Umsatz pro Monat im Blick</li></ul>
+        <p class="say reveal">Eine Herbstaktion war früher ein Auftrag an die Agentur. <b>Heute ist sie ein Formular.</b></p>
+      </div>
+      <div class="case-visual reveal"><div class="duo"><div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/15-gutscheine.webp" alt="Gutscheine und Rabattaktionen mit Kennzahlen" loading="lazy" width="624" height="1410"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#f6f8f7"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz-panel/16-rabattaktion.webp" alt="Rabattaktion Herbst-Aktion Istanbul, live als Banner" loading="lazy" width="638" height="1420"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="band graphite">
+  <div class="container">
+    <article class="case flip" id="sicherheit">
+      <div>
+        <div class="case-meta reveal"><span class="mono">Sicherheit</span></div>
+        <h2 class="reveal">Zugang nur mit <b>zweitem Faktor</b></h2>
+        <p class="txt reveal">Ein Panel mit Kundendaten und Rechnungen braucht mehr als ein Passwort. Unsere Panels unterstützen die Zwei-Faktor-Anmeldung mit einer Authenticator-App — inklusive Wiederherstellungscodes, falls das Handy einmal weg ist.</p>
+        <ul class="pts reveal"><li>Zwei-Faktor-Anmeldung mit Authenticator-App</li><li>Wiederherstellungscodes für den Notfall</li><li>Datenschutz-Einwilligung pro Kunde dokumentiert</li></ul>
+        <p class="note reveal">Im Bild: Anmeldung zum Panel von Yilmaz Souvenirs — oben läuft die Herbst-Aktion als Banner.</p>
+      </div>
+      <div class="case-visual reveal"><div class="solo"><div class="rphone"><div class="scr"><span class="sb dark" style="--sb:#fefefe"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/16-sicherheit.webp" alt="Sicherheits-Check: Eingabe des 6-stelligen Codes aus der Authenticator-App" loading="lazy" width="658" height="1344"><span class="hb"></span></div></div></div></div>
+    </article>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="band steel">
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title reveal">Ohne Panel <b>und mit</b></h2>
+      <p class="lead reveal">Was im Alltag eines kleinen Betriebs Zeit frisst — und wie es mit einem eigenen Panel aussieht.</p>
+    </div>
+    <div class="cmp reveal">
+      <div class="cmp-row head"><span>Aufgabe</span><span>Ohne Panel</span><span>Mit Buckberry-Panel</span></div>
+      <div class="cmp-row"><span class="k">Text oder Bild ändern</span><span class="no"><span class="h">Ohne Panel</span>E-Mail an die Agentur, warten, Rechnung</span><span class="yes"><span class="h">Mit Panel</span>Selbst, in zwei Minuten</span></div>
+      <div class="cmp-row"><span class="k">Neue Anfrage</span><span class="no"><span class="h">Ohne Panel</span>Irgendwo im Postfach</span><span class="yes"><span class="h">Mit Panel</span>Push aufs Handy, Inbox mit Status</span></div>
+      <div class="cmp-row"><span class="k">Buchung bestätigen</span><span class="no"><span class="h">Ohne Panel</span>E-Mail schreiben, Kalender pflegen</span><span class="yes"><span class="h">Mit Panel</span>Ein Tipp — der Kunde wird informiert</span></div>
+      <div class="cmp-row"><span class="k">Fotos liefern</span><span class="no"><span class="h">Ohne Panel</span>Download-Link, Auswahl per Nachricht</span><span class="yes"><span class="h">Mit Panel</span>Private Galerie mit Album-Auswahl</span></div>
+      <div class="cmp-row"><span class="k">Rechnung schreiben</span><span class="no"><span class="h">Ohne Panel</span>Extra-Programm, alles abtippen</span><span class="yes"><span class="h">Mit Panel</span>Aus der Buchung, als PDF</span></div>
+      <div class="cmp-row"><span class="k">Rabattaktion starten</span><span class="no"><span class="h">Ohne Panel</span>Agentur beauftragen, Banner bauen lassen</span><span class="yes"><span class="h">Mit Panel</span>Formular ausfüllen — Banner und Rabatt sind live</span></div>
+      <div class="cmp-row"><span class="k">Retoure bearbeiten</span><span class="no"><span class="h">Ohne Panel</span>E-Mails hin und her</span><span class="yes"><span class="h">Mit Panel</span>Freigeben und Kunden informieren, in einem Schritt</span></div>
+      <div class="cmp-row"><span class="k">Urlaub</span><span class="no"><span class="h">Ohne Panel</span>Buchungen annehmen und wieder absagen</span><span class="yes"><span class="h">Mit Panel</span>Tag blockieren</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section class="band surface" id="module">
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title reveal">Für Ihre Branche <b>zugeschnitten</b></h2>
+      <p class="lead reveal">Der Kern ist bei jedem Panel gleich. Dazu kommen Module, die genau Ihr Geschäft abbilden — gebaut nach Ihren Abläufen, nicht nach einer Vorlage.</p>
+    </div>
+    <div class="mods">
+      <div class="mod core reveal"><h3>Kern</h3><span class="ex">In jedem Panel</span><ul><li>Dashboard &amp; Push</li><li>Anfragen-Inbox</li><li>Website-Inhalte</li><li>Rechnungen</li><li>Zwei-Faktor-Login</li></ul></div>
+      <div class="mod reveal"><h3>Fotografie &amp; Studios</h3><span class="ex">Beispiel: Alyagraphy</span><ul><li>Buchungs-Workflow</li><li>Kalender &amp; Sperrtage</li><li>Medien-Lieferung mit Album-Auswahl</li><li>Add-ons &amp; Produkte</li></ul></div>
+      <div class="mod reveal"><h3>Sport &amp; Freizeit</h3><span class="ex">Beispiel: Salamanda Arena</span><ul><li>Platzbuchung</li><li>Turniere mit Anmeldung &amp; Warteliste</li><li>Ausrüstungsverleih</li><li>Happy Hour</li></ul></div>
+      <div class="mod reveal"><h3>Shop &amp; Handel</h3><span class="ex">Beispiel: Yilmaz Souvenirs</span><ul><li>Bestellungen &amp; Versand</li><li>Zahlungen &amp; Erstattungen</li><li>Retouren</li><li>Gutscheine &amp; Rabattaktionen</li><li>Kunden mit DSGVO-Export</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICE -->
+<section class="band graphite" id="preis">
+  <div class="container pband">
+    <div class="big reveal">+€590<small>einmalig · bei Signature und Custom inklusive</small></div>
+    <div>
+      <p class="reveal">Das Admin-Panel lässt sich zu den Paketen Start und Pro dazubuchen. Keine Lizenz pro Nutzer, keine monatliche Panel-Gebühr — Hosting und Wartung sind optional über unsere Care-Pakete.</p>
+      <div class="btns reveal">
+        <a href="/de/kontakt?type=1790&amp;panel=1" class="btn btn-primary">Panel anfragen <span class="arrow">→</span></a>
+        <a href="/de/preise#rechner" class="btn btn-ghost-dark">Im Rechner ausprobieren</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <div class="cta-orb" id="ctaOrb" aria-hidden="true"></div>
+  <div class="container">
+    <div class="cta-inner">
+      <h2 class="reveal">Weniger Verwaltung. <span class="m">Mehr Zeit fürs Geschäft.</span></h2>
+      <p class="lead reveal">Zeigen Sie uns Ihren Alltag — wir zeigen Ihnen, welches Panel dazu passt. 30 Minuten, unverbindlich.</p>
+      <a href="/de/kontakt" class="btn btn-primary pulse-glow reveal" style="font-size:16px; padding:18px 30px;">Termin buchen <span class="arrow arrow-pulse">→</span></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-col foot-brand">
+        <a href="/de/" class="brand" aria-label="Buckberry Labs"><img src="/logo/karelogo.png" alt="" aria-hidden="true"><span class="wm">buckberry</span></a>
+        <p class="tagline">Software, handverlesen.</p>
+        <span class="mono loc">Linz, Österreich</span>
+      </div>
+      <div class="foot-col">
+        <span class="mono foot-h">Lösungen</span>
+        <ul>
+          <li><a href="/de/loesungen#shop">Shop</a></li>
+          <li><a href="/de/loesungen#sport">Sport</a></li>
+          <li><a href="/de/loesungen#custom">Custom</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <span class="mono foot-h">Unternehmen</span>
+        <ul>
+          <li><a href="/de/#ueber">Über uns</a></li>
+          <li><a href="/de/admin-panel">Admin-Panel</a></li>
+          <li><a href="/de/referenzen">Referenzen</a></li>
+          <li><a href="/de/preise">Preise</a></li>
+          <li><a href="/de/kontakt">Kontakt</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bar">
+      <span>© 2026 Buckberry Labs</span>
+      <span class="mono">entwickelt in Linz, AT</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DEBUG_SEEK = false;
+
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('sticky', window.scrollY > 60);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  const ham = document.getElementById('hamburger');
+  const panel = document.getElementById('mobilePanel');
+  ham?.addEventListener('click', () => {
+    const open = ham.classList.toggle('open');
+    panel.classList.toggle('open', open);
+    ham.setAttribute('aria-expanded', open);
+  });
+  panel?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { ham.classList.remove('open'); panel.classList.remove('open'); }));
+
+  const showAll = () => document.querySelectorAll('.reveal, .h1-inner, #crumb, #heroLead, #jump')
+    .forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+  const stack = document.getElementById('pStack');
+  const staticHero = () => { document.getElementById('lHome').style.opacity = 0; };
+  if (!window.gsap) { showAll(); staticHero(); return; }
+  const ease = 'power3.out';
+  if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+  /* HERO intro */
+  if (!reduced) {
+    gsap.timeline({ defaults: { ease } })
+      .to('#crumb', { opacity: 1, duration: .5 }, 0)
+      .to('.h1-inner', { opacity: 1, y: 0, duration: .9, stagger: .12 }, .1)
+      .to('#heroLead', { opacity: 1, duration: .7 }, .45)
+      .fromTo('#jump', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .6 }, .65);
+  } else {
+    gsap.set('#crumb, .h1-inner, #heroLead, #jump', { opacity: 1, y: 0 });
+  }
+
+  /* HERO phone: open the app, a request comes in, confirm it, invoice it */
+  const labels = gsap.utils.toArray('#stageLabel span');
+  const bars = gsap.utils.toArray('.stage-progress i');
+  const tap = document.getElementById('tap');
+  const step = (i) => () => {
+    labels.forEach((l, j) => l.classList.toggle('on', j === i));
+    bars.forEach((b, j) => { if (j > i) gsap.set(b, { scaleX: 0 }); else if (j < i) gsap.set(b, { scaleX: 1 }); });
+  };
+  // tap position relative to the screen: an element's centre, or a point on the screenshot (px of the source image)
+  const at = (target, imgW) => () => {
+    const s = stack.getBoundingClientRect();
+    let x, y;
+    if (typeof target === 'string') {
+      const r = document.querySelector(target).getBoundingClientRect();
+      x = r.left - s.left + r.width / 2; y = r.top - s.top + r.height / 2;
+    } else {
+      x = target[0] / imgW * s.width; y = target[1] / imgW * s.width;
+    }
+    gsap.set(tap, { left: x, top: y });
+  };
+  const tapFx = (tl, t) => tl.fromTo(tap, { opacity: .95, scale: .5 }, { opacity: 0, scale: 1.5, duration: .55, ease: 'power2.out' }, t);
+  if (reduced) { staticHero(); step(0)(); }
+  else {
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: .4 });
+    tl.set('#lHome', { opacity: 1, scale: 1 }).set(['#lDash', '#lReq', '#lInv'], { opacity: 0, scale: 1 })
+      .set('#push', { opacity: 0, yPercent: -130 }).set('.toast', { opacity: 0, yPercent: 30 })
+      .call(step(0))
+      .fromTo(bars[0], { scaleX: 0 }, { scaleX: 1, duration: 2.4, ease: 'none' }, 0)
+      .call(at('#appMe b'), null, .9);
+    tapFx(tl, 1);
+    tl.to('#appMe b', { scale: .88, duration: .12, yoyo: true, repeat: 1 }, 1)
+      .fromTo('#lDash', { opacity: 0, scale: .82 }, { opacity: 1, scale: 1, duration: .5, ease: 'power3.out' }, 1.3)
+      .to('#lHome', { opacity: 0, duration: .3 }, 1.4)
+      // push notification arrives
+      .call(step(1), null, 2.4)
+      .fromTo(bars[1], { scaleX: 0 }, { scaleX: 1, duration: 2.6, ease: 'none' }, 2.4)
+      .to('#push', { opacity: 1, yPercent: 0, duration: .55, ease: 'back.out(1.4)' }, 2.6)
+      .call(at('#push'), null, 3.9);
+    tapFx(tl, 4);
+    tl.to('#push', { opacity: 0, yPercent: -130, duration: .35, ease: 'power2.in' }, 4.3)
+      .to('#lReq', { opacity: 1, duration: .45 }, 4.35)
+      // confirm the request
+      .call(step(2), null, 5)
+      .fromTo(bars[2], { scaleX: 0 }, { scaleX: 1, duration: 2.6, ease: 'none' }, 5)
+      .call(at([174, 1242], 638), null, 5.9);
+    tapFx(tl, 6);
+    tl.to('#toast1', { opacity: 1, yPercent: 0, duration: .4, ease: 'back.out(1.6)' }, 6.25)
+      .to('#toast1', { opacity: 0, duration: .3 }, 7.5)
+      // invoice
+      .call(step(3), null, 7.6)
+      .fromTo(bars[3], { scaleX: 0 }, { scaleX: 1, duration: 2.6, ease: 'none' }, 7.6)
+      .to('#lInv', { opacity: 1, duration: .45 }, 7.7)
+      .to('#toast2', { opacity: 1, yPercent: 0, duration: .4, ease: 'back.out(1.6)' }, 8.4)
+      .to('#toast2', { opacity: 0, duration: .3 }, 9.9)
+      .to('#lHome', { opacity: 1, duration: .5 }, 10.1);
+    if (DEBUG_SEEK) { const T = new URLSearchParams(location.search).get('t'); if (T) setTimeout(() => tl.pause(+T), 300); }
+  }
+
+  if (!window.ScrollTrigger || reduced) { showAll(); return; }
+
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.to(el, { opacity: 1, y: 0, duration: .8, ease, scrollTrigger: { trigger: el, start: 'top 88%' } });
+  });
+  gsap.matchMedia().add('(min-width: 981px)', () => {
+    gsap.to('#heroCopy', { y: 100, opacity: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  });
+  gsap.to('#ctaOrb', { x: 100, duration: 10, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+})();
+</script>
+<script>
+// jump to #section links once layout (fonts, images, animations) has settled
+window.addEventListener('load', () => {
+  const el = location.hash && document.querySelector(location.hash);
+  if (el) setTimeout(() => el.scrollIntoView({ behavior: 'auto' }), 60);
+});
+</script>
+<script>
+const LANG_SWITCH_MAP = {
+  "de/admin-panel": { "de": "/de/admin-panel", "en": "/en/admin-panel", "tr": "/tr/yonetim-paneli" }
+};
+const LANG_SWITCH_KEY = "de/admin-panel";
+(() => {
+  const current = LANG_SWITCH_MAP[LANG_SWITCH_KEY];
+  if (!current) return;
+  const suffix = location.search + location.hash;
+  document.querySelectorAll('[data-lang-switch]').forEach((link) => {
+    const target = current[link.getAttribute('data-lang-switch')];
+    if (target) link.href = target + suffix;
+  });
+})();
+</script>
+</body>
+</html>

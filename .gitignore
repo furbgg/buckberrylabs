@@ -62,3 +62,7 @@ next-start.err.log
 *.swp
 .DS_Store
 Thumbs.db
+
+# Marketing and video assets
+/marketing/
+*.mp4

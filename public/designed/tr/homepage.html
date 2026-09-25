@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Buckberry Labs — Linz çıkışlı, özenle geliştirilen yazılım.</title>
-<meta name="description" content="Avusturya ve DACH bölgesindeki KOBİ'ler için özel platformlar. Hazır kalıp yok, template yok, ajans kilidi yok." />
+<title>Buckberry Labs — Linz'den, özenle geliştirilen yazılım.</title>
+<meta name="description" content="Avusturya ve DACH bölgesindeki KOBİ'ler için web siteleri, online mağazalar ve admin panelleri. Site kurucu yok, şablon yok, ajans bağımlılığı yok." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
@@ -17,750 +17,598 @@
   :root{
     --primary-dark:#0F1E2E;
     --surface-dark:#0A1520;
+    --graphite:#111D29;
+    --graphite-2:#172533;
     --mint:#3DD9C4;
     --deep-mint:#14B8A6;
     --grad: linear-gradient(135deg,#3DD9C4 0%,#14B8A6 100%);
-    --light:#FAFAFA;
     --cream:#F4F2ED;
-    --white:#FFFFFF;
-    --border:#E5E7EB;
-    --muted:#6B7280;
+    --line:rgba(255,255,255,.1);
+    --text-dim:rgba(255,255,255,.66);
     --ease:cubic-bezier(0.2,0.8,0.2,1);
-    --ease-out:cubic-bezier(0.4,0,1,1);
-    --bounce:cubic-bezier(0.34,1.56,0.64,1);
   }
 
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
   body{
     font-family:'Inter',system-ui,sans-serif;
-    font-weight:400;
-    line-height:1.6;
-    color:var(--primary-dark);
-    background:var(--light);
-    -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
+    font-weight:400; line-height:1.6;
+    color:#fff; background:var(--surface-dark);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     overflow-x:hidden;
-    cursor:none;
   }
-  @media (max-width:900px){ body{cursor:auto;} }
-
   ::selection{ background:var(--mint); color:var(--surface-dark); }
 
-  .display{
-    font-family:'Geist','Inter',sans-serif;
-    font-weight:600;
-    letter-spacing:-0.02em;
-  }
   .mono{
-    font-family:'Geist Mono','ui-monospace',monospace;
-    font-weight:500;
-    letter-spacing:0.15em;
-    text-transform:uppercase;
-    font-size:12px;
+    font-family:'Geist Mono','ui-monospace',monospace; font-weight:500;
+    letter-spacing:0.15em; text-transform:uppercase; font-size:12px;
   }
-  .container{ max-width:1200px; margin:0 auto; padding:0 24px; }
+  .container{ max-width:1240px; margin:0 auto; padding:0 24px; }
 
   /* buttons */
   .btn{
     display:inline-flex; align-items:center; gap:8px;
-    padding:14px 24px;
-    border-radius:10px;
-    font-weight:600; font-size:15px;
-    font-family:'Geist','Inter',sans-serif;
-    letter-spacing:-0.01em;
-    text-decoration:none;
-    transition: transform .2s var(--ease), box-shadow .3s var(--ease), border-color .2s, color .2s, background .2s;
-    border:1px solid transparent;
-    cursor:none;
-    will-change:transform;
+    padding:14px 24px; border-radius:10px;
+    font-weight:600; font-size:15px; font-family:'Geist','Inter',sans-serif; letter-spacing:-0.01em;
+    text-decoration:none; border:1px solid transparent;
+    transition: transform .2s var(--ease), box-shadow .3s var(--ease), border-color .25s, color .25s, background .25s;
   }
-  @media (max-width:900px){ .btn{cursor:pointer;} }
-  .btn-primary{
-    background:var(--grad); color:var(--surface-dark);
-    box-shadow: 0 4px 16px -4px rgba(61,217,196,.25);
-  }
-  .btn-primary:hover{ transform:translateY(-2px); box-shadow: 0 16px 32px -8px rgba(61,217,196,.5);}
-  .btn-primary:active{ transform:translateY(0);}
-  .btn-primary.glow{ box-shadow:0 0 32px rgba(61,217,196,.3), 0 4px 16px -4px rgba(61,217,196,.4); }
-  .btn-ghost-dark{
-    border-color:rgba(255,255,255,.2); color:#fff; background:transparent;
-  }
+  .btn-primary{ background:var(--grad); color:var(--surface-dark); box-shadow:0 4px 16px -4px rgba(61,217,196,.25); }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 16px 32px -8px rgba(61,217,196,.5); }
+  .btn-ghost-dark{ border-color:rgba(255,255,255,.22); color:#fff; background:transparent; }
   .btn-ghost-dark:hover{ border-color:var(--mint); color:var(--mint); }
-  .btn-ghost-light{
-    border-color:var(--border); color:var(--primary-dark); background:transparent;
-  }
-  .btn-ghost-light:hover{ border-color:var(--primary-dark); }
-  .arrow{ display:inline-block; transition: transform .2s var(--ease); }
-  .btn:hover .arrow{ transform:translateX(4px);}
-  .arrow-pulse{ animation: arrowPulse 1.8s ease-in-out infinite; }
-  @keyframes arrowPulse { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
+  .arrow{ display:inline-block; transition:transform .2s var(--ease); }
+  .btn:hover .arrow{ transform:translateX(4px); }
+  .arrow-pulse{ animation:arrowPulse 1.8s ease-in-out infinite; }
+  @keyframes arrowPulse{ 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
 
-  /* links */
-  .link-mint{
-    color:var(--deep-mint); font-weight:500;
-    text-decoration:none; display:inline-flex; align-items:center; gap:6px;
-    position:relative;
-  }
-  .link-mint::after{
-    content:''; position:absolute; left:0; bottom:-2px; height:1px; width:0;
-    background:currentColor; transition:width .25s var(--ease);
-  }
+  .link-mint{ color:var(--mint); font-weight:500; text-decoration:none; display:inline-flex; align-items:center; gap:6px; position:relative; }
+  .link-mint::after{ content:''; position:absolute; left:0; bottom:-2px; height:1px; width:0; background:currentColor; transition:width .25s var(--ease); }
   .link-mint:hover::after{ width:100%; }
   .link-mint:hover .arrow{ transform:translateX(4px); }
 
   /* NAV ------------------------------------------------------ */
   .nav{
-    position:fixed; top:0; left:0; right:0; z-index:50;
-    height:72px;
+    position:fixed; top:0; left:0; right:0; z-index:50; height:84px;
     display:flex; align-items:center;
-    transition: background .3s linear, backdrop-filter .3s linear, border-color .3s linear;
+    transition: background .3s linear, height .3s var(--ease), border-color .3s linear;
     border-bottom:1px solid transparent;
   }
-  .nav-inner{ display:flex; align-items:center; justify-content:space-between; width:100%; }
-  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit;}
-  .berry{
-    width:32px; height:32px; border-radius:50%;
-    background:var(--grad);
-    position:relative;
-    box-shadow: inset 0 -4px 8px rgba(0,0,0,.15), 0 2px 8px rgba(61,217,196,.3);
-  }
-  .berry::before{
-    content:''; position:absolute; top:6px; left:9px; width:8px; height:8px;
-    background:rgba(255,255,255,.5); border-radius:50%; filter:blur(2px);
-  }
-  .berry::after{
-    content:''; position:absolute; top:-4px; left:12px; width:8px; height:8px;
-    background:#0F1E2E; border-radius:0 100% 0 0; transform:rotate(-20deg);
-  }
-  .wordmark{
-    font-family:'Geist','Inter',sans-serif; font-weight:600;
-    font-size:20px; letter-spacing:-0.025em;
-    color:var(--white);
-    transition:color .3s linear;
-  }
-  .nav.sticky .wordmark{ color:var(--primary-dark); }
-  .nav-links{ display:flex; gap:32px; align-items:center; }
-  .nav-link{
-    font-size:14px; font-weight:500; color:rgba(255,255,255,.85);
-    text-decoration:none; transition:color .2s;
-    position:relative; padding:8px 0;
-  }
-  .nav-link:hover{ color:var(--mint);}
-  .nav-link::after{
-    content:''; position:absolute; left:50%; bottom:0;
-    width:4px; height:4px; border-radius:50%; background:var(--mint);
-    opacity:0; transform:translate(-50%,6px);
-    transition: opacity .2s, transform .2s var(--ease);
-  }
-  .nav-link:hover::after{ opacity:1; transform:translate(-50%,0);}
-  .nav.sticky .nav-link{ color:var(--primary-dark); }
-  .nav.sticky .nav-link:hover{ color:var(--deep-mint); }
   .nav.sticky{
-    background:rgba(250,250,250,.85);
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    border-bottom-color:var(--border);
+    height:72px;
+    background:rgba(10,21,32,.78);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border-bottom-color:var(--line);
   }
-  .caret{ display:inline-block; margin-left:4px; width:8px; height:8px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:translateY(-2px) rotate(45deg);}
-  .nav-right{ display:flex; align-items:center; gap:12px;}
-  .btn-kontakt{
-    font-size:14px; font-weight:500; color:rgba(255,255,255,.85);
-    background:transparent; border:none; padding:8px 12px;
-    text-decoration:none; cursor:none;
-    position:relative;
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; width:100%; }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+  .brand img{ height:40px; width:auto; }
+  .brand .wm{ font-family:'Geist',sans-serif; font-weight:600; font-size:21px; letter-spacing:-0.03em; color:#fff; }
+  .nav-links{ display:flex; gap:40px; align-items:center; }
+  @media (max-width:1280px){ .nav-links{ gap:26px; } .nav-link{ font-size:14px; } }
+  @media (max-width:1140px){ .nav-links a[href$="#ueber"]{ display:none; } }
+  .nav-link{
+    font-family:'Geist',sans-serif; font-size:15px; font-weight:500; color:rgba(255,255,255,.88);
+    text-decoration:none; transition:color .2s; position:relative; padding:8px 0;
   }
-  .btn-kontakt::after{
-    content:''; position:absolute; left:12px; right:12px; bottom:4px; height:1px;
-    background:currentColor; transform:scaleX(0); transform-origin:left;
-    transition:transform .25s var(--ease);
+  .nav-link:hover{ color:var(--mint); }
+  .nav-link::after{
+    content:''; position:absolute; left:50%; bottom:0; width:4px; height:4px; border-radius:50%;
+    background:var(--mint); opacity:0; transform:translate(-50%,6px); transition:opacity .2s, transform .2s var(--ease);
   }
-  .btn-kontakt:hover::after{ transform:scaleX(1);}
-  .nav.sticky .btn-kontakt{ color:var(--primary-dark); }
-  .nav .btn-primary{ padding:10px 18px; font-size:14px; }
+  .nav-link:hover::after{ opacity:1; transform:translate(-50%,0); }
+  .nav-right{ display:flex; align-items:center; gap:20px; }
+  /* outlined over the hero, filled once the nav turns sticky */
+  .nav-cta{
+    padding:12px 22px; font-size:14px; border-radius:6px;
+    background:transparent; color:#fff; border:1px solid rgba(255,255,255,.85); box-shadow:none;
+  }
+  .nav-cta:hover{ border-color:var(--mint); color:var(--mint); }
+  .nav.sticky .nav-cta{ background:var(--grad); color:var(--surface-dark); border-color:transparent; }
+  .nav.sticky .nav-cta:hover{ color:var(--surface-dark); box-shadow:0 10px 24px -8px rgba(61,217,196,.55); }
 
-  .hamburger{ display:none; width:32px; height:32px; flex-direction:column; justify-content:center; align-items:center; gap:5px; background:none; border:none; cursor:none;}
-  .hamburger span{ width:22px; height:1.5px; background:#fff; transition: transform .18s var(--ease), opacity .18s; }
-  .nav.sticky .hamburger span{ background:var(--primary-dark); }
-  .hamburger.open span:nth-child(1){ transform:translateY(6.5px) rotate(45deg);}
-  .hamburger.open span:nth-child(2){ opacity:0;}
-  .hamburger.open span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg);}
+  .hamburger{ display:none; cursor:pointer; width:32px; height:32px; flex-direction:column; justify-content:center; align-items:center; gap:5px; background:none; border:none; }
+  .hamburger span{ width:22px; height:1.5px; background:#fff; transition:transform .18s var(--ease), opacity .18s; }
+  .hamburger.open span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2){ opacity:0; }
+  .hamburger.open span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
 
   .mobile-panel{
     position:fixed; top:0; right:0; width:min(360px,90vw); height:100vh;
-    background:var(--surface-dark); z-index:45;
+    background:var(--primary-dark); z-index:45;
     transform:translateX(100%); transition:transform .3s var(--ease);
-    padding:96px 32px 32px;
-    display:none; flex-direction:column; gap:4px;
+    padding:96px 32px 32px; display:none; flex-direction:column; gap:4px;
   }
-  .mobile-panel.open{ transform:translateX(0);}
+  .mobile-panel.open{ transform:translateX(0); }
 
-  @media (max-width:900px){
-    .nav-links, .nav-right .btn-kontakt, .nav-right .btn-primary{ display:none; }
+  @media (max-width:980px){
+    .nav-links, .nav-right .nav-cta{ display:none; }
     .hamburger{ display:flex; }
     .mobile-panel{ display:flex; }
     .mobile-panel a{
       color:#fff; text-decoration:none; font-family:'Geist','Inter',sans-serif;
-      font-size:24px; font-weight:500; padding:12px 0;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      opacity:0; transform:translateX(20px);
-      transition: opacity .4s var(--ease), transform .4s var(--ease);
+      font-size:24px; font-weight:500; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.08);
+      opacity:0; transform:translateX(20px); transition:opacity .4s var(--ease), transform .4s var(--ease);
     }
-    .mobile-panel.open a{ opacity:1; transform:translateX(0);}
-    .mobile-panel.open a:nth-child(1){ transition-delay:.05s; }
-    .mobile-panel.open a:nth-child(2){ transition-delay:.11s; }
-    .mobile-panel.open a:nth-child(3){ transition-delay:.17s; }
-    .mobile-panel.open a:nth-child(4){ transition-delay:.23s; }
-    .mobile-panel.open a:nth-child(5){ transition-delay:.29s; }
-    .mobile-panel .btn{ margin-top:16px; justify-content:center; }
+    .mobile-panel.open a{ opacity:1; transform:translateX(0); }
+    .mobile-panel .btn{ margin-top:16px; justify-content:center; border-bottom:none; }
   }
 
   /* HERO ----------------------------------------------------- */
   .hero{
-    position:relative;
-    min-height:92vh;
-    background:var(--surface-dark);
-    color:#fff;
-    display:flex; align-items:center; justify-content:center;
-    padding: 120px 24px 80px;
-    overflow:hidden;
-    isolation:isolate;
+    position:relative; min-height:100vh; min-height:100svh;
+    background:var(--surface-dark); overflow:hidden; isolation:isolate;
+    display:flex; align-items:center;
+    padding:120px 0 72px;
   }
-  .dotgrid{
-    position:absolute; inset:0;
+  /* ambient light follows the active scene (JS sets --glow-x / --glow-c) */
+  .hero-glow{
+    position:absolute; inset:0; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(60% 70% at var(--glow-x,78%) 50%, var(--glow-c, rgba(30,58,95,.55)), transparent 70%),
+      radial-gradient(40% 50% at 0% 0%, rgba(20,184,166,.10), transparent 70%);
+    transition: background 1.2s linear;
+  }
+  .hero-noise{
+    position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:.35;
     background-image: radial-gradient(rgba(61,217,196,.35) 1px, transparent 1px);
-    background-size: 32px 32px;
-    opacity:.12;
-    pointer-events:none;
-    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    background-size:34px 34px;
+    mask-image: radial-gradient(ellipse at 70% 50%, black 10%, transparent 65%);
+    -webkit-mask-image: radial-gradient(ellipse at 70% 50%, black 10%, transparent 65%);
   }
-  .vignette{
-    position:absolute; inset:0; pointer-events:none;
-    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,.5) 100%);
-  }
-  .orb{
-    position:absolute; width:400px; height:400px; border-radius:50%;
-    background: radial-gradient(circle at 30% 30%, rgba(61,217,196,.55), rgba(20,184,166,.25) 40%, transparent 70%);
-    filter: blur(80px);
-    pointer-events:none;
-    will-change: transform;
-  }
-  .orb-a{ top:-80px; right:-80px; }
-  .orb-b{ bottom:-100px; left:-100px; width:440px; height:440px; animation-delay:-8s; }
-
-  .hero-inner{ position:relative; z-index:2; max-width:900px; text-align:center; }
-  .hero-kicker{
-    color:var(--mint); margin-bottom:28px;
-    display:inline-flex; align-items:center; gap:10px;
+  .scanline{
+    position:absolute; top:0; bottom:0; left:30%; width:1px; z-index:3; pointer-events:none;
+    background:linear-gradient(180deg, transparent, rgba(61,217,196,.55) 30%, rgba(61,217,196,.55) 70%, transparent);
+    box-shadow:0 0 12px rgba(61,217,196,.5);
     opacity:0;
   }
-  .hero-kicker::before{
-    content:''; width:24px; height:1px; background:var(--mint); opacity:.7;
-  }
-  .hero-kicker::after{
-    content:''; width:24px; height:1px; background:var(--mint); opacity:.7;
-  }
 
+  .hero-grid{
+    position:relative; width:100%;
+    display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1.05fr); gap:24px; align-items:center;
+  }
+  .hero-copy{ position:relative; z-index:4; }
+  .hero-kicker{ color:var(--mint); display:inline-flex; align-items:center; gap:12px; margin-bottom:32px; opacity:0; }
+  .hero-kicker::before{ content:''; width:28px; height:1px; background:var(--mint); opacity:.7; }
   .hero h1{
-    font-family:'Geist','Inter',sans-serif; font-weight:600;
-    font-size: clamp(40px,8vw,88px);
-    line-height:1.02;
-    letter-spacing:-0.035em;
-    margin-bottom:28px;
+    font-family:'Geist','Inter',sans-serif; font-weight:400;
+    font-size:clamp(52px,7.4vw,112px); line-height:.98; letter-spacing:-0.045em;
+    margin-bottom:40px;
   }
-  .h1-line{
-    display:block; overflow:hidden;
+  .h1-line{ display:block; overflow:hidden; padding-bottom:.06em; }
+  .h1-inner{ display:block; opacity:0; transform:translateY(40%); }
+  .h1-inner.mint{ color:var(--mint); }
+  .hero-lead{ max-width:500px; font-size:19px; line-height:1.6; color:rgba(255,255,255,.82); margin-bottom:36px; opacity:0; }
+  .hero-cta{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:64px; }
+  .hero-cta .btn{ opacity:0; transform:translateY(10px); }
+
+  .trusted{ display:flex; align-items:center; gap:36px; flex-wrap:wrap; opacity:0; }
+  .trusted .label{ font-family:'Geist',sans-serif; font-weight:500; font-size:14px; color:rgba(255,255,255,.85); }
+  .trusted .clients{ display:flex; align-items:center; gap:32px; flex-wrap:wrap; }
+  .cl{ color:rgba(255,255,255,.78); white-space:nowrap; transition:color .2s; }
+  .cl:hover{ color:#fff; }
+  .cl-yilmaz{ font-family:Georgia,'Times New Roman',serif; font-style:italic; font-size:19px; letter-spacing:-.01em; }
+  .cl-sala{ font-family:'Geist',sans-serif; font-weight:600; font-size:14px; letter-spacing:.18em; text-transform:uppercase; }
+  .cl-sala b{ color:var(--mint); font-weight:600; }
+  .cl-alya{ font-family:'Geist',sans-serif; font-weight:300; font-size:20px; letter-spacing:-.02em; }
+
+  /* ---- stage: the looping "video" ---- */
+  .stage{ position:relative; height:640px; z-index:2; }
+  .scene{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden; will-change:transform, opacity, filter;
   }
-  .h1-inner{
-    display:block;
-    opacity:0;
-    transform:translateY(16px);
-    clip-path: inset(0 100% 0 0);
+  .scale-box{ transform-origin:center; }
+  .stage-progress{
+    position:absolute; left:50%; bottom:-8px; transform:translateX(-50%);
+    display:flex; gap:10px; z-index:5;
   }
-  .hero h1 .accent{
-    background:var(--grad);
-    -webkit-background-clip:text; background-clip:text;
-    color:transparent;
-    font-style:italic;
-    font-weight:500;
+  .stage-progress span{ width:40px; height:2px; background:rgba(255,255,255,.14); border-radius:2px; overflow:hidden; position:relative; }
+  .stage-progress span i{ position:absolute; inset:0; background:var(--mint); transform:scaleX(0); transform-origin:left; }
+
+  /* Laptop */
+  .laptop{ width:700px; transform:perspective(1800px) rotateY(-20deg) rotateX(8deg) rotateZ(1deg); transform-style:preserve-3d; }
+  .lt-lid{
+    position:relative; background:#0b1117; border-radius:20px 20px 6px 6px; padding:14px 14px 18px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), inset 0 0 0 5px #121b23, 0 60px 120px -40px rgba(0,0,0,.9);
+  }
+  .lt-cam{ position:absolute; top:5px; left:50%; width:6px; height:6px; border-radius:50%; background:#1f2c36; transform:translateX(-50%); }
+  .lt-screen{ aspect-ratio:16/10; border-radius:6px; overflow:hidden; position:relative; background:#fff; }
+  .lt-screen::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(115deg, rgba(255,255,255,.18) 0%, transparent 35%, transparent 70%, rgba(255,255,255,.06) 100%);
+  }
+  .lt-hinge{ height:10px; width:104%; margin-left:-2%; background:linear-gradient(180deg,#2a4250,#152029); border-radius:0 0 4px 4px; }
+  .lt-deck{
+    width:124%; margin-left:-12%; height:300px; margin-bottom:-300px; /* rotated flat: don't reserve layout height */
+    transform-origin:top center; transform:rotateX(70deg);
+    background:
+      radial-gradient(120% 60% at 50% 0%, rgba(61,217,196,.18), transparent 60%),
+      linear-gradient(180deg,#27414d 0%,#182a33 55%,#0e1a21 100%);
+    border-radius:0 0 34px 34px; position:relative;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,.12);
+  }
+  .lt-keys{
+    position:absolute; left:9%; right:9%; top:8%; height:46%; border-radius:10px;
+    background:
+      repeating-linear-gradient(90deg, rgba(5,12,16,.85) 0 22px, transparent 22px 26px),
+      repeating-linear-gradient(0deg, rgba(5,12,16,.85) 0 18px, transparent 18px 22px);
+    opacity:.8; mix-blend-mode:multiply;
+  }
+  .lt-pad{ position:absolute; left:34%; right:34%; top:60%; bottom:8%; border-radius:12px; background:rgba(61,217,196,.10); box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); }
+
+  /* mini website inside the laptop */
+  .ls{ position:absolute; inset:0; overflow:hidden; background:#fff; color:#0F1E2E; font-family:'Geist',sans-serif; }
+  .ls-track{ position:absolute; left:0; right:0; top:0; }
+  .ls-bar{ display:flex; align-items:center; gap:6px; padding:8px 12px; background:#F4F2ED; border-bottom:1px solid #E5E7EB; }
+  .ls-bar i{ width:8px; height:8px; border-radius:50%; background:#E5E7EB; }
+  .ls-bar i:nth-child(1){ background:#FF5F57; } .ls-bar i:nth-child(2){ background:#FEBC2E; } .ls-bar i:nth-child(3){ background:#28C840; }
+  .ls-bar .addr{ margin-left:10px; flex:1; font-family:'Geist Mono',monospace; font-size:9px; color:#6B7280; background:#fff; border:1px solid #E5E7EB; border-radius:5px; padding:3px 8px; }
+  .ls-head{ display:flex; justify-content:space-between; align-items:center; padding:12px 20px; }
+  .ls-logo{ font-family:Georgia,serif; font-style:italic; font-size:15px; }
+  .ls-nav{ display:flex; gap:16px; font-size:10px; color:#6B7280; }
+  .ls-nav b{ color:#14B8A6; font-weight:600; }
+  .ls-hero{
+    margin:4px 20px 14px; height:150px; border-radius:12px; padding:22px 24px; color:#fff; position:relative; overflow:hidden;
+    background:linear-gradient(120deg,#0F1E2E 0%,#16434a 60%,#14B8A6 130%);
+  }
+  .ls-hero .t{ font-size:22px; font-weight:600; letter-spacing:-.03em; line-height:1.1; max-width:60%; }
+  .ls-hero .s{ font-family:'Geist Mono',monospace; font-size:8px; letter-spacing:.14em; text-transform:uppercase; opacity:.7; margin-top:8px; }
+  .ls-hero .b{ display:inline-block; margin-top:14px; font-size:10px; font-weight:600; background:#3DD9C4; color:#0A1520; padding:6px 12px; border-radius:6px; }
+  .ls-hero .blob{ position:absolute; right:20px; top:18px; width:110px; height:110px; border-radius:22px; background:linear-gradient(145deg,#F4F2ED,#d8d3c7); transform:rotate(8deg); box-shadow:0 20px 30px -10px rgba(0,0,0,.4); }
+  .ls-hero .blob::after{ content:''; position:absolute; inset:26px; border-radius:50% 50% 46% 46%; background:linear-gradient(160deg,#3DD9C4,#0f766e); }
+  .ls-h{ padding:0 20px; font-size:12px; font-weight:600; margin-bottom:8px; display:flex; justify-content:space-between; }
+  .ls-h span{ font-weight:400; color:#14B8A6; font-size:10px; }
+  .ls-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:0 20px 16px; }
+  .ls-card .img{ height:78px; border-radius:8px; margin-bottom:6px; }
+  .ls-card .n{ font-size:9px; font-weight:500; }
+  .ls-card .p{ font-size:9px; color:#14B8A6; font-family:'Geist Mono',monospace; }
+  .im1{ background:linear-gradient(150deg,#e9e4d8,#cfc6b3); } .im2{ background:linear-gradient(150deg,#bfeee6,#3DD9C4); }
+  .im3{ background:linear-gradient(150deg,#1d3346,#0F1E2E); } .im4{ background:linear-gradient(150deg,#f6d9b8,#e0a872); }
+  .im5{ background:linear-gradient(150deg,#dfe7ee,#9fb3c4); } .im6{ background:linear-gradient(150deg,#14B8A6,#0b5e57); }
+  .ls-strip{ margin:0 20px 16px; border-radius:10px; background:#F4F2ED; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; font-size:10px; }
+  .ls-strip .pay{ display:flex; gap:6px; }
+  .ls-strip .pay i{ font-style:normal; font-family:'Geist Mono',monospace; font-size:8px; padding:3px 6px; border-radius:4px; background:#fff; border:1px solid #E5E7EB; }
+  .ls-foot{ background:#0F1E2E; color:rgba(255,255,255,.6); padding:18px 20px; font-size:9px; display:flex; justify-content:space-between; }
+  .ls-cursor{ position:absolute; width:14px; height:14px; z-index:3; left:62%; top:58%; pointer-events:none; }
+  .ls-cursor svg{ width:100%; height:100%; filter:drop-shadow(0 2px 3px rgba(0,0,0,.35)); }
+
+  /* Phone */
+  .phone-wrap{ position:relative; width:640px; height:620px; }
+  .phone{
+    position:absolute; right:40px; top:0;
+    width:296px; height:610px; border-radius:52px; padding:12px; background:#0b1117;
+    box-shadow:
+      0 0 0 2px #2e6d66, 0 0 0 6px #0f2622, 0 0 0 7px rgba(61,217,196,.35),
+      0 0 110px rgba(61,217,196,.28), 0 70px 120px -40px rgba(0,0,0,.9);
+    transform:perspective(1600px) rotateY(-16deg) rotateZ(6deg);
+  }
+  .ph-screen{
+    position:relative; width:100%; height:100%; border-radius:41px; overflow:hidden;
+    background:linear-gradient(170deg,#12283a 0%,#0c1c28 55%,#0b3b37 100%);
+    padding:54px 20px 20px; font-family:'Geist',sans-serif;
+  }
+  .ph-island{ position:absolute; top:12px; left:50%; transform:translateX(-50%); width:92px; height:26px; border-radius:20px; background:#000; }
+  .ph-island::after{ content:''; position:absolute; right:12px; top:8px; width:10px; height:10px; border-radius:50%; background:#0d3a35; box-shadow:0 0 0 2px #06201d; }
+  .ph-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+  .ph-top .mono{ font-size:9px; color:var(--mint); letter-spacing:.14em; }
+  .ph-top .av{ width:26px; height:26px; border-radius:50%; background:var(--grad); }
+  .ph-lbl{ font-size:11px; color:rgba(255,255,255,.55); }
+  .ph-big{ font-size:40px; font-weight:500; letter-spacing:-.04em; line-height:1.1; margin:2px 0 4px; }
+  .ph-delta{ font-family:'Geist Mono',monospace; font-size:10px; color:var(--mint); }
+  .ph-chart{ margin:18px -4px 18px; height:90px; }
+  .ph-chart svg{ width:100%; height:100%; overflow:visible; }
+  .ph-kpis{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+  .ph-kpi{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.07); border-radius:14px; padding:10px 12px; }
+  .ph-kpi .v{ font-size:17px; font-weight:500; letter-spacing:-.02em; }
+  .ph-kpi .l{ font-size:9px; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:.08em; }
+  .ph-list .row{ display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-top:1px solid rgba(255,255,255,.07); font-size:11px; }
+  .ph-list .row span:first-child{ color:rgba(255,255,255,.8); }
+  .ph-list .ok{ font-family:'Geist Mono',monospace; font-size:8px; letter-spacing:.08em; padding:2px 6px; border-radius:4px; background:rgba(61,217,196,.16); color:var(--mint); }
+  .ph-home{ position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:110px; height:4px; border-radius:3px; background:rgba(255,255,255,.55); }
+
+  .glass{
+    position:absolute; left:0; top:190px; width:360px; z-index:2;
+    padding:24px; border-radius:22px;
+    background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.16);
+    backdrop-filter:blur(18px) saturate(140%); -webkit-backdrop-filter:blur(18px) saturate(140%);
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.6);
+    font-family:'Geist',sans-serif;
+  }
+  .glass .mono{ font-size:11px; color:rgba(255,255,255,.85); letter-spacing:.08em; text-transform:none; display:flex; align-items:center; gap:8px; }
+  .glass .live{ width:7px; height:7px; border-radius:50%; background:var(--mint); box-shadow:0 0 0 4px rgba(61,217,196,.2); animation:livePulse 1.6s ease-in-out infinite; }
+  @keyframes livePulse{ 50%{ box-shadow:0 0 0 8px rgba(61,217,196,0); } }
+  .glass .msg{ font-size:21px; line-height:1.35; letter-spacing:-.02em; margin:14px 0 18px; color:rgba(255,255,255,.95); }
+  .glass .prod{ display:flex; gap:14px; align-items:center; background:rgba(255,255,255,.07); border-radius:14px; padding:10px; }
+  .glass .pimg{ width:70px; height:70px; border-radius:10px; background:linear-gradient(150deg,#F4F2ED,#cfc6b3); position:relative; flex:none; }
+  .glass .pimg::after{ content:''; position:absolute; inset:18px; border-radius:50% 50% 46% 46%; background:linear-gradient(160deg,#3DD9C4,#0f766e); }
+  .glass .pn{ font-size:14px; font-weight:500; }
+  .glass .pp{ font-size:13px; color:rgba(255,255,255,.6); margin-top:2px; }
+  .glass .paid{ margin-left:auto; width:30px; height:30px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; color:#0A1520; flex:none; }
+  .glass .stock{ margin-top:14px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.06em; color:var(--mint); }
+
+  /* Logo scene */
+  .logo-scene-inner{ position:relative; display:flex; flex-direction:column; align-items:center; gap:34px; }
+  .lg-mark{ position:relative; width:260px; height:260px; }
+  .lg-mark img{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
+  .lg-mark .glow{ filter:blur(28px) brightness(1.3); opacity:.8; }
+  .lg-mark .crisp{ filter:drop-shadow(0 0 1px rgba(61,217,196,.8)); }
+  .lg-ring{ position:absolute; left:50%; top:130px; width:260px; height:260px; border-radius:50%; border:1px solid rgba(61,217,196,.45); transform:translate(-50%,-50%) scale(.6); opacity:0; }
+  .lg-word{ font-family:'Geist',sans-serif; font-weight:600; font-size:44px; letter-spacing:-.04em; display:flex; }
+  .lg-word span{ display:inline-block; opacity:0; transform:translateY(12px); }
+  .lg-word .labs{ color:var(--mint); margin-left:.28em; }
+  .lg-sub{ margin-top:-18px; color:rgba(255,255,255,.55); font-size:11px; opacity:0; }
+
+  @media (max-width:1180px){
+    .stage{ height:560px; }
+    .scale-box{ transform:scale(.82); }
+  }
+  @media (max-width:980px){
+    .hero{ padding:112px 0 56px; }
+    .hero-grid{ grid-template-columns:1fr; gap:8px; }
+    .stage{ height:440px; margin:0 -24px; }
+    .scale-box{ transform:scale(.6); }
+    .logo-scene-inner{ transform:scale(.75); }
+    .hero-cta{ margin-bottom:40px; }
+    .scanline{ display:none; }
+  }
+  @media (max-width:560px){
+    .stage{ height:340px; }
+    .scale-box{ transform:scale(.46); }
+    .logo-scene-inner{ transform:scale(.6); }
+    .trusted{ gap:16px; }
+    .trusted .clients{ gap:20px; }
   }
 
-  .hero-lead{
-    max-width:560px; margin: 0 auto 36px;
-    font-size:18px; line-height:1.6;
-    color: rgba(255,255,255,.7);
-    opacity:0;
-  }
+  /* SECTIONS ------------------------------------------------- */
+  section.band{ padding:112px 0; position:relative; overflow:hidden; }
+  @media(min-width:1024px){ section.band{ padding:144px 0; } }
+  .band.graphite{ background:var(--graphite-2); }
+  .band.surface{ background:var(--surface-dark); }
 
-  .hero-cta{
-    display:flex; justify-content:center; gap:16px; flex-wrap:wrap;
-    margin-bottom:56px;
+  .sec-title{
+    font-family:'Geist','Inter',sans-serif; font-weight:400;
+    font-size:clamp(32px,4.2vw,56px); line-height:1.1; letter-spacing:-0.035em; max-width:22ch;
   }
-  .hero-cta .btn{ opacity:0; transform: scale(.96); }
+  .sec-title b{ font-weight:600; }
+  .kicker{ display:inline-block; color:var(--mint); margin-bottom:20px; }
 
-  .tech-row{
-    display:flex; justify-content:center; flex-wrap:wrap; gap:32px;
-    color:rgba(61,217,196,.5);
-    font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.15em; text-transform:uppercase;
-  }
-  .tech-row span{ opacity:0; position:relative; }
-  .tech-row span::before{
-    content:''; position:absolute; left:-18px; top:50%; width:4px; height:4px; border-radius:50%;
-    background:currentColor; opacity:.5;
-  }
-  .tech-row span:first-child::before{ display:none; }
+  .reveal{ opacity:0; transform:translateY(24px); }
 
-  .scroll-indicator{
-    position:absolute; bottom:48px; left:50%; transform:translateX(-50%);
-    display:flex; flex-direction:column; align-items:center; gap:10px;
-    opacity:0;
+  /* SHOWCASE ------------------------------------------------- */
+  .show-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:32px; flex-wrap:wrap; margin-bottom:88px; }
+  .show-grid{ display:grid; grid-template-columns:1fr 1fr; column-gap:clamp(40px,8vw,120px); }
+  .show-col{ display:flex; flex-direction:column; gap:112px; }
+  .show-col.b{ padding-top:150px; }
+  @media(max-width:860px){
+    .show-grid{ grid-template-columns:1fr; row-gap:72px; }
+    .show-col{ gap:72px; }
+    .show-col.b{ padding-top:0; }
   }
-  .scroll-line{
-    position:relative; width:1px; height:32px; background:rgba(61,217,196,.25);
-    overflow:hidden;
-  }
-  .scroll-line::after{
-    content:''; position:absolute; top:-4px; left:50%; transform:translateX(-50%);
-    width:4px; height:4px; border-radius:50%; background:var(--mint);
-    animation: scrollDot 1.6s var(--ease) infinite;
-  }
-  @keyframes scrollDot {
-    0%{ top:-4px; opacity:0; }
-    20%{ opacity:1; }
-    80%{ opacity:1; }
-    100%{ top:32px; opacity:0; }
-  }
-  .scroll-indicator .mono{ color:rgba(255,255,255,.45); font-size:10px; }
-
-  /* SECTION BASICS ------------------------------------------- */
-  section.band{ padding: 96px 0; position:relative; overflow:hidden; }
-  @media(min-width:1024px){ section.band{ padding: 128px 0;} }
-  .band.dark{ background:var(--primary-dark); color:#fff; }
-  .band.surface-dark{ background:var(--surface-dark); color:#fff; }
-  .band.cream{ background:var(--cream); }
-  .band.light{ background:var(--light); }
-
-  .kicker{
-    display:inline-block; margin-bottom:20px;
-  }
-  .kicker.dark-k{ color:var(--deep-mint);}
-  .kicker.light-k{ color:var(--mint);}
-
-  h2.display{
-    font-size: clamp(32px,5vw,56px);
-    line-height:1.08;
-    letter-spacing:-0.03em;
-    max-width: 20ch;
-  }
-  h2.display + .lead{
-    margin-top:20px;
-    font-size:18px; line-height:1.6;
-    max-width:56ch;
-    color: var(--muted);
-  }
-  .band.dark h2.display + .lead, .band.surface-dark h2.display + .lead{ color:rgba(255,255,255,.7); }
-
-  /* reveal base */
-  .reveal{ opacity:0; transform:translateY(20px); }
-  .reveal-x{ opacity:0; transform:translateX(-8px); }
-
-  /* SOLUTIONS ----------------------------------------------- */
-  .solutions-header{ max-width:800px; margin-bottom:72px; }
-  .cards{
-    display:grid; gap:24px;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-  .card{
-    background:#fff; border:1px solid var(--border);
-    border-radius:24px; padding:40px;
-    transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
-    position:relative; overflow:hidden;
-  }
-  .card:hover{
-    transform: translateY(-4px) scale(1.01);
-    border-color: var(--mint);
-    box-shadow: 0 20px 40px -12px rgba(15,30,46,.12);
-  }
-  .card::after{
-    content:''; position:absolute; inset:0;
-    background: radial-gradient(circle at 20% 0%, rgba(61,217,196,.08), transparent 50%);
-    opacity:0; transition:opacity .3s;
-    pointer-events:none;
-  }
-  .card:hover::after{ opacity:1; }
-  .card-icon{
-    width:56px; height:56px; border-radius:14px;
-    background: var(--grad);
+  .work{ display:block; text-decoration:none; color:inherit; }
+  .work-visual{
+    position:relative; aspect-ratio:1/1; overflow:hidden; margin-bottom:28px;
     display:flex; align-items:center; justify-content:center;
-    margin-bottom:28px;
-    box-shadow: 0 8px 24px -8px rgba(61,217,196,.5), inset 0 1px 0 rgba(255,255,255,.25);
-    transition: transform .4s var(--bounce);
-    position:relative;
   }
-  .card:hover .card-icon{ transform:scale(1.08);}
-  .card-icon svg{ width:28px; height:28px; color:#0A1520;}
-  .card h3{
-    font-family:'Geist','Inter',sans-serif; font-weight:600;
-    font-size:22px; letter-spacing:-0.02em;
-    margin-bottom:10px;
+  .work-visual .inner{ transition:transform .7s var(--ease); }
+  a.work:hover .work-visual .inner{ transform:scale(1.05) rotate(-1deg); }
+  .work-visual .go{
+    position:absolute; right:24px; bottom:20px; font-size:30px; line-height:1;
+    color:#fff; opacity:0; transform:translate(-8px,8px);
+    transition:opacity .3s, transform .3s var(--ease);
   }
-  .card-product{
-    font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.15em;
-    text-transform:uppercase; color:var(--deep-mint);
-    margin-bottom:16px; display:block;
+  .work:hover .work-visual .go{ opacity:1; transform:none; }
+  .work-meta{ display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:16px; }
+  .work-meta .mono{ font-size:12px; color:rgba(255,255,255,.9); letter-spacing:.12em; }
+  .work h3{
+    font-family:'Geist',sans-serif; font-weight:600; font-size:clamp(22px,2.2vw,30px);
+    letter-spacing:-.025em; line-height:1.3;
+    background-image:linear-gradient(currentColor,currentColor); background-size:0 2px; background-repeat:no-repeat; background-position:0 100%;
+    transition:background-size .4s var(--ease); display:inline;
   }
-  .card p{
-    font-size:15px; color:var(--muted); margin-bottom:28px;
-  }
-  .card .link-mint{ font-size:14px; }
-  .card:hover .link-mint .arrow{ transform:translateX(6px); }
+  .work:hover h3{ background-size:100% 2px; }
+  .work p{ color:var(--text-dim); font-size:16px; margin-top:14px; max-width:46ch; }
 
-  /* PROCESS -------------------------------------------------- */
-  .process-header{ margin-bottom:80px; }
-  .steps{
-    display:grid; gap:48px;
-    grid-template-columns: repeat(4, 1fr);
-    position:relative;
-  }
-  @media(max-width:900px){ .steps{ grid-template-columns: 1fr; gap:40px; } }
-  .step{ position:relative; opacity:0; transform:translateY(16px); }
-  .step-num{
-    font-family:'Geist Mono',monospace; font-weight:500;
-    font-size:72px; line-height:1;
-    color:transparent;
-    -webkit-text-stroke: 1px var(--mint);
-    margin-bottom:24px;
-    letter-spacing:-0.02em;
-  }
-  .step h4{
-    font-family:'Geist','Inter',sans-serif; font-weight:500;
-    font-size:20px; color:#fff; margin-bottom:10px;
-    letter-spacing:-0.015em;
-  }
-  .step p{
-    color: rgba(255,255,255,.6); font-size:14px; line-height:1.6;
-    max-width:22ch;
-  }
-  .step .connector{
-    position:absolute; top:32px; right:-24px; width:48px; height:1px;
-    background: rgba(61,217,196,.3);
-    transform: scaleX(0); transform-origin:left;
-    transition: transform .5s linear;
-  }
-  .step:last-child .connector{ display:none; }
-  @media(max-width:900px){ .step .connector{ display:none; } }
-  .step.revealed{ opacity:1; transform:translateY(0); transition: opacity .6s var(--ease), transform .6s var(--ease);}
-  .step.revealed .connector{ transform:scaleX(1); transition-delay:.3s; }
+  .v-mint{ background:transparent; }
+  .v-cream{ background:transparent; }
+  .v-steel{ background:transparent; }
+  .v-open{ background:transparent; border:1px dashed rgba(61,217,196,.4); }
 
-  /* pulse line */
-  .pulse-track{
-    position:absolute; top:32px; left:0; right:0; height:1px;
-    background: linear-gradient(90deg, transparent, rgba(61,217,196,.2) 50%, transparent);
-    opacity:0;
-    transition: opacity .4s;
-  }
-  .pulse-track.on{ opacity:1; }
-  .pulse-dot{
-    position:absolute; top:-2px; left:-5px; width:5px; height:5px; border-radius:50%;
-    background:var(--mint);
-    box-shadow: 0 0 12px var(--mint);
-    animation: pulseRun 3s linear infinite;
-  }
-  @keyframes pulseRun { 0%{left:-5px;} 100%{left:100%;} }
-  @media(max-width:900px){ .pulse-track, .pulse-dot{ display:none; } }
 
-  /* CASE STUDY ----------------------------------------------- */
-  .case-grid{
-    display:grid; grid-template-columns: 55fr 45fr; gap:80px;
-    align-items:center;
-  }
-  @media(max-width:1024px){
-    .case-grid{ grid-template-columns: 1fr; gap:56px; }
-  }
-  .mockup-wrap{ position:relative; perspective:1200px; will-change:transform;}
-  .mockup{
-    border-radius: 14px; overflow:hidden;
-    box-shadow: 0 40px 80px -20px rgba(15,30,46,.25), 0 0 0 1px rgba(15,30,46,.08);
-    background:#fff; transition: transform .5s var(--ease);
-    transform-style: preserve-3d;
-  }
-  .mockup-wrap:hover .mockup{ transform: rotateY(2deg) rotateX(-1deg);}
-  .browser-bar{
-    display:flex; align-items:center; gap:8px;
-    padding: 12px 16px;
-    background:#F4F2ED; border-bottom:1px solid var(--border);
-  }
-  .browser-bar .dot{ width:10px; height:10px; border-radius:50%; background:#E5E7EB; }
-  .browser-bar .dot:nth-child(1){ background:#FF5F57;}
-  .browser-bar .dot:nth-child(2){ background:#FEBC2E;}
-  .browser-bar .dot:nth-child(3){ background:#28C840;}
-  .browser-bar .addr{
-    margin-left:12px; flex:1;
-    font-family:'Geist Mono',monospace; font-size:11px; color:var(--muted);
-    background:#fff; padding:4px 10px; border-radius:6px; border:1px solid var(--border);
+
+  /* real screenshots in phone frames (showcase) */
+  .duo{ position:relative; width:400px; height:500px; }
+  .rphone{ position:absolute; width:210px; aspect-ratio:70.6/146.6; border-radius:16.5% / 7.95%; container-type:inline-size;
+    background:linear-gradient(90deg,#3d3d40 0%,#6b6b70 3%,#48484b 9%,#2e2e31 50%,#48484b 91%,#6b6b70 97%,#3d3d40 100%);
+    box-shadow:0 44px 64px -22px rgba(0,0,0,.6), 0 16px 26px -14px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.18); }
+  .rphone::before{ content:''; position:absolute; left:-.9cqw; top:40cqw; width:1cqw; height:13cqw; border-radius:.6cqw 0 0 .6cqw; background:#4a4a4e; box-shadow:0 17cqw 0 #4a4a4e, 0 -17cqw 0 -.1cqw #4a4a4e; }
+  .rphone::after{ content:''; position:absolute; right:-.9cqw; top:50cqw; width:1cqw; height:21cqw; border-radius:0 .6cqw .6cqw 0; background:#4a4a4e; }
+  .rphone .scr{ position:absolute; inset:1.2cqw; display:flex; flex-direction:column; overflow:hidden; border-radius:15.3cqw; border:3.3cqw solid #000; background:#000; }
+  .rphone .scr::before{ content:''; position:absolute; z-index:3; top:2.1cqw; left:50%; transform:translateX(-50%); width:30cqw; height:8.8cqw; border-radius:5cqw; background:#000; }
+  .rphone .sb{ position:relative; flex:none; height:14.2cqw; background:var(--sb,#fafafa); color:#000; font-family:-apple-system,'SF Pro Text','Inter',system-ui,sans-serif; }
+  .rphone .sb.light{ color:#fff; }
+  .rphone .sb i{ position:absolute; left:9.5cqw; top:6.5cqw; transform:translateY(-50%); font-style:normal; font-weight:600; font-size:4.3cqw; letter-spacing:-.01em; line-height:1; }
+  .rphone .sb .ic{ position:absolute; right:6.8cqw; top:6.5cqw; transform:translateY(-50%); display:flex; align-items:center; gap:1.2cqw; }
+  .rphone .sb .ic svg{ display:block; height:3.1cqw; width:auto; fill:currentColor; }
+  .rphone .sb .ic svg.bat{ height:3.4cqw; }
+  .rphone img, .rphone .stack{ display:block; flex:1; min-height:0; width:100%; object-fit:cover; object-position:top; }
+  .rphone .stack{ position:relative; }
+  .rphone .stack img{ position:absolute; inset:0; height:100%; }
+  .rphone .hb{ position:absolute; z-index:3; bottom:1.7cqw; left:50%; transform:translateX(-50%); width:35cqw; height:1.3cqw; border-radius:1cqw; background:#fff; mix-blend-mode:difference; opacity:.9; }
+  .hp-panel{ background:#1a2735; }
+  .hp-panel-grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(40px,7vw,120px); align-items:center; }
+  .hp-lead{ font-size:18px; line-height:1.65; color:rgba(255,255,255,.85); margin:28px 0 28px; max-width:50ch; }
+  .hp-pts{ list-style:none; display:flex; flex-direction:column; gap:12px; margin-bottom:36px; }
+  .hp-pts li{ position:relative; padding-left:26px; font-size:16px; color:rgba(255,255,255,.82); }
+  .hp-pts li::before{ content:''; position:absolute; left:0; top:.72em; width:12px; height:2px; background:var(--mint); }
+  .hp-link{ color:#fff; font-family:'Geist',sans-serif; font-weight:600; font-size:17px; text-decoration:none; display:inline-flex; align-items:center; gap:10px; }
+  .hp-link .t{ border-bottom:2px solid currentColor; padding-bottom:2px; }
+  .hp-link:hover{ color:var(--mint); }
+  .hp-visual{ display:flex; justify-content:center; }
+  @media(max-width:860px){ .hp-panel-grid{ grid-template-columns:1fr; } }
+  .duo .rphone.back{ left:10px; top:40px; transform:rotate(-8deg); }
+  .duo .rphone.front{ right:10px; top:0; transform:rotate(6deg); z-index:1; }
+  @media(min-width:861px) and (max-width:1120px){ .duo{ transform:scale(.8); } }
+
+  .open-inner{ text-align:center; padding:32px; max-width:380px; }
+  .open-inner .plus{ width:84px; height:84px; margin:0 auto 24px; border-radius:50%; border:1px solid rgba(61,217,196,.5); display:flex; align-items:center; justify-content:center; font-size:36px; font-weight:300; color:var(--mint); }
+  .open-inner p{ color:var(--text-dim); margin:0 0 24px; font-size:16px; }
+
+  @media(max-width:560px){
+    .duo{ transform:scale(.66); }
   }
 
-  /* synthetic dashboard */
-  .dash{
-    display:grid; grid-template-columns: 180px 1fr;
-    height: 420px; background:#fff;
+  /* EXPERTISE ------------------------------------------------ */
+  .exp-list{ margin-top:88px; border-top:1px solid var(--line); }
+  .exp-row{
+    display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1.35fr); gap:40px; align-items:center;
+    padding:48px 0; border-bottom:1px solid var(--line);
   }
-  .dash-side{
-    background:#F4F2ED; border-right:1px solid var(--border);
-    padding:18px 14px; display:flex; flex-direction:column; gap:6px;
+  .exp-row h3{
+    font-family:'Geist',sans-serif; font-weight:600; font-size:clamp(24px,2.4vw,34px); letter-spacing:-.025em;
+    display:flex; align-items:baseline; gap:18px; transition:color .25s;
   }
-  .dash-logo{ display:flex; align-items:center; gap:8px; padding:4px 6px; margin-bottom:14px; }
-  .dash-logo .berry{ width:18px; height:18px; }
-  .dash-logo .wm{ font-family:'Geist',sans-serif; font-weight:600; font-size:12px; color:var(--primary-dark);}
-  .dash-item{
-    display:flex; align-items:center; gap:10px;
-    padding:7px 10px; border-radius:6px;
-    font-size:12px; color:var(--muted);
-  }
-  .dash-item.active{ background:#fff; color:var(--primary-dark); font-weight:500; border:1px solid var(--border);}
-  .dash-item .ic{ width:12px; height:12px; background:currentColor; opacity:.6; border-radius:3px;}
+  .exp-row h3 .n{ font-family:'Geist Mono',monospace; font-weight:500; font-size:12px; color:var(--mint); letter-spacing:.1em; }
+  .exp-row p{ color:rgba(255,255,255,.78); font-size:17px; line-height:1.65; }
+  .exp-row:hover h3{ color:var(--mint); }
+  @media(max-width:760px){ .exp-row{ grid-template-columns:1fr; gap:14px; padding:36px 0; } }
 
-  .dash-main{ padding:20px; display:flex; flex-direction:column; gap:14px; overflow:hidden;}
-  .dash-h{ display:flex; justify-content:space-between; align-items:center;}
-  .dash-h h5{ font-family:'Geist',sans-serif; font-weight:600; font-size:15px; letter-spacing:-0.01em;}
-  .dash-pill{ font-family:'Geist Mono',monospace; font-size:9px; letter-spacing:.1em; padding:3px 8px; background:rgba(61,217,196,.15); color:var(--deep-mint); border-radius:4px; text-transform:uppercase;}
-  .stats{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
-  .stat{ padding:12px; border:1px solid var(--border); border-radius:10px;}
-  .stat .v{ font-family:'Geist',sans-serif; font-weight:600; font-size:18px; letter-spacing:-0.02em;}
-  .stat .l{ font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-top:2px;}
-  .stat .d{ font-family:'Geist Mono',monospace; font-size:9px; color:var(--deep-mint); margin-top:6px;}
-  .chart{
-    height:140px; border:1px solid var(--border); border-radius:10px;
-    padding:12px; position:relative; overflow:hidden;
+  /* RESULTS -------------------------------------------------- */
+  .res-head{ display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; margin-bottom:112px; }
+  .res-head .lead{ font-size:clamp(18px,1.6vw,22px); line-height:1.55; color:rgba(255,255,255,.85); }
+  .res-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(16px,3vw,48px); align-items:start; }
+  .res-card{
+    background:var(--graphite-2); min-height:400px; padding:36px 32px;
+    border:1px solid rgba(255,255,255,.04); transition:border-color .3s;
   }
-  .chart-title{ font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em;}
-  .chart svg{ position:absolute; left:0; right:0; bottom:0; width:100%; height:80%;}
-  .orders{ border:1px solid var(--border); border-radius:10px; overflow:hidden;}
-  .order-row{
-    display:grid; grid-template-columns: 1fr 80px 80px;
-    padding:8px 12px; font-size:11px;
-    border-top:1px solid var(--border);
+  .res-card:hover{ border-color:rgba(255,255,255,.16); }
+  .res-grid .res-card:nth-child(2){ margin-top:48px; }
+  .res-grid .res-card:nth-child(3){ margin-top:96px; }
+  .res-grid .res-card:nth-child(4){ margin-top:144px; }
+  .res-card .num{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(46px,4.8vw,76px); letter-spacing:-.05em; line-height:1; margin-bottom:28px; white-space:nowrap; }
+  .res-card .num .u{ color:var(--mint); }
+  .res-card p{ color:rgba(255,255,255,.8); font-size:16px; line-height:1.6; }
+  .res-card .src{ display:block; margin-top:20px; font-size:10px; color:rgba(255,255,255,.4); }
+  @media(max-width:980px){
+    .res-head{ grid-template-columns:1fr; margin-bottom:64px; }
+    .res-grid{ grid-template-columns:1fr 1fr; }
+    .res-grid .res-card:nth-child(n){ margin-top:0; }
+    .res-grid .res-card:nth-child(even){ margin-top:48px; }
+    .res-card{ min-height:300px; }
   }
-  .order-row:first-child{ border-top:none; background:#FAFAFA; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-size:9px; padding:8px 12px;}
-  .order-row .status{
-    display:inline-block; font-family:'Geist Mono',monospace; font-size:9px; padding:2px 6px; border-radius:3px; letter-spacing:.08em;
+  @media(max-width:560px){
+    .res-grid{ grid-template-columns:1fr; }
+    .res-grid .res-card:nth-child(even){ margin-top:0; }
+    .res-card{ min-height:0; }
   }
-  .order-row .ok{ background:rgba(61,217,196,.18); color:var(--deep-mint);}
-  .order-row .pd{ background:#FEF3C7; color:#92400E;}
 
-  .float-card{
-    position:absolute; right:-24px; bottom:-32px;
-    width:220px; background:#fff; border:1px solid var(--border);
-    border-radius:14px; padding:16px;
-    box-shadow: 0 20px 40px -12px rgba(15,30,46,.18);
-    will-change: transform;
+  /* WHY ------------------------------------------------------ */
+  .why{
+    position:relative; padding:128px 0; overflow:hidden;
+    background:
+      radial-gradient(70% 90% at 0% 30%, rgba(20,184,166,.28), transparent 60%),
+      radial-gradient(50% 60% at 100% 100%, rgba(30,58,82,.6), transparent 70%),
+      var(--surface-dark);
   }
-  @media(max-width:1024px){ .float-card{ right:0; bottom:-24px; width:200px; } }
-  .float-card .fc-label{ font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em;}
-  .float-card .fc-val{ font-family:'Geist',sans-serif; font-weight:600; font-size:22px; letter-spacing:-0.02em; margin-top:4px; color:var(--primary-dark);}
-  .float-card .fc-bar{ margin-top:10px; height:4px; border-radius:2px; background:var(--border); overflow:hidden;}
-  .float-card .fc-fill{ height:100%; width:78%; background:var(--grad); border-radius:2px;}
-  .float-card .fc-foot{ margin-top:8px; font-family:'Geist Mono',monospace; font-size:10px; color:var(--deep-mint); letter-spacing:.08em;}
-
-  .case-bullets{ list-style:none; margin:28px 0 32px; display:flex; flex-direction:column; gap:14px;}
-  .case-bullets li{
-    display:flex; align-items:flex-start; gap:14px; font-size:15px; color:var(--primary-dark);
-    opacity:0; transform:translateX(-8px);
+  .why-grid{ display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1.1fr); gap:64px; align-items:stretch; }
+  .why-left{ display:flex; flex-direction:column; justify-content:space-between; gap:48px; }
+  .why-brand{ display:flex; align-items:center; gap:10px; margin-bottom:24px; }
+  .why-brand img{ width:30px; height:30px; object-fit:contain; }
+  .why-brand span{ font-family:'Geist',sans-serif; font-weight:600; font-size:20px; letter-spacing:-.03em; }
+  .why-left h2{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(40px,5vw,68px); letter-spacing:-.04em; line-height:1.05; }
+  .why-left h2 b{ font-weight:600; }
+  .why-left p{ font-family:'Geist',sans-serif; font-weight:500; font-size:clamp(17px,1.5vw,20px); line-height:1.6; max-width:40ch; color:rgba(255,255,255,.9); }
+  .why-tiles{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .why-tile{
+    padding:40px 32px; background:rgba(10,21,32,.55); border:1px solid rgba(255,255,255,.05);
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    transition:border-color .3s, background .3s;
   }
-  .check{
-    flex:none; width:22px; height:22px; border-radius:50%;
-    background:rgba(61,217,196,.15); border:1px solid rgba(61,217,196,.3);
-    display:flex; align-items:center; justify-content:center; margin-top:1px;
-  }
-  .check svg{ width:11px; height:11px; color:var(--deep-mint);}
-
-  /* WHY US --------------------------------------------------- */
-  .why-grid{
-    display:grid; grid-template-columns: repeat(2, 1fr); gap:32px;
-    max-width:900px;
-  }
-  @media(max-width:700px){ .why-grid{ grid-template-columns: 1fr; } }
-  .why-cell{ opacity:0; transform:translateY(16px);}
-  .why-icon{
-    width:48px; height:48px; border-radius:12px;
-    background: var(--grad);
-    display:flex; align-items:center; justify-content:center;
-    margin-bottom:20px;
-    box-shadow: 0 6px 16px -6px rgba(61,217,196,.5), inset 0 1px 0 rgba(255,255,255,.3);
-    transition: transform .3s var(--bounce);
-  }
-  .why-icon svg{ width:22px; height:22px; color:#0A1520;}
-  .why-cell:hover .why-icon{ transform: rotate(5deg) scale(1.08);}
-  .why-cell h4{
-    font-family:'Geist','Inter',sans-serif; font-weight:600;
-    font-size:22px; letter-spacing:-0.02em; margin-bottom:10px;
-    transition: color .25s;
-  }
-  .why-cell:hover h4{ color: var(--deep-mint); }
-  .why-cell p{ font-size:15px; color:var(--muted); max-width: 38ch;}
+  .why-tile:hover{ border-color:rgba(255,255,255,.16); }
+  .why-tile .num{ font-family:'Geist',sans-serif; font-weight:400; font-size:clamp(48px,5vw,76px); letter-spacing:-.05em; line-height:1; margin-bottom:22px; }
+  .why-tile .l{ font-family:'Geist',sans-serif; font-weight:600; font-size:16px; }
+  .why-tile .d{ font-size:14px; color:rgba(255,255,255,.6); margin-top:6px; }
+  @media(max-width:900px){ .why-grid{ grid-template-columns:1fr; } }
+  @media(max-width:480px){ .why-tiles{ grid-template-columns:1fr; } }
 
   /* PRICING -------------------------------------------------- */
   .pricing-header{ text-align:center; margin-bottom:64px; }
-  .pricing-header h2{ margin:0 auto; }
-  .pricing-header .lead{ margin: 20px auto 0; }
-  .price-grid{
-    display:grid; grid-template-columns: repeat(3, 1fr); gap:24px;
-    align-items:stretch;
-  }
-  @media(max-width:900px){ .price-grid{ grid-template-columns: 1fr; } }
+  .pricing-header .sec-title{ margin:0 auto; }
+  .pricing-header .lead{ margin:20px auto 0; color:var(--text-dim); font-size:18px; max-width:56ch; }
+  .price-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; align-items:stretch; }
+  @media(max-width:900px){ .price-grid{ grid-template-columns:1fr; } }
   .price-card{
-    background: rgba(255,255,255,.03);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:24px; padding:36px 32px;
-    position:relative; opacity:0; transform:scale(.96);
-    transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
+    background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08);
+    border-radius:24px; padding:36px 32px; position:relative; opacity:0; transform:scale(.96);
+    transition:transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
     display:flex; flex-direction:column;
   }
-  .price-card:hover{
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 24px 48px -16px rgba(0,0,0,.4);
-  }
-  .price-card.elevated{
-    border-color: var(--mint);
-    background: linear-gradient(180deg, rgba(61,217,196,.08), rgba(255,255,255,.02));
-    box-shadow: 0 20px 40px -16px rgba(61,217,196,.3);
-    transform: scale(1.03);
-  }
+  .price-card:hover{ transform:translateY(-2px) scale(1.01); box-shadow:0 24px 48px -16px rgba(0,0,0,.4); }
+  .price-card.elevated{ border-color:var(--mint); background:linear-gradient(180deg,rgba(61,217,196,.08),rgba(255,255,255,.02)); box-shadow:0 20px 40px -16px rgba(61,217,196,.3); transform:scale(1.03); }
   @media(max-width:900px){ .price-card.elevated{ transform:scale(1); } }
-  .price-card.elevated:hover{ transform: translateY(-2px) scale(1.04); }
-  .price-badge{
-    position:absolute; top:-12px; left:50%; transform:translateX(-50%);
-    padding:5px 14px; background:var(--mint); color:var(--surface-dark);
-    border-radius:999px; font-family:'Geist Mono',monospace;
-    font-size:10px; letter-spacing:.12em; text-transform:uppercase; font-weight:500;
-  }
-  .price-card h3{
-    font-family:'Geist','Inter',sans-serif; font-weight:500;
-    font-size:16px; color:rgba(255,255,255,.7);
-    margin-bottom:16px; letter-spacing:-0.01em;
-  }
-  .price-value{
-    font-family:'Geist','Inter',sans-serif; font-weight:600;
-    font-size:36px; color:#fff; letter-spacing:-0.035em; line-height:1.05;
-    margin-bottom:8px;
-  }
-  .price-value .suffix{ font-size:15px; color:rgba(255,255,255,.5); font-weight:400; letter-spacing:0;}
-  .price-note{
-    font-family:'Geist Mono',monospace; font-size:10px; color:var(--mint);
-    letter-spacing:.12em; text-transform:uppercase; margin-bottom:28px;
-  }
-  .price-features{
-    list-style:none; display:flex; flex-direction:column; gap:12px;
-    flex:1; margin-bottom:24px;
-  }
-  .price-features li{
-    display:flex; align-items:flex-start; gap:10px;
-    font-size:14px; color: rgba(255,255,255,.8);
-  }
-  .price-features .check{
-    background:rgba(61,217,196,.15); border-color:rgba(61,217,196,.3);
-    width:18px; height:18px; margin-top:2px;
-  }
-  .price-features .check svg{ width:9px; height:9px; }
-  .pricing-foot{ text-align:center; margin-top:48px;}
-  .pricing-foot a{ color:#fff;}
+  .price-card.elevated:hover{ transform:translateY(-2px) scale(1.04); }
+  .price-badge{ position:absolute; top:-12px; left:50%; transform:translateX(-50%); padding:5px 14px; background:var(--mint); color:var(--surface-dark); border-radius:999px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; font-weight:500; }
+  .price-card h3{ font-family:'Geist','Inter',sans-serif; font-weight:500; font-size:16px; color:rgba(255,255,255,.7); margin-bottom:16px; }
+  .price-value{ font-family:'Geist','Inter',sans-serif; font-weight:600; font-size:36px; color:#fff; letter-spacing:-0.035em; line-height:1.05; margin-bottom:8px; }
+  .price-value .suffix{ font-size:15px; color:rgba(255,255,255,.5); font-weight:400; letter-spacing:0; }
+  .price-note{ font-family:'Geist Mono',monospace; font-size:10px; color:var(--mint); letter-spacing:.12em; text-transform:uppercase; margin-bottom:28px; }
+  .price-features{ list-style:none; display:flex; flex-direction:column; gap:12px; flex:1; margin-bottom:24px; }
+  .price-features li{ display:flex; align-items:flex-start; gap:10px; font-size:14px; color:rgba(255,255,255,.8); }
+  .check{ flex:none; width:18px; height:18px; display:flex; align-items:center; justify-content:center; margin-top:2px; }
+  .check svg{ width:14px; height:14px; color:var(--mint); }
+  .pricing-foot{ text-align:center; margin-top:48px; }
 
   /* CTA BANNER ----------------------------------------------- */
-  .cta-banner{ position:relative; padding: 140px 0; text-align:center; overflow:hidden;}
-  .cta-orb{
-    position:absolute; width:800px; height:800px; border-radius:50%;
-    left:50%; top:50%; transform:translate(-50%,-50%);
-    background: radial-gradient(circle, rgba(61,217,196,.25), rgba(20,184,166,.1) 40%, transparent 70%);
-    filter:blur(120px); pointer-events:none;
-    will-change:transform;
-  }
-  .cta-inner{ position:relative; z-index:2; max-width:720px; margin:0 auto;}
-  .cta-inner h2{
-    font-family:'Geist','Inter',sans-serif; font-weight:600;
-    font-size: clamp(36px,5.5vw,56px);
-    letter-spacing:-0.035em; line-height:1.08;
-    color:#fff; margin-bottom:20px;
-  }
-  .cta-inner h2 .word{ display:inline-block; opacity:0; transform:translateY(20px); margin-right:0.25em;}
-  .cta-inner .lead{ color:rgba(255,255,255,.7); font-size:18px; margin-bottom:36px; }
-  .cta-inner .btn-primary.pulse-glow{ animation: glowPulse 2.4s ease-in-out infinite;}
-  @keyframes glowPulse {
-    0%,100%{ box-shadow: 0 0 32px rgba(61,217,196,.3), 0 4px 16px -4px rgba(61,217,196,.3);}
-    50%{ box-shadow: 0 0 48px rgba(61,217,196,.6), 0 4px 16px -4px rgba(61,217,196,.5);}
-  }
-  .cta-sec{ display:block; margin-top:20px; color:var(--mint); font-size:14px; text-decoration:none;}
-  .cta-sec:hover{ text-decoration:underline;}
+  .cta-banner{ position:relative; padding:150px 0; text-align:center; overflow:hidden; background:var(--surface-dark); }
+  .cta-orb{ position:absolute; width:800px; height:800px; border-radius:50%; left:50%; top:50%; transform:translate(-50%,-50%); background:radial-gradient(circle, rgba(61,217,196,.25), rgba(20,184,166,.1) 40%, transparent 70%); filter:blur(120px); pointer-events:none; }
+  .cta-inner{ position:relative; z-index:2; max-width:760px; margin:0 auto; }
+  .cta-inner h2{ font-family:'Geist','Inter',sans-serif; font-weight:500; font-size:clamp(40px,6vw,72px); letter-spacing:-0.04em; line-height:1.04; margin-bottom:24px; }
+  .cta-inner h2 .word{ display:inline-block; opacity:0; transform:translateY(20px); margin-right:0.22em; }
+  .cta-inner h2 .word.m{ color:var(--mint); }
+  .cta-inner .lead{ color:var(--text-dim); font-size:18px; margin-bottom:36px; }
+  .cta-inner .btn-primary.pulse-glow{ animation:glowPulse 2.4s ease-in-out infinite; }
+  @keyframes glowPulse{ 0%,100%{ box-shadow:0 0 32px rgba(61,217,196,.3), 0 4px 16px -4px rgba(61,217,196,.3);} 50%{ box-shadow:0 0 48px rgba(61,217,196,.6), 0 4px 16px -4px rgba(61,217,196,.5);} }
+  .cta-sec{ display:block; margin-top:20px; color:var(--mint); font-size:14px; text-decoration:none; }
+  .cta-sec:hover{ text-decoration:underline; }
 
   /* FOOTER --------------------------------------------------- */
-  footer{ background: var(--primary-dark); color:#fff; padding: 80px 0 24px; }
-  .foot-grid{
-    display:grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap:48px;
-    padding-bottom:56px; border-bottom:1px solid rgba(255,255,255,.08);
-  }
-  @media(max-width:900px){ .foot-grid{ grid-template-columns: 1fr 1fr; gap:40px; } }
-  @media(max-width:520px){ .foot-grid{ grid-template-columns: 1fr; } }
-  .foot-brand .brand{ margin-bottom:16px;}
-  .foot-brand .brand .wordmark{ color:#fff; }
-  .foot-brand .tagline{ font-size:14px; color:rgba(255,255,255,.7); max-width:28ch; margin-bottom:12px;}
-  .foot-brand .loc{ color:rgba(255,255,255,.45); font-size:10px;}
-  .foot-h{ color:rgba(255,255,255,.5); margin-bottom:20px; display:block;}
-  .foot-col ul{ list-style:none; display:flex; flex-direction:column; gap:10px;}
-  .foot-col a{
-    font-size:14px; color:rgba(255,255,255,.7); text-decoration:none;
-    transition: color .2s;
-  }
-  .foot-col a:hover{ color:var(--mint);}
-  .foot-bar{
-    padding-top:24px;
-    display:flex; justify-content:space-between; align-items:center; gap:24px;
-    font-size:12px; color:rgba(255,255,255,.45);
-  }
+  footer{ background:var(--surface-dark); color:#fff; padding:80px 0 24px; border-top:1px solid var(--line); }
+  .foot-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:48px; padding-bottom:56px; border-bottom:1px solid rgba(255,255,255,.08); }
+  @media(max-width:900px){ .foot-grid{ grid-template-columns:1fr 1fr; gap:40px; } }
+  @media(max-width:520px){ .foot-grid{ grid-template-columns:1fr; } }
+  .foot-brand .brand{ margin-bottom:16px; }
+  .foot-brand .brand img{ width:24px; height:24px; object-fit:contain; }
+  .foot-brand .brand .wm{ font-size:20px; }
+  .foot-brand .tagline{ font-size:14px; color:rgba(255,255,255,.7); max-width:28ch; margin-bottom:12px; }
+  .foot-brand .loc{ color:rgba(255,255,255,.45); font-size:10px; }
+  .foot-h{ color:rgba(255,255,255,.5); margin-bottom:20px; display:block; }
+  .foot-col ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .foot-col a{ font-size:14px; color:rgba(255,255,255,.7); text-decoration:none; transition:color .2s; }
+  .foot-col a:hover{ color:var(--mint); }
+  .foot-bar{ padding-top:24px; display:flex; justify-content:space-between; align-items:center; gap:24px; font-size:12px; color:rgba(255,255,255,.45); }
   .foot-bar .mono{ font-size:10px; }
-  @media(max-width:700px){ .foot-bar{ flex-direction:column; align-items:flex-start; gap:12px;} }
+  @media(max-width:700px){ .foot-bar{ flex-direction:column; align-items:flex-start; gap:12px; } }
 
-  /* CUSTOM CURSOR ------------------------------------------- */
-  .cursor{
-    position:fixed; top:0; left:0; pointer-events:none; z-index:9999;
-    width:16px; height:16px; border-radius:50%;
-    background: var(--mint);
-    opacity:.3;
-    transform: translate(-50%,-50%) scale(1);
-    transition: width .18s var(--ease), height .18s var(--ease), opacity .18s, transform .18s var(--ease);
-    mix-blend-mode: difference;
-  }
-  .cursor.hover{ width:40px; height:40px; opacity:.15;}
-  .cursor.click{ animation: cursorClick .2s ease-out;}
-  @keyframes cursorClick { 0%{transform:translate(-50%,-50%) scale(1);} 50%{transform:translate(-50%,-50%) scale(1.4);} 100%{transform:translate(-50%,-50%) scale(1);} }
-  @media(max-width:900px){ .cursor{ display:none; } }
 
-  :focus-visible{
-    outline: 3px solid var(--mint);
-    outline-offset: 3px;
-    border-radius:8px;
-  }
+  :focus-visible{ outline:3px solid var(--mint); outline-offset:3px; border-radius:8px; }
+
+  .lang-switch{ display:flex; align-items:center; gap:10px; font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+  .lang-switch a{ display:inline; color:#fff; text-decoration:none; opacity:.55; transition:opacity .2s, color .2s; font-size:12px; padding:0; border:0; }
+  .lang-switch a:hover{ opacity:1; }
+  .lang-switch a.active{ opacity:1; color:var(--mint); font-weight:700; }
+  .lang-switch .sep{ opacity:.28; }
+  .mobile-panel .lang-switch{ margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,.08); }
+  @media(min-width:981px){ .mobile-panel .lang-switch{ display:none; } }
 
   /* REDUCED MOTION ------------------------------------------ */
   @media (prefers-reduced-motion: reduce){
-    *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration: .2s !important;}
-    .orb, .cta-orb, .pulse-dot, .scroll-line::after, .cursor{ animation:none !important; }
-    .reveal, .reveal-x, .step, .h1-inner, .hero-kicker, .hero-lead, .hero-cta .btn, .tech-row span, .scroll-indicator, .case-bullets li, .why-cell, .price-card, .cta-inner h2 .word {
-      opacity:1 !important; transform:none !important; clip-path:none !important;
+    *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.2s !important; }
+    .reveal, .h1-inner, .hero-kicker, .hero-lead, .hero-cta .btn, .trusted, .price-card, .cta-inner h2 .word{
+      opacity:1 !important; transform:none !important;
     }
-    body{ cursor:auto !important;} .cursor{ display:none; }
+   
   }
-
-  .lang-switch{display:flex;align-items:center;gap:10px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;}
-  .lang-switch a{display:inline;color:inherit;text-decoration:none;opacity:.55;transition:opacity .2s,color .2s;font-size:12px;padding:0;border:0;}
-  .lang-switch a:hover{opacity:1;}
-  .lang-switch a.active{opacity:1;color:var(--deep-mint);font-weight:700;}
-  .lang-switch .sep{opacity:.28;}
-  .mobile-panel .lang-switch{margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);}
-  .mobile-panel .lang-switch a{color:#fff;}
-  .mobile-panel .lang-switch a.active{color:var(--mint);}
-  
-  @media(min-width:901px){ .mobile-panel .lang-switch{display:none;} }
-
 </style>
 <link rel="canonical" href="https://buckberrylabs.com/tr/" />
 <link rel="alternate" hreflang="de" href="https://buckberrylabs.com/de/" />
@@ -770,33 +618,33 @@
 </head>
 <body>
 
-<!-- Custom cursor -->
-<div class="cursor" id="cursor" aria-hidden="true"></div>
 
 <!-- NAV -->
-<header class="nav" id="nav" aria-label="Hauptnavigation">
+<header class="nav" id="nav" aria-label="Ana menü">
   <div class="container nav-inner">
     <a href="#top" class="brand" aria-label="Buckberry Labs ana sayfa">
-      <img src="/logo/karelogo.png" alt="Buckberry Labs" style="height:44px;width:auto;object-fit:contain;">
+      <img src="/logo/karelogo.png" alt="">
+      <span class="wm">buckberry</span>
     </a>
 
-    <nav class="nav-links" aria-label="Primär">
-      <a href="/tr/cozumler" class="nav-link">Çözümler <span class="caret" aria-hidden="true"></span></a>
+    <nav class="nav-links" aria-label="Birincil">
+      <a href="/tr/cozumler" class="nav-link">Çözümler</a>
+      <a href="/tr/yonetim-paneli" class="nav-link">Admin paneli</a>
       <a href="/tr/referanslar" class="nav-link">Referanslar</a>
       <a href="/tr/fiyatlar" class="nav-link">Fiyatlar</a>
       <a href="#ueber" class="nav-link">Hakkımızda</a>
+      <a href="/tr/iletisim" class="nav-link">İletişim</a>
     </nav>
 
     <div class="nav-right">
-    <div class="lang-switch" aria-label="Dili değiştir">
-      <a href="/de/" data-lang-switch="de" class="">DE</a>
-      <span class="sep">·</span>
-      <a href="/en/" data-lang-switch="en" class="">EN</a>
-      <span class="sep">·</span>
-      <a href="/tr/" data-lang-switch="tr" class="active">TR</a>
-    </div>
-      <a href="/tr/iletisim" class="btn-kontakt">İletişim</a>
-      <a href="/tr/iletisim" class="btn btn-primary">Projeyi başlat <span class="arrow">→</span></a>
+      <div class="lang-switch" aria-label="Dili değiştir">
+        <a href="/de/" data-lang-switch="de">DE</a>
+        <span class="sep">·</span>
+        <a href="/en/" data-lang-switch="en">EN</a>
+        <span class="sep">·</span>
+        <a href="/tr/" data-lang-switch="tr" class="active">TR</a>
+      </div>
+      <a href="/tr/iletisim" class="btn nav-cta">Projeyi başlat <span class="arrow">→</span></a>
       <button class="hamburger" id="hamburger" aria-label="Menü" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -806,6 +654,7 @@
 
 <div class="mobile-panel" id="mobilePanel" aria-hidden="true">
   <a href="/tr/cozumler">Çözümler</a>
+  <a href="/tr/yonetim-paneli">Admin paneli</a>
   <a href="/tr/referanslar">Referanslar</a>
   <a href="/tr/fiyatlar">Fiyatlar</a>
   <a href="#ueber">Hakkımızda</a>
@@ -813,308 +662,381 @@
   <a href="/tr/iletisim" class="btn btn-primary">Projeyi başlat <span class="arrow">→</span></a>
 </div>
 
-<!-- HERO -->
 <main id="top">
-<section class="hero" aria-label="Einleitung">
-  <div class="dotgrid" aria-hidden="true"></div>
-  <div class="vignette" aria-hidden="true"></div>
-  <div class="orb orb-a" aria-hidden="true"></div>
-  <div class="orb orb-b" aria-hidden="true"></div>
 
-  <div class="hero-inner" id="heroInner">
-    <span class="mono hero-kicker" id="heroKicker">Yazılım laboratuvarı · Linz, AT</span>
+<!-- HERO -->
+<section class="hero" aria-label="Giriş">
+  <div class="hero-glow" id="heroGlow" aria-hidden="true"></div>
+  <div class="hero-noise" aria-hidden="true"></div>
+  <div class="scanline" id="scanline" aria-hidden="true"></div>
 
-    <h1>
-      <span class="h1-line"><span class="h1-inner" data-h1="1">İşlerin gerçekten ihtiyaç duyduğu</span></span>
-      <span class="h1-line"><span class="h1-inner" data-h1="2">şirketlerin <span class="accent">gerçekten</span> ihtiyaç duyduğu.</span></span>
-    </h1>
-
-    <p class="hero-lead" id="heroLead">
-      Hazır site yok. Template yok. Avusturya ve DACH bölgesindeki KOBİ'ler için özel platformlar.
-    </p>
-
-    <div class="hero-cta">
-      <a href="/tr/iletisim" class="btn btn-primary" data-cta="1">Projeyi başlat <span class="arrow arrow-pulse">→</span></a>
-      <a href="#referenz" class="btn btn-ghost-dark" data-cta="2">Referanslara bak</a>
-    </div>
-
-    <div class="tech-row" id="techRow">
-      <span>Next.js</span>
-      <span>Spring Boot</span>
-      <span>PostgreSQL</span>
-      <span>Stripe</span>
-    </div>
-  </div>
-
-  <div class="scroll-indicator" id="scrollInd" aria-hidden="true">
-    <div class="scroll-line"></div>
-    <span class="mono">Kaydır</span>
-  </div>
-</section>
-
-<!-- SOLUTIONS -->
-<section class="band cream" id="loesungen">
-  <div class="container">
-    <div class="solutions-header">
-      <span class="mono kicker dark-k reveal">— 01 · Çözümler</span>
-      <h2 class="display reveal" data-splitwords>Üç platform. Tek işçilik standardı.</h2>
-      <p class="lead reveal">Problem netse ürünleşiriz. Geri kalan her şeyi özel kurarız.</p>
-    </div>
-
-    <div class="cards">
-      <!-- Shop -->
-      <article class="card reveal" style="--delay:0">
-        <div class="card-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 7h18l-2 12H5L3 7z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/><circle cx="10" cy="13" r=".8" fill="currentColor"/><circle cx="14" cy="13" r=".8" fill="currentColor"/>
-          </svg>
+  <div class="container hero-grid">
+    <div class="hero-copy" id="heroCopy">
+      <span class="mono hero-kicker" id="heroKicker">Yazılım laboratuvarı · Linz, AT</span>
+      <h1>
+        <span class="h1-line"><span class="h1-inner mint">Sonuç veren</span></span>
+        <span class="h1-line"><span class="h1-inner">yazılım.</span></span>
+      </h1>
+      <p class="hero-lead" id="heroLead">
+        Avusturya ve DACH bölgesindeki KOBİ'ler için web siteleri, online mağazalar ve admin panelleri geliştiriyoruz — size özel, hazır şablon yok, bağımlılık yok.
+      </p>
+      <div class="hero-cta">
+        <a href="/tr/iletisim" class="btn btn-primary">Projeyi başlat <span class="arrow arrow-pulse">→</span></a>
+        <a href="#arbeiten" class="btn btn-ghost-dark">Çalışmalarımızı görün</a>
+      </div>
+      <div class="trusted" id="trusted">
+        <span class="label">Kullananlar:</span>
+        <div class="clients">
+          <span class="cl cl-yilmaz">Yilmaz Souvenirs</span>
+          <span class="cl cl-sala">Salamanda <b>Arena</b></span>
+          <span class="cl cl-alya">alyagraphy</span>
         </div>
-        <span class="card-product">Buckberry · Shop</span>
-        <h3>White-Label E-Commerce</h3>
-        <p>Online büyümek isteyen perakende işletmeler için. Çok dilli, Stripe hazır, GDPR uyumlu.</p>
-        <a href="/tr/cozumler#shop" class="link-mint">Detayı gör <span class="arrow">→</span></a>
-      </article>
-
-      <!-- Sport -->
-      <article class="card reveal" style="--delay:1">
-        <div class="card-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="5" width="18" height="14" rx="1"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="2.5"/>
-          </svg>
-        </div>
-        <span class="card-product">Buckberry · Sport</span>
-        <h3>Saha rezervasyonu ve kulüpler</h3>
-        <p>Online rezervasyon, üye yönetimi, antrenör planlaması. Salonlar, kulüpler ve tesisler için.</p>
-        <a href="/tr/cozumler#sport" class="link-mint">Detayı gör <span class="arrow">→</span></a>
-      </article>
-
-      <!-- Custom -->
-      <article class="card reveal" style="--delay:2">
-        <div class="card-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4h10l6 6v10a0 0 0 0 1 0 0H4z"/><path d="M14 4v6h6"/><path d="M8 14h8M8 17h5"/>
-          </svg>
-        </div>
-        <span class="card-product">Buckberry · Custom</span>
-        <h3>Özel SaaS</h3>
-        <p>Standart yazılım yetmediğinde, işletmenizin gerçekten ihtiyacı olanı kurarız.</p>
-        <a href="/tr/cozumler#custom" class="link-mint">Detayı gör <span class="arrow">→</span></a>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- PROCESS -->
-<section class="band dark" id="ueber">
-  <div class="container">
-    <div class="process-header">
-      <span class="mono kicker light-k reveal">— 02 · Süreç</span>
-      <h2 class="display reveal">
-        Hazır site yok.<br/>
-        Şablon yok.
-      </h2>
-    </div>
-
-    <div class="steps" id="steps">
-      <div class="pulse-track"><div class="pulse-dot"></div></div>
-
-      <div class="step">
-        <div class="step-num">01</div>
-        <h4>Görüşme</h4>
-        <p>Önce anlarız, sonra kurarız.</p>
-        <div class="connector"></div>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <h4>Kapsam</h4>
-        <p>Kapsam, stack, kilometre taşları. Yazılı.</p>
-        <div class="connector"></div>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <h4>Geliştirme</h4>
-        <p>Haftalık durum geçeriz. Kara kutu yok.</p>
-        <div class="connector"></div>
-      </div>
-      <div class="step">
-        <div class="step-num">04</div>
-        <h4>Operasyon</h4>
-        <p>Canlıya çıkınca iş bitmez.</p>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- CASE STUDY -->
-<section class="band light" id="referenz">
-  <div class="container">
-    <div class="case-grid">
-      <!-- Left mockup -->
-      <div class="mockup-wrap reveal" id="mockupWrap">
-        <div class="mockup" id="mockup">
-          <div class="browser-bar">
-            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-            <span class="addr">admin.yilmaz-souvenirs.at</span>
+    <!-- Animated stage: laptop → phone → logo -->
+    <div class="stage" id="stage" aria-hidden="true">
+
+      <!-- Scene 1: website on laptop -->
+      <div class="scene" id="sceneLaptop">
+        <div class="scale-box">
+          <div class="laptop">
+            <div class="lt-lid">
+              <span class="lt-cam"></span>
+              <div class="lt-screen">
+                <div class="ls">
+                  <div class="ls-track" id="lsTrack">
+                    <div class="ls-bar"><i></i><i></i><i></i><span class="addr">shop.yilmaz-souvenirs.at</span></div>
+                    <div class="ls-head">
+                      <span class="ls-logo">Yilmaz Souvenirs</span>
+                      <span class="ls-nav"><span>Mağaza</span><span>Yeni</span><span>Hakkımızda</span><b>Sepet · 2</b></span>
+                    </div>
+                    <div class="ls-hero">
+                      <div class="t">Avusturya'da el yapımı.</div>
+                      <div class="s">Kargo DE · AT · CH · TR</div>
+                      <span class="b">Şimdi keşfet →</span>
+                      <span class="blob"></span>
+                    </div>
+                    <div class="ls-h">Çok satanlar <span>Tümünü gör →</span></div>
+                    <div class="ls-grid">
+                      <div class="ls-card"><div class="img im1"></div><div class="n">Alp Minyatürü</div><div class="p">€24,90</div></div>
+                      <div class="ls-card"><div class="img im2"></div><div class="n">Viyana Serisi</div><div class="p">€38,00</div></div>
+                      <div class="ls-card"><div class="img im3"></div><div class="n">Linz Classic</div><div class="p">€19,50</div></div>
+                      <div class="ls-card"><div class="img im4"></div><div class="n">Seramik Set</div><div class="p">€44,00</div></div>
+                    </div>
+                    <div class="ls-h">Yeni gelenler <span>Tümünü gör →</span></div>
+                    <div class="ls-grid">
+                      <div class="ls-card"><div class="img im5"></div><div class="n">Salzburg Mini</div><div class="p">€21,00</div></div>
+                      <div class="ls-card"><div class="img im6"></div><div class="n">Tuna Fincanı</div><div class="p">€16,90</div></div>
+                      <div class="ls-card"><div class="img im1"></div><div class="n">Ahşap Seri</div><div class="p">€29,00</div></div>
+                      <div class="ls-card"><div class="img im2"></div><div class="n">Hediye kutusu</div><div class="p">€49,00</div></div>
+                    </div>
+                    <div class="ls-strip"><span><b>Güvenli ödeme</b> · GDPR uyumlu</span><span class="pay"><i>Stripe</i><i>Visa</i><i>EPS</i><i>Klarna</i></span></div>
+                    <div class="ls-foot"><span>© Yilmaz Souvenirs</span><span>made by buckberry</span></div>
+                  </div>
+                  <div class="ls-cursor" id="lsCursor"><svg viewBox="0 0 24 24"><path d="M4 2l16 10-7 1.5L9.5 21z" fill="#0F1E2E" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+                </div>
+              </div>
+            </div>
+            <div class="lt-hinge"></div>
+            <div class="lt-deck"><div class="lt-keys"></div><div class="lt-pad"></div></div>
           </div>
-          <div class="dash">
-            <aside class="dash-side">
-              <div class="dash-logo"><img src="/logo/karelogo.png" alt="" aria-hidden="true" style="width:24px;height:24px;object-fit:contain;border-radius:0;background:none;box-shadow:none;"><span class="wm">yilmaz</span></div>
-              <div class="dash-item active"><span class="ic"></span>Genel bakış</div>
-              <div class="dash-item"><span class="ic"></span>Siparişler</div>
-              <div class="dash-item"><span class="ic"></span>Ürünler</div>
-              <div class="dash-item"><span class="ic"></span>Müşteriler</div>
-              <div class="dash-item"><span class="ic"></span>Ayarlar</div>
-            </aside>
-            <div class="dash-main">
-              <div class="dash-h">
-                <h5>Genel bakış · Nisan 2026</h5>
-                <span class="dash-pill">Live</span>
+        </div>
+      </div>
+
+      <!-- Scene 2: admin panel on phone + live order card -->
+      <div class="scene" id="scenePhone">
+        <div class="scale-box">
+          <div class="phone-wrap">
+            <div class="phone" id="phone">
+              <div class="ph-screen">
+                <span class="ph-island"></span>
+                <div class="ph-top"><span class="mono">Buckberry Admin</span><span class="av"></span></div>
+                <div class="ph-lbl">Bugünkü ciro</div>
+                <div class="ph-big" id="phRevenue">€0</div>
+                <div class="ph-delta">↑ %12,4 geçen haftaya göre</div>
+                <div class="ph-chart">
+                  <svg viewBox="0 0 250 90" preserveAspectRatio="none">
+                    <defs><linearGradient id="phg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3DD9C4" stop-opacity=".45"/><stop offset="100%" stop-color="#3DD9C4" stop-opacity="0"/></linearGradient></defs>
+                    <path id="phArea" d="M0,70 L25,62 L50,66 L75,52 L100,56 L125,40 L150,44 L175,30 L200,34 L225,16 L250,20 L250,90 L0,90 Z" fill="url(#phg)"/>
+                    <path id="phLine" d="M0,70 L25,62 L50,66 L75,52 L100,56 L125,40 L150,44 L175,30 L200,34 L225,16 L250,20" fill="none" stroke="#3DD9C4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="ph-kpis">
+                  <div class="ph-kpi"><div class="v">38</div><div class="l">Siparişler</div></div>
+                  <div class="ph-kpi"><div class="v">3,2 %</div><div class="l">Dönüşüm</div></div>
+                </div>
+                <div class="ph-list">
+                  <div class="row"><span>#A-2049 · L. Mayer</span><span class="ok">ÖDENDİ</span></div>
+                  <div class="row"><span>#A-2048 · S. Huber</span><span class="ok">ÖDENDİ</span></div>
+                  <div class="row"><span>#A-2047 · M. Kılıç</span><span class="ok">KARGODA</span></div>
+                </div>
+                <span class="ph-home"></span>
               </div>
-              <div class="stats">
-                <div class="stat"><div class="v">€18.240</div><div class="l">Ciro</div><div class="d">↑ 12,4%</div></div>
-                <div class="stat"><div class="v">284</div><div class="l">Siparişler</div><div class="d">↑ 8,1%</div></div>
-                <div class="stat"><div class="v">3,2%</div><div class="l">Conversion</div><div class="d">↑ 0,4%</div></div>
+            </div>
+
+            <div class="glass" id="glassCard">
+              <div class="mono"><span class="live"></span>Yeni sipariş · az önce</div>
+              <div class="msg">Viyana Serisi × 2, L. Mayer, Salzburg — ödeme alındı, stok güncellendi.</div>
+              <div class="prod">
+                <span class="pimg"></span>
+                <div><div class="pn">Viyana Serisi</div><div class="pp">€76,00 · Stripe</div></div>
+                <span class="paid"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
               </div>
-              <div class="chart">
-                <div class="chart-title">Ciro · son 30 gün</div>
-                <svg viewBox="0 0 300 80" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="ch" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stop-color="#3DD9C4" stop-opacity="0.4"/>
-                      <stop offset="100%" stop-color="#3DD9C4" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <path d="M0,60 L15,55 L30,58 L45,50 L60,52 L75,44 L90,46 L105,40 L120,42 L135,35 L150,38 L165,30 L180,34 L195,25 L210,28 L225,20 L240,22 L255,14 L270,18 L285,10 L300,12 L300,80 L0,80 Z"
-                        fill="url(#ch)"/>
-                  <path d="M0,60 L15,55 L30,58 L45,50 L60,52 L75,44 L90,46 L105,40 L120,42 L135,35 L150,38 L165,30 L180,34 L195,25 L210,28 L225,20 L240,22 L255,14 L270,18 L285,10 L300,12"
-                        fill="none" stroke="#14B8A6" stroke-width="1.5"/>
-                </svg>
-              </div>
-              <div class="orders">
-                <div class="order-row"><span>Sipariş</span><span>Durum</span><span>Tutar</span></div>
-                <div class="order-row"><span>#A-2048 · L. Mayer</span><span class="status ok">Ödendi</span><span>€128</span></div>
-                <div class="order-row"><span>#A-2047 · M. Kılıç</span><span class="status pd">Açık</span><span>€76</span></div>
-                <div class="order-row"><span>#A-2046 · S. Huber</span><span class="status ok">Ödendi</span><span>€214</span></div>
-              </div>
+              <div class="stock">Stok: 41 → 39 · senkron 0,4 sn</div>
             </div>
           </div>
         </div>
-        <div class="float-card" id="floatCard">
-          <div class="fc-label">Stok · canlı</div>
-          <div class="fc-val">1.284 Art.</div>
-          <div class="fc-bar"><div class="fc-fill"></div></div>
-          <div class="fc-foot">Senkron · Stripe · 2 sn önce</div>
+      </div>
+
+      <!-- Scene 3: logo reveal -->
+      <div class="scene" id="sceneLogo">
+        <div class="logo-scene-inner">
+          <span class="lg-ring"></span><span class="lg-ring"></span>
+          <div class="lg-mark" id="lgMark">
+            <img class="glow" src="/logo/karelogo.png" alt="">
+            <img class="crisp" src="/logo/karelogo.png" alt="">
+          </div>
+          <div class="lg-word" id="lgWord"><span>buckberry</span><span class="labs">labs</span></div>
+          <div class="mono lg-sub" id="lgSub">Yazılım · Linz, Avusturya</div>
         </div>
       </div>
 
-      <!-- Right text -->
-      <div class="case-text">
-        <span class="mono kicker dark-k reveal">— 03 · Referans</span>
-        <h2 class="display reveal">Avusturyalı bir hediyelik eşya satıcısı için uçtan uca e-ticaret platformu.</h2>
-        <p class="lead reveal">Yilmaz Souvenirs fiziksel mağazasını online'a taşımak istiyordu. Biz de admin panelinden GDPR uyumlu checkout'a kadar tüm platformu kurduk.</p>
+      <div class="stage-progress"><span><i></i></span><span><i></i></span><span><i></i></span></div>
+    </div>
+  </div>
+</section>
 
-        <ul class="case-bullets" id="caseBullets">
-          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Admin paneli + müşteri yönetimi</li>
-          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Çok dilli mağaza (DE/EN/TR)</li>
-          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Stripe checkout + canlı stok</li>
-          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>GDPR uyumlu sipariş akışı</li>
-        </ul>
+<!-- SHOWCASE -->
+<section class="band surface" id="arbeiten">
+  <div class="container">
+    <div class="show-head">
+      <h2 class="sec-title reveal">Online mağazalar, rezervasyon sistemleri ve <b>her gün çalışan admin panelleri</b></h2>
+      <a href="/tr/referanslar" class="link-mint reveal">Tüm referanslar <span class="arrow">→</span></a>
+    </div>
 
-        <a href="/tr/vaka-calismasi" class="link-mint" style="font-size:15px;">Vaka çalışmasını oku<span class="arrow arrow-pulse">→</span></a>
+    <div class="show-grid">
+      <div class="show-col a">
+        <a href="/tr/referanslar#yilmaz" class="work reveal">
+          <div class="work-visual v-mint">
+            <div class="inner">
+              <div class="duo">
+                <div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz/01-hero-blau.webp" alt="Mozaik lambalı Yilmaz Souvenirs ana sayfası" loading="lazy" width="660" height="1446"><span class="hb"></span></div></div>
+                <div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/yilmaz/05-produkt.webp" alt="Renk seçenekleri ve stok bilgisi olan ürün sayfası" loading="lazy" width="656" height="1438"><span class="hb"></span></div></div>
+              </div>
+            </div>
+            <span class="go">→</span>
+          </div>
+          <div class="work-meta"><span class="cl cl-yilmaz">Yilmaz Souvenirs</span><span class="mono">E-ticaret</span></div>
+          <h3>Türk el sanatları için online mağaza — Stripe ödeme ve müşteri hesabıyla</h3>
+          <p>Ürün varyantları, canlı stok, sipariş geçmişi ve iadeler içeren üç dilli mağaza (DE/EN/TR) — kendi admin paneliyle yönetiliyor.</p>
+        </a>
+
+        <a href="/tr/referanslar" class="work reveal">
+          <div class="work-visual v-steel">
+            <div class="inner">
+              <div class="duo">
+                <div class="rphone back"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy/01-hero.webp" alt="Akıllı telefonda Alyagraphy ana sayfası" loading="lazy" width="652" height="1432"><span class="hb"></span></div></div>
+                <div class="rphone front"><div class="scr"><span class="sb dark" style="--sb:#fafafa"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy/05-kundenportal.webp" alt="Bilet kodlu girişli Alyagraphy müşteri portalı" loading="lazy" width="652" height="1432"><span class="hb"></span></div></div>
+              </div>
+            </div>
+            <span class="go">→</span>
+          </div>
+          <div class="work-meta"><span class="cl cl-alya">alyagraphy</span><span class="mono">Portfolyo · Müşteri portalı</span></div>
+          <h3>Düğün fotoğrafçılığı için özel online galeri — albüm seçimi için peşinden koşmak yok</h3>
+          <p>Fotoğraflar admin paneline yükleniyor, çifte otomatik olarak erişim kodlu bir e-posta gidiyor; çift özel galerisini açıp albüm fotoğraflarını doğrudan online seçiyor.</p>
+        </a>
+      </div>
+
+      <div class="show-col b">
+        <a href="/tr/referanslar" class="work reveal">
+          <div class="work-visual v-cream">
+            <div class="inner">
+              <div class="duo">
+            <div class="rphone back"><div class="scr"><span class="sb light" style="--sb:#0a0a0a"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/salamanda/01-hero.webp" alt="Salamanda Soccer Arena ana sayfası: senin oyunun, senin sahan" loading="lazy" width="672" height="1440"><span class="hb"></span></div></div>
+            <div class="rphone front"><div class="scr"><span class="sb light" style="--sb:#0e0c0a"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/salamanda/03-buchung.webp" alt="Filtre, oyun türü, süre ve boş saatlerle saha rezervasyonu" loading="lazy" width="654" height="1416"><span class="hb"></span></div></div>
+          </div>
+            </div>
+            <span class="go">→</span>
+          </div>
+          <div class="work-meta"><span class="cl cl-sala">Salamanda <b>Arena</b></span><span class="mono">Spor · Rezervasyon</span></div>
+          <h3>İki kapalı saha için online rezervasyon — futbol, bubble soccer ve turnuvalar</h3>
+          <p>Oyuncular sahayı online ayırtıyor, krampon ve ekipmanı da aynı anda kiralıyor, rezervasyonu kodla değiştiriyor ve takımlarını turnuvalara kaydediyor — personel her şeyi tek bir admin panelinden yönetiyor.</p>
+        </a>
+
+        <div class="work reveal">
+          <div class="work-visual v-open">
+            <div class="open-inner">
+                            <p>Sıradaki proje sizinki olabilir. İhtiyacınızı 30 dakikada anlatın.</p>
+              <a href="/tr/iletisim" class="btn btn-primary">Görüşme planla <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- WHY US -->
-<section class="band cream">
+<!-- EXPERTISE -->
+<section class="band graphite" id="leistungen">
   <div class="container">
-    <div class="solutions-header">
-      <span class="mono kicker dark-k reveal">— 04 · Neden biz</span>
-      <h2 class="display reveal">Yazılım gibi görünmeyen yazılım.</h2>
-    </div>
+    <span class="mono kicker reveal">— Hizmetler</span>
+    <h2 class="sec-title reveal">Her şey tek elden — <b>konseptten işletmeye</b></h2>
 
-    <div class="why-grid" id="whyGrid">
-      <div class="why-cell">
-        <div class="why-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-6 8-12a8 8 0 1 0-16 0c0 6 8 12 8 12z"/><circle cx="12" cy="10" r="2.5"/>
-          </svg>
-        </div>
-        <h4>Avusturya'da üretilir.</h4>
-        <p>Doğu Avrupa'ya ya da Hindistan'a outsource yok. Her satır kod Linz'de çıkar.</p>
+    <div class="exp-list" id="expList">
+      <div class="exp-row">
+        <h3>Strateji &amp; konsept</h3>
+        <p>Önce işinizi anlıyoruz: gereksinimler, kapsam, teknoloji ve kilometre taşları — tek satır kod yazılmadan önce yazılı olarak.</p>
       </div>
-      <div class="why-cell">
-        <div class="why-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>
-          </svg>
-        </div>
-        <h4>Tam sahiplik.</h4>
-        <p>Kod sizin. Vendor lock-in yok, lisans kıskacı yok.</p>
+      <div class="exp-row">
+        <h3>Tasarım &amp; kullanıcı deneyimi</h3>
+        <p>Şablon yerine net arayüzler. Dönüşüm odaklı sayfalar, temiz arayüz, erişilebilir ve önce mobil düşünülmüş.</p>
       </div>
-      <div class="why-cell">
-        <div class="why-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 6h12a4 4 0 0 1 0 8h-6l-4 4v-4H4z"/>
-          </svg>
-        </div>
-        <h4>Doğrudan temas.</h4>
-        <p>Arada account manager yok. Ürünü yapanlarla konuşursunuz.</p>
+      <div class="exp-row">
+        <h3>Web siteleri &amp; online mağazalar</h3>
+        <p>Stripe ödeme, GDPR uyumlu süreçler ve stok ya da ERP bağlantısıyla hızlı, çok dilli web siteleri ve mağazalar.</p>
       </div>
-      <div class="why-cell">
-        <div class="why-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/>
-          </svg>
-        </div>
-        <h4>Haftalık güncelleme.</h4>
-        <p>Ticket değil, ilerleme görürsünüz. PDF değil, gerçek build.</p>
+      <div class="exp-row">
+        <h3>Admin panelleri &amp; SaaS</h3>
+        <p>Kendi arka ofisiniz: siparişler, rezervasyonlar, müşteriler ve raporlar tek panelde — tam da çalışma şeklinize göre.</p>
+      </div>
+      <div class="exp-row">
+        <h3>Hosting, bakım &amp; destek</h3>
+        <p>Yayına çıkmak son değil: hosting, güncellemeler, izleme, yedekler ve 24 saat içinde e-posta desteği.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN PANEL TEASER -->
+<section class="band hp-panel" id="panel">
+  <div class="container hp-panel-grid">
+    <div>
+      <span class="mono kicker reveal">— Admin paneli</span>
+      <h2 class="sec-title reveal">İşletmeniz <b>cebinizde</b></h2>
+      <p class="hp-lead reveal">Her web sitesine isteğe bağlı kendi paneli: rezervasyonları onaylayın, talepleri yanıtlayın, fatura kesin, içerikleri değiştirin — telefonunuzdan, bizi aramanıza gerek kalmadan.</p>
+      <ul class="hp-pts reveal">
+        <li>Ana ekranda uygulama olarak, yeni taleplerde anlık bildirim</li>
+        <li>Rezervasyonlar, siparişler, iadeler ve faturalar tek yerde</li>
+        <li>İndirim kampanyaları ve kuponlar tek bir formla</li>
+        <li>Metinleri, görselleri ve fiyatları kendiniz değiştirin</li>
+      </ul>
+      <a href="/tr/yonetim-paneli" class="hp-link reveal"><span class="t">Paneli inceleyin</span><span class="arrow">→</span></a>
+    </div>
+    <div class="hp-visual reveal">
+      <div class="duo"><div class="rphone back"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/01-dashboard.webp" alt="Anlık bildirim uyarısıyla admin paneli ana ekranı" loading="lazy" width="648" height="1424"><span class="hb"></span></div></div><div class="rphone front"><div class="scr"><span class="sb light" style="--sb:#0b0a09"><i>9:41</i><em class="ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.4-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3L12.9 5.7C11.6 4.5 9.9 3.8 8 3.8s-3.6.7-4.9 1.9l1.4 1.4c1-.8 2.2-1.3 3.5-1.3zm0 3.4c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.7c-.4-.4-1-.6-1.6-.6z"/></svg><svg class="bat" viewBox="0 0 27 12.5" aria-hidden="true"><rect x=".6" y=".6" width="22.6" height="11.3" rx="3.4" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".38"/><rect x="2.3" y="2.3" width="19.2" height="7.9" rx="2"/><path d="M24.6 4.3v3.9c.9-.3 1.5-1.1 1.5-1.95s-.6-1.65-1.5-1.95z" opacity=".45"/></svg></em></span><img src="/work/alyagraphy-panel/03-buchung-workflow.webp" alt="İş akışlı rezervasyon detayı" loading="lazy" width="632" height="1436"><span class="hb"></span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="band surface" id="ergebnisse">
+  <div class="container">
+    <div class="res-head">
+      <h2 class="sec-title reveal">İşte <b>somut sonuçlar</b></h2>
+      <p class="lead reveal">Sistemlerimiz sadece sunumda değil, her gün çalışıyor — gerçek müşterilerde, gerçek sipariş ve rezervasyonlarla.</p>
+    </div>
+    <div class="res-grid" id="resGrid">
+      <div class="res-card">
+        <div class="num"><span data-count="99.98" data-dec="2">0</span><span class="u">%</span></div>
+        <p>Avusturyalı bir hediyelik eşya satıcısının online mağazasında uptime</p>
+        <span class="mono src">Yilmaz Souvenirs</span>
+      </div>
+      <div class="res-card">
+        <div class="num"><span data-count="100">0</span><span class="u">+</span></div>
+        <p>aktif üye sahalarını telefon yerine online ayırtıyor</p>
+        <span class="mono src">Salamanda Arena</span>
+      </div>
+      <div class="res-card">
+        <div class="num"><span data-count="200">0</span><span class="u">+</span></div>
+        <p>aylık rezervasyon tamamen otomatik olarak sistem üzerinden işliyor</p>
+        <span class="mono src">Salamanda Arena</span>
+      </div>
+      <div class="res-card">
+        <div class="num"><span data-count="3">0</span></div>
+        <p>dil — DE, EN ve TR — tek bir admin panelinden yönetiliyor</p>
+        <span class="mono src">Yilmaz Souvenirs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why" id="ueber">
+  <div class="container why-grid">
+    <div class="why-left">
+      <div>
+        <div class="why-brand reveal"><img src="/logo/karelogo.png" alt=""><span>buckberry</span></div>
+        <h2 class="reveal">Neden <b>Buckberry?</b></h2>
+      </div>
+      <p class="reveal">Geliştiricilerle doğrudan iletişim, kodun tamamen sizin olması ve dürüst fiyatlar. Outsourcing yok, arada account manager yok — Linz'de geliştirildi.</p>
+    </div>
+    <div class="why-tiles">
+      <div class="why-tile reveal">
+        <div class="num"><span data-count="100">0</span>%</div>
+        <div class="l">Kod sahipliği</div>
+        <div class="d">Kod sizin. Vendor lock-in yok.</div>
+      </div>
+      <div class="why-tile reveal">
+        <div class="num">&lt;<span data-count="24">0</span>h</div>
+        <div class="l">Destek yanıt süresi</div>
+        <div class="d">E-posta ile, her bakım paketine dahil.</div>
+      </div>
+      <div class="why-tile reveal">
+        <div class="num"><span data-count="1">0</span>×</div>
+        <div class="l">haftalık güncelleme</div>
+        <div class="d">PDF durum raporu yerine gerçek build.</div>
+      </div>
+      <div class="why-tile reveal">
+        <div class="num"><span data-count="0">0</span></div>
+        <div class="l">Outsourcing</div>
+        <div class="d">Her satır kod Linz'de yazılıyor.</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- PRICING -->
-<section class="band surface-dark" id="preise">
+<section class="band graphite" id="preise">
   <div class="container">
     <div class="pricing-header">
-      <span class="mono kicker light-k reveal" style="display:inline-block;">— 05 · Fiyatlar</span>
-      <h2 class="display reveal" style="margin-left:auto;margin-right:auto;text-align:center;">Net fiyat. Şeffaf paketler.</h2>
-      <p class="lead reveal" style="text-align:center;">Gizli maliyet yok. Ucu açık 'başlangıç' fiyatı yok.</p>
+      <span class="mono kicker reveal">— Fiyatlar</span>
+      <h2 class="sec-title reveal">Adil fiyatlar. <b>Şeffaf paketler.</b></h2>
+      <p class="lead reveal">Gizli maliyet yok. Ucu açık “başlangıç” fiyatı yok.</p>
     </div>
 
     <div class="price-grid" id="priceGrid">
-      <div class="price-card">
-        <h3>Tek seferlik kurulum</h3>
-        <div class="price-value">€990 – €1.990</div>
-        <div class="price-note">Tek seferlik</div>
+      <div class="price-card elevated">
+        <span class="price-badge">1. adım</span>
+        <h3>Web sitesi paketleri</h3>
+        <div class="price-value">€990 – €2.690</div>
+        <div class="price-note">Tek seferlik · sabit fiyat</div>
         <ul class="price-features">
-          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Proje kurulumu</li>
-          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Marka entegrasyonu</li>
-          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Deployment</li>
-          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Eğitim</li>
+          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Kurumsal kimliğinize göre tasarım &amp; geliştirme</li>
+          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Çok dilli (DE / EN / TR) mümkün</li>
+          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Alan adı &amp; SSL dahil yayına alma</li>
+          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Kaynak kod sizin</li>
         </ul>
-        <a href="/tr/iletisim" class="btn btn-ghost-dark" style="align-self:flex-start;">Talep gönder</a>
+        <a href="/tr/fiyatlar#pakete" class="btn btn-primary" style="align-self:flex-start;">Paketlere bak <span class="arrow">→</span></a>
       </div>
 
-      <div class="price-card elevated">
-        <span class="price-badge">Önerilen</span>
-        <h3>Hosting ve destek</h3>
-        <div class="price-value">€89 – €149<span class="suffix">/ay</span></div>
-        <div class="price-note">Aylık</div>
+      <div class="price-card">
+        <span class="price-badge">2. adım · isteğe bağlı</span>
+        <h3>Hosting &amp; bakım</h3>
+        <div class="price-value">€39 – €149<span class="suffix">/ay</span></div>
+        <div class="price-note">Aylık · iptal edilebilir</div>
         <ul class="price-features">
           <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Hosting dahil</li>
-          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Güncelleme ve bakım</li>
+          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Güncelleme &amp; bakım</li>
           <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>24 saat içinde e-posta desteği</li>
-          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Aylık raporlama</li>
+          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Ya da kendiniz barındırın — her şeyi teslim ederiz</li>
         </ul>
-        <a href="/tr/iletisim" class="btn btn-primary" style="align-self:flex-start;">Paketi seç <span class="arrow">→</span></a>
+        <a href="/tr/fiyatlar#wartung" class="btn btn-ghost-dark" style="align-self:flex-start;">Bakım paketlerine bak</a>
       </div>
 
       <div class="price-card">
         <h3>Özel projeler</h3>
-        <div class="price-value">talep üzerine</div>
+        <div class="price-value">€3.490'dan itibaren</div>
         <div class="price-note">Özel kapsam</div>
         <ul class="price-features">
           <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Tamamen özel</li>
@@ -1127,25 +1049,24 @@
     </div>
 
     <div class="pricing-foot">
-      <a href="/tr/fiyatlar" class="link-mint" style="color:#fff;">Tüm paket detayları<span class="arrow">→</span></a>
+      <a href="/tr/fiyatlar" class="link-mint">Tüm paket detayları <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
 
 <!-- CTA BANNER -->
-<section class="cta-banner surface-dark" id="kontakt" style="background:var(--surface-dark);">
+<section class="cta-banner" id="kontakt">
   <div class="cta-orb" id="ctaOrb" aria-hidden="true"></div>
-  <div class="dotgrid" aria-hidden="true"></div>
   <div class="container">
     <div class="cta-inner">
       <h2 id="ctaH2" aria-label="İşe yarayan bir şey kurmaya hazır mısınız?">
-        <span class="word">Hazır</span>
-        <span class="word">mısınız</span>
-        <span class="word">işe yarayan</span>
-        <span class="word">bir şey kurmaya</span>
-        <span class="word">?</span>
+        <span class="word">İşe</span>
+        <span class="word">yarayan</span>
+        <span class="word m">bir şey</span>
+        <span class="word">kurmaya</span>
+        <span class="word">hazır mısınız?</span>
       </h2>
-      <p class="lead reveal">30 dakika. Satış konuşması yok. Net sorular, net cevaplar.</p>
+      <p class="lead reveal">30 dakikalık görüşme. Satış konuşması yok. Sadece dürüst sorular ve net cevaplar.</p>
       <a href="/tr/iletisim" class="btn btn-primary pulse-glow reveal" style="font-size:16px;padding:18px 30px;">Görüşme ayarla <span class="arrow arrow-pulse">→</span></a>
       <a href="mailto:info@buckberrylabs.com" class="cta-sec">ya da yazın: info@buckberrylabs.com</a>
     </div>
@@ -1158,8 +1079,8 @@
     <div class="foot-grid">
       <div class="foot-col foot-brand">
         <a href="#top" class="brand" aria-label="Buckberry Labs">
-          <img src="/logo/karelogo.png" alt="" aria-hidden="true" style="width:24px;height:24px;object-fit:contain;border-radius:0;background:none;box-shadow:none;">
-          <span class="wordmark" style="color:#fff;">buckberry</span>
+          <img src="/logo/karelogo.png" alt="" aria-hidden="true">
+          <span class="wm">buckberry</span>
         </a>
         <p class="tagline">Yazılım, özenle seçilmiş.</p>
         <span class="mono loc">Linz, Avusturya</span>
@@ -1167,15 +1088,16 @@
       <div class="foot-col">
         <span class="mono foot-h">Çözümler</span>
         <ul>
-          <li><a href="/tr/cozumler#shop">Shop</a></li>
+          <li><a href="/tr/cozumler#shop">Mağaza</a></li>
           <li><a href="/tr/cozumler#sport">Spor</a></li>
-          <li><a href="/tr/cozumler#custom">Custom</a></li>
+          <li><a href="/tr/cozumler#custom">Özel</a></li>
         </ul>
       </div>
       <div class="foot-col">
         <span class="mono foot-h">Şirket</span>
         <ul>
           <li><a href="/tr/#ueber">Hakkımızda</a></li>
+          <li><a href="/tr/yonetim-paneli">Admin paneli</a></li>
           <li><a href="/tr/referanslar">Referanslar</a></li>
           <li><a href="/tr/fiyatlar">Fiyatlar</a></li>
           <li><a href="/tr/iletisim">İletişim</a></li>
@@ -1184,8 +1106,7 @@
     </div>
     <div class="foot-bar">
       <span>© 2026 Buckberry Labs</span>
-      <span class="mono">Linz, AT'de geliştirildi · Vercel üzerinde barındırılıyor</span>
-        
+      <span class="mono">Linz, AT'de geliştirildi</span>
     </div>
   </div>
 </footer>
@@ -1193,16 +1114,11 @@
 <script>
 (() => {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const LOCALE = document.documentElement.lang || 'de';
 
   // ---------- NAV sticky ----------
   const nav = document.getElementById('nav');
-  const onScroll = () => {
-    const y = window.scrollY;
-    nav.classList.toggle('sticky', y > 80);
-    // update primary btn glow
-    const pb = nav.querySelector('.btn-primary');
-    if (pb) pb.classList.toggle('glow', y > 80);
-  };
+  const onScroll = () => nav.classList.toggle('sticky', window.scrollY > 60);
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
@@ -1219,189 +1135,145 @@
     ham.classList.remove('open'); panel.classList.remove('open');
   }));
 
-  // ---------- Custom cursor ----------
-  if (!reduced && window.matchMedia('(pointer:fine)').matches) {
-    const cursor = document.getElementById('cursor');
-    let tx = 0, ty = 0, cx = 0, cy = 0;
-    window.addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; });
-    const loop = () => {
-      cx += (tx - cx) * 0.18;
-      cy += (ty - cy) * 0.18;
-      cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
-      requestAnimationFrame(loop);
-    };
-    loop();
-    const hov = 'a, button, .card, .why-cell, .price-card, .mockup-wrap, [role="button"], input, textarea, select, .hamburger';
-    document.querySelectorAll(hov).forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-    });
-    window.addEventListener('mousedown', () => { cursor.classList.add('click'); setTimeout(() => cursor.classList.remove('click'), 200);});
-  } else {
-    document.body.style.cursor = 'auto';
-    const c = document.getElementById('cursor'); if (c) c.style.display = 'none';
-  }
 
-  // ---------- HERO timeline ----------
+  const fmt = (v, dec) => v.toLocaleString(LOCALE, { minimumFractionDigits: dec, maximumFractionDigits: dec });
+
+  if (!window.gsap) {
+    document.querySelectorAll('.reveal, .h1-inner, #heroKicker, #heroLead, .hero-cta .btn, #trusted, .price-card, #ctaH2 .word, #sceneLaptop')
+      .forEach(el => { el.style.opacity = 1; el.style.visibility = 'visible'; el.style.transform = 'none'; });
+    return;
+  }
+  const ease = 'power3.out';
+
+  // ---------- HERO intro ----------
   if (!reduced) {
-    const tl = gsap.timeline({ defaults: { ease: 'cubic-bezier(0.2,0.8,0.2,1)' }});
-    tl.to('#heroKicker', { opacity: 1, duration: .4 }, 0);
-    tl.to('[data-h1="1"]', { opacity: 1, y: 0, clipPath: 'inset(0 0% 0 0)', duration: .7 }, 0.12);
-    tl.to('[data-h1="2"]', { opacity: 1, y: 0, clipPath: 'inset(0 0% 0 0)', duration: .7 }, 0.28);
-    tl.to('#heroLead', { opacity: 1, duration: .6 }, 0.5);
-    tl.to('.hero-cta .btn', { opacity: 1, scale: 1, duration: .5, stagger: .08 }, 0.7);
-    tl.to('#techRow span', { opacity: 1, duration: .4, stagger: .06 }, 0.9);
-    tl.to('#scrollInd', { opacity: 1, duration: .5 }, 1.4);
+    gsap.timeline({ defaults: { ease } })
+      .to('#heroKicker', { opacity: 1, duration: .5 }, 0)
+      .to('.h1-inner', { opacity: 1, y: 0, duration: .9, stagger: .12 }, .1)
+      .to('#heroLead', { opacity: 1, duration: .7 }, .45)
+      .to('.hero-cta .btn', { opacity: 1, y: 0, duration: .6, stagger: .08 }, .6)
+      .to('#trusted', { opacity: 1, duration: .7 }, .85);
   } else {
-    document.querySelectorAll('#heroKicker, .h1-inner, #heroLead, .hero-cta .btn, #techRow span, #scrollInd')
-      .forEach(el => { el.style.opacity = 1; el.style.clipPath = 'none'; el.style.transform = 'none'; });
+    gsap.set('#heroKicker, .h1-inner, #heroLead, .hero-cta .btn, #trusted', { opacity: 1, y: 0 });
   }
 
-  // ---------- GSAP ScrollTrigger reveals ----------
-  if (window.gsap && window.ScrollTrigger) {
-    gsap.registerPlugin(ScrollTrigger);
+  // ---------- HERO stage: laptop → phone → logo (looping) ----------
+  const bars = gsap.utils.toArray('.stage-progress i');
+  const glow = document.getElementById('heroGlow');
+  const setGlow = (x, c) => { glow.style.setProperty('--glow-x', x); glow.style.setProperty('--glow-c', c); };
+  const revenue = { v: 0 };
+  const revEl = document.getElementById('phRevenue');
+  const drawRevenue = () => { revEl.textContent = '€' + fmt(Math.round(revenue.v), 0); };
 
-    if (!reduced) {
-      // generic reveal
-      gsap.utils.toArray('.reveal').forEach(el => {
-        gsap.to(el, {
-          opacity: 1, y: 0,
-          duration: .7, ease: 'cubic-bezier(0.2,0.8,0.2,1)',
-          scrollTrigger: { trigger: el, start: 'top 85%' }
-        });
-      });
+  if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
-      // cards stagger
-      gsap.utils.toArray('.cards').forEach(grid => {
-        const cards = grid.querySelectorAll('.card');
-        gsap.fromTo(cards, { opacity: 0, y: 24 }, {
-          opacity: 1, y: 0, duration: .6, stagger: .1,
-          ease: 'cubic-bezier(0.2,0.8,0.2,1)',
-          scrollTrigger: { trigger: grid, start: 'top 80%' }
-        });
-      });
+  if (reduced) {
+    gsap.set('#sceneLaptop', { autoAlpha: 1 });
+    gsap.set(bars[0], { scaleX: 1 });
+  } else {
+    const S = 5.2; // seconds per scene
+    const loop = gsap.timeline({ repeat: -1, delay: .5 });
 
-      // process steps
-      const stepsEl = document.getElementById('steps');
-      if (stepsEl) {
-        const steps = stepsEl.querySelectorAll('.step');
-        ScrollTrigger.create({
-          trigger: stepsEl, start: 'top 75%',
-          onEnter: () => {
-            steps.forEach((s, i) => setTimeout(() => s.classList.add('revealed'), i * 180));
-            setTimeout(() => stepsEl.querySelector('.pulse-track').classList.add('on'), steps.length * 180 + 400);
-          }
-        });
-      }
+    // scene 1: website on laptop
+    loop.call(() => setGlow('72%', 'rgba(33,62,110,.6)'), null, 0)
+      .set(bars, { scaleX: 0 }, 0)
+      .fromTo('#sceneLaptop', { autoAlpha: 0, scale: .9, x: 80, filter: 'blur(10px)' },
+        { autoAlpha: 1, scale: 1, x: 0, filter: 'blur(0px)', duration: 1.2, ease }, 0)
+      .fromTo('#lsTrack', { y: 0 }, { y: -250, duration: 3.4, ease: 'power2.inOut' }, 1)
+      .fromTo('#lsCursor', { left: '70%', top: '70%' }, { left: '44%', top: '40%', duration: 1.6, ease: 'power2.inOut' }, 1.4)
+      .to('#lsCursor', { scale: .8, duration: .1, yoyo: true, repeat: 1 }, 3.1)
+      .to(bars[0], { scaleX: 1, duration: S, ease: 'none' }, 0)
+      .to('#sceneLaptop', { autoAlpha: 0, scale: 1.06, x: -60, filter: 'blur(12px)', duration: .8, ease: 'power2.in' }, S - .6)
+      .fromTo('#scanline', { left: '38%', opacity: 0 }, { left: '96%', opacity: 1, duration: .9, ease: 'power2.inOut' }, S - .6)
+      .to('#scanline', { opacity: 0, duration: .3 }, S + .3);
 
-      // case bullets stagger
-      gsap.fromTo('#caseBullets li', { opacity: 0, x: -8 }, {
-        opacity: 1, x: 0, duration: .5, stagger: .08,
-        ease: 'cubic-bezier(0.2,0.8,0.2,1)',
-        scrollTrigger: { trigger: '#caseBullets', start: 'top 85%' }
-      });
+    // scene 2: admin panel on phone + live order card
+    const p = S;
+    loop.call(() => setGlow('82%', 'rgba(20,184,166,.32)'), null, p)
+      .fromTo('#scenePhone', { autoAlpha: 0 }, { autoAlpha: 1, duration: .5 }, p)
+      .fromTo('#phone', { y: 120, rotationY: -30, opacity: 0 }, { y: 0, rotationY: -16, opacity: 1, duration: 1.2, ease }, p)
+      .fromTo(revenue, { v: 0 }, { v: 2480, duration: 1.8, ease: 'power2.out', onUpdate: drawRevenue }, p + .5)
+      .fromTo('#phLine', { strokeDasharray: 400, strokeDashoffset: 400 }, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.out' }, p + .6)
+      .fromTo('#phArea', { opacity: 0 }, { opacity: 1, duration: 1, ease: 'none' }, p + 1)
+      .fromTo('#glassCard', { autoAlpha: 0, y: 30, scale: .94 }, { autoAlpha: 1, y: 0, scale: 1, duration: .9, ease: 'back.out(1.4)' }, p + 1.5)
+      .to(bars[1], { scaleX: 1, duration: S, ease: 'none' }, p)
+      .to('#scenePhone', { autoAlpha: 0, scale: .94, y: -30, filter: 'blur(12px)', duration: .8, ease: 'power2.in' }, p + S - .6)
+      .set('#scenePhone', { scale: 1, y: 0, filter: 'blur(0px)' }, p + S + .3);
 
-      // why cells stagger
-      gsap.fromTo('#whyGrid .why-cell', { opacity: 0, y: 16 }, {
-        opacity: 1, y: 0, duration: .6, stagger: .1,
-        ease: 'cubic-bezier(0.2,0.8,0.2,1)',
-        scrollTrigger: { trigger: '#whyGrid', start: 'top 80%' }
-      });
+    // scene 3: logo reveal
+    const q = S * 2;
+    loop.call(() => setGlow('70%', 'rgba(20,184,166,.22)'), null, q)
+      .fromTo('#sceneLogo', { autoAlpha: 0 }, { autoAlpha: 1, duration: .4 }, q)
+      .fromTo('#lgMark', { scale: .6, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: 0, duration: 1.3, ease: 'expo.out' }, q)
+      .fromTo('#lgMark .glow', { opacity: 0 }, { opacity: .85, duration: 1.4, ease: 'power2.out' }, q + .3)
+      .fromTo('.lg-ring', { scale: .6, opacity: .8 }, { scale: 2.1, opacity: 0, duration: 2.2, stagger: .5, ease: 'power2.out' }, q + .2)
+      .fromTo('#lgWord span', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .7, stagger: .15, ease }, q + .8)
+      .fromTo('#lgSub', { opacity: 0 }, { opacity: 1, duration: .6 }, q + 1.3)
+      .to(bars[2], { scaleX: 1, duration: S, ease: 'none' }, q)
+      .to('#sceneLogo', { autoAlpha: 0, scale: .92, filter: 'blur(10px)', duration: .8, ease: 'power2.in' }, q + S - .6)
+      .set('#sceneLogo', { scale: 1, filter: 'blur(0px)' }, q + S + .3);
 
-      // price cards stagger (middle last)
-      gsap.utils.toArray('#priceGrid .price-card').forEach((c, i) => {
-        const delay = c.classList.contains('elevated') ? .18 : (i * .08);
-        gsap.to(c, {
-          opacity: 1, scale: c.classList.contains('elevated') ? 1.03 : 1,
-          duration: .55, delay,
-          ease: 'cubic-bezier(0.2,0.8,0.2,1)',
-          scrollTrigger: { trigger: '#priceGrid', start: 'top 80%' }
-        });
-      });
-
-      // CTA banner h2 words
-      gsap.fromTo('#ctaH2 .word', { opacity: 0, y: 20 }, {
-        opacity: 1, y: 0, duration: .55, stagger: .06,
-        ease: 'cubic-bezier(0.2,0.8,0.2,1)',
-        scrollTrigger: { trigger: '#ctaH2', start: 'top 85%' }
-      });
-
-      // Case mockup parallax on scroll
-      gsap.to('#mockup', {
-        y: -40,
-        ease: 'none',
-        scrollTrigger: { trigger: '.case-grid', start: 'top bottom', end: 'bottom top', scrub: true }
-      });
-      gsap.to('#floatCard', {
-        y: -80,
-        ease: 'none',
-        scrollTrigger: { trigger: '.case-grid', start: 'top bottom', end: 'bottom top', scrub: true }
-      });
-      gsap.fromTo('#mockup', { scale: .94, opacity: .5 }, {
-        scale: 1, opacity: 1, duration: .9,
-        ease: 'cubic-bezier(0.2,0.8,0.2,1)',
-        scrollTrigger: { trigger: '#mockupWrap', start: 'top 85%' }
-      });
-
-      // Hero parallax
-      gsap.to('#heroInner', {
-        y: 120, opacity: .3,
-        ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: '40% top', scrub: true }
-      });
-      gsap.to('.orb-a', { y: 60, x: -30, ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }});
-      gsap.to('.orb-b', { y: 40, x: 30, ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }});
-
-      // CTA orb drift
-      gsap.to('#ctaOrb', { x: 100, duration: 10, yoyo: true, repeat: -1, ease: 'sine.inOut' });
-
-      // Orb loops
-      gsap.to('.orb-a', { x: '+=60', y: '+=30', duration: 12, yoyo: true, repeat: -1, ease: 'sine.inOut' });
-      gsap.to('.orb-b', { x: '-=40', y: '-=25', duration: 16, yoyo: true, repeat: -1, ease: 'sine.inOut' });
-    } else {
-      // reduced: just fade in
-      gsap.utils.toArray('.reveal').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
-      document.querySelectorAll('.step, #caseBullets li, .why-cell, .price-card, #ctaH2 .word').forEach(el => {
-        el.style.opacity = 1; el.style.transform = 'none';
-      });
+    // don't burn CPU while the hero is off-screen
+    if (window.ScrollTrigger) {
+      ScrollTrigger.create({ trigger: '.hero', start: 'top bottom', end: 'bottom top',
+        onToggle: self => self.isActive ? loop.play() : loop.pause() });
     }
   }
+
+  if (!window.ScrollTrigger) return;
+
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseFloat(el.dataset.count), dec = +(el.dataset.dec || 0), o = { v: 0 };
+    if (reduced) { el.textContent = fmt(target, dec); return; }
+    gsap.to(o, { v: target, duration: 1.6, ease: 'power2.out', onUpdate: () => el.textContent = fmt(o.v, dec),
+      scrollTrigger: { trigger: el, start: 'top 90%' } });
+  });
+
+  if (reduced) {
+    gsap.set('.reveal, .price-card, #ctaH2 .word', { opacity: 1, y: 0, scale: 1 });
+    return;
+  }
+
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.to(el, { opacity: 1, y: 0, duration: .8, ease, scrollTrigger: { trigger: el, start: 'top 88%' } });
+  });
+
+  const mm = gsap.matchMedia();
+  // hero copy drifts away (desktop only; on mobile it would slide over the stage)
+  mm.add('(min-width: 981px)', () => {
+    gsap.to('#heroCopy', { y: 100, opacity: .2, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  });
+
+  // showcase: right column drifts against the left one
+  mm.add('(min-width: 861px)', () => {
+    gsap.fromTo('.show-col.b', { y: 80 }, { y: -80, ease: 'none',
+      scrollTrigger: { trigger: '.show-grid', start: 'top bottom', end: 'bottom top', scrub: true } });
+  });
+
+  // expertise: rows start indented + dimmed, then align as they scroll in
+  gsap.utils.toArray('#expList .exp-row').forEach((row, i) => {
+    gsap.fromTo(row, { x: (i + 1) * 28, opacity: .9 - i * .12 }, { x: 0, opacity: 1, ease: 'none',
+      scrollTrigger: { trigger: row, start: 'top 95%', end: 'top 55%', scrub: true } });
+  });
+
+  gsap.fromTo('#resGrid .res-card', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: .9, stagger: .12, ease,
+    scrollTrigger: { trigger: '#resGrid', start: 'top 80%' } });
+
+  gsap.utils.toArray('#priceGrid .price-card').forEach((c, i) => {
+    const el = c.classList.contains('elevated');
+    gsap.to(c, { opacity: 1, scale: el ? 1.03 : 1, duration: .55, delay: el ? .18 : i * .08, ease,
+      scrollTrigger: { trigger: '#priceGrid', start: 'top 80%' } });
+  });
+
+  gsap.fromTo('#ctaH2 .word', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .55, stagger: .06, ease,
+    scrollTrigger: { trigger: '#ctaH2', start: 'top 85%' } });
+  gsap.to('#ctaOrb', { x: 100, duration: 10, yoyo: true, repeat: -1, ease: 'sine.inOut' });
 })();
 </script>
 <script>
 const LANG_SWITCH_MAP = {
-  "de/": {
-    "de": "/de/",
-    "en": "/en/",
-    "tr": "/tr/"
-  },
-  "de/loesungen": {
-    "de": "/de/loesungen",
-    "en": "/en/solutions",
-    "tr": "/tr/cozumler"
-  },
-  "de/referenzen": {
-    "de": "/de/referenzen",
-    "en": "/en/references",
-    "tr": "/tr/referanslar"
-  },
-  "de/preise": {
-    "de": "/de/preise",
-    "en": "/en/pricing",
-    "tr": "/tr/fiyatlar"
-  },
-  "de/fallstudie": {
-    "de": "/de/fallstudie",
-    "en": "/en/case-study",
-    "tr": "/tr/vaka-calismasi"
-  },
-  "de/kontakt": {
-    "de": "/de/kontakt",
-    "en": "/en/contact",
-    "tr": "/tr/iletisim"
-  }
+  "de/": { "de": "/de/", "en": "/en/", "tr": "/tr/" }
 };
 const LANG_SWITCH_KEY = "de/";
 (() => {
